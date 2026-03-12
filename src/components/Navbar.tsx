@@ -35,13 +35,15 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 shadow-sm sticky top-0 z-50">
+    <nav className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-b border-gray-200/50 dark:border-gray-700/50 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex items-center">
-            <Link href="/" className="flex items-center space-x-2">
-              <Sparkles className="h-8 w-8 text-indigo-600" />
-              <span className="text-xl font-extrabold text-gray-900 dark:text-white">
+            <Link href="/" className="flex items-center space-x-2 group">
+              <div className="p-2 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-lg group-hover:shadow-lg transition-all duration-300">
+                <Sparkles className="h-6 w-6 text-white" />
+              </div>
+              <span className="text-xl font-extrabold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
                 GenStacker
               </span>
             </Link>
