@@ -106,5 +106,5 @@ export function getBlogPostsByCategory(category: string): BlogPost[] {
 }
 
 export function getBlogCategories(): string[] {
-  return [...new Set(blogPosts.map(post => post.category))];
+  return Array.from(new Set(blogPosts.map(post => post.category)));
 }
