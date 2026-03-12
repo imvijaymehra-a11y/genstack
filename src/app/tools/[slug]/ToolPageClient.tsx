@@ -40,8 +40,8 @@ export default function ToolPageClient({ slug }: ToolPageClientProps) {
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, payload) => {
-        setUser(payload.session?.user || null);
-        setSession(payload.session || null);
+        setUser(payload?.session?.user || null);
+        setSession(payload?.session || null);
       }
     );
 
