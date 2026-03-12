@@ -13,34 +13,39 @@ export default function HomePage() {
       <Navbar />
       
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-900 dark:to-gray-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
+      <section className="relative overflow-hidden bg-gradient-to-br from-indigo-50 via-white to-purple-50 dark:from-gray-950 dark:via-gray-900 dark:to-purple-950">
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute -top-40 -right-40 w-80 h-80 bg-indigo-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 dark:opacity-10"></div>
+          <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-purple-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 dark:opacity-10"></div>
+        </div>
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32">
           <div className="text-center">
             <div className="flex justify-center mb-8">
-              <div className="p-3 bg-primary/10 rounded-full">
-                <Sparkles className="h-12 w-12 text-primary" />
+              <div className="inline-flex items-center px-4 py-2 bg-indigo-100 dark:bg-indigo-900/30 rounded-full border border-indigo-200 dark:border-indigo-700">
+                <Sparkles className="h-4 w-4 text-indigo-600 dark:text-indigo-400 mr-2" />
+                <span className="text-sm font-semibold text-indigo-600 dark:text-indigo-400">Welcome to the future of content creation</span>
               </div>
             </div>
             
-<h1 className="text-5xl md:text-6xl font-extrabold text-gray-900 dark:text-white mb-6">
+<h1 className="text-6xl md:text-7xl font-extrabold bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent mb-6">
                 Your AI Sidekick for Content, Creativity & Copy
             </h1>
             
-            <p className="text-xl md:text-2xl text-gray-700 dark:text-gray-300 mb-8 max-w-3xl mx-auto">
+            <p className="text-xl md:text-2xl text-gray-700 dark:text-gray-300 mb-12 max-w-3xl mx-auto leading-relaxed">
               41 powerful tools under one roof – write, brainstorm, design and scale faster than ever.
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
                 href="/tools"
-                className="inline-flex items-center justify-center px-8 py-4 bg-primary hover:bg-primary/90 text-white font-semibold rounded-lg transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl"
+                className="inline-flex items-center justify-center px-8 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 shadow-xl hover:shadow-2xl"
               >
                 Explore All Tools
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Link>
               <Link
                 href="/pricing"
-                className="inline-flex items-center justify-center px-8 py-4 bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-900 dark:text-white font-semibold rounded-lg transition-all duration-200"
+                className="inline-flex items-center justify-center px-8 py-4 bg-white/80 hover:bg-white dark:bg-gray-800/80 dark:hover:bg-gray-800 text-gray-900 dark:text-white font-semibold rounded-xl transition-all duration-300 border border-gray-200 dark:border-gray-700"
               >
                 View Pricing
               </Link>
@@ -62,10 +67,10 @@ export default function HomePage() {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            <div className="text-center">
+            <div className="text-center p-6 rounded-xl bg-white dark:bg-gray-800/50 border border-gray-200/50 dark:border-gray-700/50 hover:shadow-lg transition-all duration-300">
               <div className="flex justify-center mb-4">
-                <div className="p-3 bg-blue-100 dark:bg-blue-900 rounded-lg">
-                  <Zap className="h-8 w-8 text-blue-600 dark:text-blue-400" />
+                <div className="p-3 bg-gradient-to-br from-indigo-100 to-indigo-200 dark:from-indigo-900/30 dark:to-indigo-900/50 rounded-lg">
+                  <Zap className="h-8 w-8 text-indigo-600 dark:text-indigo-400" />
                 </div>
               </div>
               <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
@@ -76,10 +81,10 @@ export default function HomePage() {
               </p>
             </div>
             
-            <div className="text-center">
+            <div className="text-center p-6 rounded-xl bg-white dark:bg-gray-800/50 border border-gray-200/50 dark:border-gray-700/50 hover:shadow-lg transition-all duration-300">
               <div className="flex justify-center mb-4">
-                <div className="p-3 bg-green-100 dark:bg-green-900 rounded-lg">
-                  <Shield className="h-8 w-8 text-green-600 dark:text-green-400" />
+                <div className="p-3 bg-gradient-to-br from-purple-100 to-purple-200 dark:from-purple-900/30 dark:to-purple-900/50 rounded-lg">
+                  <Shield className="h-8 w-8 text-purple-600 dark:text-purple-400" />
                 </div>
               </div>
               <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
@@ -90,10 +95,10 @@ export default function HomePage() {
               </p>
             </div>
             
-            <div className="text-center">
+            <div className="text-center p-6 rounded-xl bg-white dark:bg-gray-800/50 border border-gray-200/50 dark:border-gray-700/50 hover:shadow-lg transition-all duration-300">
               <div className="flex justify-center mb-4">
-                <div className="p-3 bg-purple-100 dark:bg-purple-900 rounded-lg">
-                  <Users className="h-8 w-8 text-purple-600 dark:text-purple-400" />
+                <div className="p-3 bg-gradient-to-br from-indigo-100 to-purple-100 dark:from-indigo-900/30 dark:to-purple-900/30 rounded-lg">
+                  <Users className="h-8 w-8 text-indigo-600 dark:text-indigo-400" />
                 </div>
               </div>
               <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
@@ -104,10 +109,10 @@ export default function HomePage() {
               </p>
             </div>
             
-            <div className="text-center">
+            <div className="text-center p-6 rounded-xl bg-white dark:bg-gray-800/50 border border-gray-200/50 dark:border-gray-700/50 hover:shadow-lg transition-all duration-300">
               <div className="flex justify-center mb-4">
-                <div className="p-3 bg-orange-100 dark:bg-orange-900 rounded-lg">
-                  <BarChart3 className="h-8 w-8 text-orange-600 dark:text-orange-400" />
+                <div className="p-3 bg-gradient-to-br from-purple-100 to-indigo-100 dark:from-purple-900/30 dark:to-indigo-900/30 rounded-lg">
+                  <BarChart3 className="h-8 w-8 text-purple-600 dark:text-purple-400" />
                 </div>
               </div>
               <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
@@ -246,25 +251,25 @@ export default function HomePage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-24 bg-primary">
+      <section className="py-24 bg-gradient-to-r from-indigo-600 to-purple-600">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
             Ready to Create Amazing Content?
           </h2>
-          <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
+          <p className="text-xl text-indigo-100 mb-8 max-w-2xl mx-auto">
             Join thousands of users who are already using GenStacker to create content faster and better.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               href="/auth/signup"
-              className="inline-flex items-center justify-center px-8 py-4 bg-white hover:bg-gray-100 text-primary font-semibold rounded-lg transition-all duration-200 transform hover:scale-105"
+              className="inline-flex items-center justify-center px-8 py-4 bg-white hover:bg-gray-100 text-indigo-600 font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg"
             >
               Start Free Trial
               <CheckCircle className="ml-2 h-5 w-5" />
             </Link>
             <Link
               href="/tools"
-              className="inline-flex items-center justify-center px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-all duration-200"
+              className="inline-flex items-center justify-center px-8 py-4 bg-indigo-700 hover:bg-indigo-800 text-white font-semibold rounded-xl transition-all duration-300 border border-indigo-500"
             >
               Browse Tools
             </Link>
