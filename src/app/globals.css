@@ -63,3 +63,21 @@
     @apply bg-background text-foreground;
   }
 }
+
+@layer utilities {
+  .text-primary {
+    @apply text-indigo-600 dark:text-indigo-400;
+  }
+  
+  .bg-primary {
+    @apply bg-indigo-600 dark:bg-indigo-600;
+  }
+  
+  .hover\:bg-primary {
+    @apply hover:bg-indigo-700 dark:hover:bg-indigo-700;
+  }
+  
+  .border-primary {
+    @apply border-indigo-500;
+  }
+}
