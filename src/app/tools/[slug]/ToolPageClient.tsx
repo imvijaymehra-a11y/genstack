@@ -31,8 +31,8 @@ export default function ToolPageClient({ slug }: ToolPageClientProps) {
 
     // Check user authentication & session
     const checkAuth = async () => {
-      const { data: { session, user } } = await supabase.auth.getSession();
-      setUser(user);
+      const { data: { session } } = await supabase.auth.getSession();
+      setUser(session?.user || null);
       setSession(session);
     };
 
