@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getToolBySlug } from '@/lib/tools';
 import { generateContent } from '@/lib/openai';
-import { canUserGenerate, recordUsage } from '@/lib/supabase';
+import { canUserGenerate, recordUsage, getUserPlan } from '@/lib/supabase';
 import { createClient } from '@supabase/supabase-js';
 
 // Rate limiting storage (in production, use Redis or similar)
@@ -88,8 +88,9 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Check rate limiting
-    const dailyLimit = user.plan === 'pro' ? 1000 : 10; // Pro users get higher rate limit
+    // Get user's plan for rate limiting
+    const userPlan = await getUserPlan(user.id) || 'free';
+    const dailyLimit = userPlan === 'pro' ? 1000 : 10; // Pro users get higher rate limit
     const rateLimitCheck = checkRateLimit(user.id, dailyLimit);
     if (!rateLimitCheck.allowed) {
       const resetTime = new Date(rateLimitCheck.resetTime!);

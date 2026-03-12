@@ -71,6 +71,20 @@ export async function recordUsage(userId: string, tool: string): Promise<void> {
   }
 }
 
+export async function getUserPlan(userId: string): Promise<'free' | 'pro' | null> {
+  const { data: user, error } = await supabase
+    .from('users')
+    .select('plan')
+    .eq('id', userId)
+    .single();
+  
+  if (error || !user) {
+    return null;
+  }
+  
+  return user.plan as 'free' | 'pro';
+}
+
 export async function canUserGenerate(userId: string): Promise<{ canGenerate: boolean; reason?: string }> {
   const { data: user, error } = await supabase
     .from('users')
