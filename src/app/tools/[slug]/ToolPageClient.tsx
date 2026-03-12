@@ -37,7 +37,7 @@ export default function ToolPageClient({ slug }: ToolPageClientProps) {
     checkAuth();
   }, [slug]);
 
-  const handleGenerate = async (input: string) => {
+  const handleGenerate = async (input: string): Promise<string> => {
     setIsGenerating(true);
     setError('');
 
@@ -54,8 +54,10 @@ export default function ToolPageClient({ slug }: ToolPageClientProps) {
       }
 
       setGeneratedContent(data.content);
+      return data.content;
     } catch (err: any) {
       setError(err.message || 'An error occurred');
+      throw err;
     } finally {
       setIsGenerating(false);
     }
