@@ -68,7 +68,7 @@ export default function Navbar() {
                 {categories.map((category) => (
                   <Link
                     key={category}
-                    href={\/tools?category=\\}
+                    href={`/tools?category=${category}`}
                     className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 hover:text-indigo-600 dark:hover:text-indigo-400 first:rounded-t-lg last:rounded-b-lg transition-colors"
                   >
                     {category}
