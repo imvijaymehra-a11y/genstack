@@ -164,14 +164,14 @@ export default function Navbar() {
               className="w-full text-left px-3 py-2 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors flex items-center justify-between"
             >
               Categories
-              <ChevronDown className={\h-4 w-4 transition-transform \\} />
+              <ChevronDown className="h-4 w-4 transition-transform" />
             </button>
             {showCategoriesMenu && (
               <div className="pl-4 space-y-1">
                 {categories.map((category) => (
                   <Link
                     key={category}
-                    href={\/tools?category=\\}
+                    href={`/tools?category=${category}`}
                     className="block px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
                     onClick={() => {
                       setIsOpen(false);
