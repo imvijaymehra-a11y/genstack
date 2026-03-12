@@ -18,6 +18,7 @@ export default function ToolPageClient({ slug }: ToolPageClientProps) {
   const [generatedContent, setGeneratedContent] = useState('');
   const [isGenerating, setIsGenerating] = useState(false);
   const [user, setUser] = useState<any>(null);
+  const [session, setSession] = useState<any>(null);
   const [error, setError] = useState('');
 
   useEffect(() => {
@@ -28,23 +29,42 @@ export default function ToolPageClient({ slug }: ToolPageClientProps) {
       return;
     }
 
-    // Check user authentication
+    // Check user authentication & session
     const checkAuth = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
+      const { data: { session, user } } = await supabase.auth.getSession();
       setUser(user);
+      setSession(session);
     };
 
     checkAuth();
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      (event, payload) => {
+        setUser(payload.session?.user || null);
+        setSession(payload.session || null);
+      }
+    );
+
+    return () => subscription.unsubscribe();
   }, [slug]);
 
   const handleGenerate = async (input: string): Promise<string> => {
+    if (!session?.access_token) {
+      setError('Please sign in to use this tool.');
+      throw new Error('Authorization required');
+    }
+
     setIsGenerating(true);
     setError('');
 
     try {
+      const headers: Record<string,string> = { 
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${session.access_token}`
+      };
       const res = await fetch('/api/generate', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers,
         body: JSON.stringify({ toolSlug: slug, input }),
       });
 

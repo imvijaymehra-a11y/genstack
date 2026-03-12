@@ -15,8 +15,8 @@ export default function Footer() {
               </span>
             </div>
             <p className="text-gray-600 dark:text-gray-400 max-w-md">
-              Generate Content, Ideas, Images and Marketing Copy with AI. 
-              41 AI Tools in One Platform.
+              Your all-in-one AI companion for creating copy, images, and ideas at lightning speed. 
+              41 smart tools to help you write, design, and grow.
             </p>
           </div>
 
