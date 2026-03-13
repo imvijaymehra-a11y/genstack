@@ -117,6 +117,11 @@ export default function HomePage() {
               >
                 View All Tools
               </Link>
+            </div>
+
+            {/* Stats Section */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8 mt-12 md:mt-16">
+              <div className="text-center">
                 <div className="flex justify-center items-center mb-2">
                   <div className="p-2 bg-indigo-100 dark:bg-indigo-900/30 rounded-lg">
                     <Zap className="h-6 w-6 text-indigo-600 dark:text-indigo-400" />
