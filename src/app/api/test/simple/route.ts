@@ -72,11 +72,10 @@ export async function GET() {
   results.recommendations = recommendations;
 
   // Check if all API keys are present
-  const allKeysPresent = 
-    process.env.OPENAI_API_KEY &&
+  const allKeysPresent = !!(process.env.OPENAI_API_KEY &&
     process.env.ANTHROPIC_API_KEY &&
     process.env.GOOGLE_AI_API_KEY &&
-    process.env.GROQ_API_KEY;
+    process.env.GROQ_API_KEY);
 
   results.summary = {
     allKeysPresent,
