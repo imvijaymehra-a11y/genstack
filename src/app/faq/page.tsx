@@ -1,14 +1,9 @@
-import { Metadata } from 'next';
+'use client';
+
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { HelpCircle, CreditCard, Shield, Zap, Users, Settings, ChevronDown, ChevronUp } from 'lucide-react';
 import { useState } from 'react';
-
-export const metadata: Metadata = {
-  title: 'FAQ | GenStacker - AI Tools Platform',
-  description: 'Frequently asked questions about GenStacker AI tools platform. Find answers about pricing, features, support, and more.',
-  robots: 'index, follow',
-};
 
 interface FAQItem {
   question: string;
