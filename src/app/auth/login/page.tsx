@@ -31,6 +31,7 @@ export default function LoginPage() {
     e.preventDefault();
     setLoading(true);
     setError('');
+    setMessage('');
 
     try {
       const { data, error } = await supabase.auth.signInWithPassword({
@@ -39,12 +40,23 @@ export default function LoginPage() {
       });
 
       if (error) {
-        setError(error.message);
-      } else {
-        setMessage('Login successful! Redirecting...');
-        setTimeout(() => {
-          router.push('/dashboard');
-        }, 1000);
+        if (error.message.includes('Email not confirmed')) {
+          setError('Please verify your email before signing in. Check your inbox for the verification link.');
+        } else {
+          setError(error.message);
+        }
+      } else if (data.user) {
+        if (data.user.email_confirmed_at) {
+          setMessage('Login successful! Redirecting to tools...');
+          setTimeout(() => {
+            router.push('/tools');
+          }, 1500);
+        } else {
+          // User exists but email not confirmed
+          setError('Please verify your email before signing in. Check your inbox for the verification link.');
+          // Sign out the user since email is not confirmed
+          await supabase.auth.signOut();
+        }
       }
     } catch (err) {
       setError('An unexpected error occurred. Please try again.');

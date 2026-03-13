@@ -58,6 +58,7 @@ export default function SignupPage() {
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+    setMessage('');
 
     if (!validateForm()) {
       return;
@@ -73,16 +74,22 @@ export default function SignupPage() {
           data: {
             full_name: fullName,
           },
+          emailRedirectTo: `${window.location.origin}/auth/verify`,
         },
       });
 
       if (error) {
         setError(error.message);
-      } else {
+      } else if (data.user && !data.session) {
+        // Email verification required
         setMessage('Account created successfully! Please check your email to verify your account.');
+        // Don't redirect, let user see the message
+      } else if (data.user && data.session) {
+        // User is automatically signed in (email provider)
+        setMessage('Account created successfully! Redirecting to tools...');
         setTimeout(() => {
-          router.push('/auth/login');
-        }, 3000);
+          router.push('/tools');
+        }, 2000);
       }
     } catch (err) {
       setError('An unexpected error occurred. Please try again.');
