@@ -98,16 +98,9 @@ export default function ToolPageClient({ slug }: ToolPageClientProps) {
     setGeneratedContent(''); // Clear previous content to prevent caching issues
 
     try {
-      const headers: Record<string,string> = { 
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${session.access_token}`,
-        'Cache-Control': 'no-cache',
-        'Pragma': 'no-cache'
-      };
-
       // Create FormData if there's a file
       let body: string | FormData;
-      let contentType: string;
+      let headers: Record<string,string>;
 
       if (file) {
         const formData = new FormData();
@@ -117,7 +110,13 @@ export default function ToolPageClient({ slug }: ToolPageClientProps) {
         formData.append('timestamp', Date.now().toString());
         formData.append('file', file);
         body = formData;
-        contentType = 'multipart/form-data';
+        
+        // Don't set Content-Type header for FormData - browser sets it automatically
+        headers = {
+          'Authorization': `Bearer ${session.access_token}`,
+          'Cache-Control': 'no-cache',
+          'Pragma': 'no-cache'
+        };
       } else {
         body = JSON.stringify({ 
           toolSlug: slug, 
@@ -125,15 +124,18 @@ export default function ToolPageClient({ slug }: ToolPageClientProps) {
           modelId: selectedModel,
           timestamp: Date.now()
         });
-        contentType = 'application/json';
+        
+        headers = {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${session.access_token}`,
+          'Cache-Control': 'no-cache',
+          'Pragma': 'no-cache'
+        };
       }
 
       const res = await fetch('/api/generate', {
         method: 'POST',
-        headers: {
-          ...headers,
-          'Content-Type': contentType
-        },
+        headers,
         body,
       });
 

@@ -36,23 +36,45 @@ export async function POST(request: NextRequest) {
     // Handle both JSON and FormData requests
     const contentType = request.headers.get('content-type') || '';
     let toolSlug: string;
-    let input: string;
+    let input: string = '';
     let modelId = 'gpt-3.5-turbo';
     let imageFile: File | undefined;
 
+    console.log('Content-Type:', contentType);
+
     if (contentType.includes('multipart/form-data')) {
       // Handle file upload
-      const formData = await request.formData();
-      toolSlug = formData.get('toolSlug') as string;
-      input = formData.get('input') as string;
-      modelId = formData.get('modelId') as string || 'gpt-3.5-turbo';
-      imageFile = formData.get('file') as File | undefined;
+      try {
+        const formData = await request.formData();
+        console.log('FormData received, entries:', formData.keys());
+        
+        toolSlug = formData.get('toolSlug') as string;
+        input = formData.get('input') as string || '';
+        modelId = formData.get('modelId') as string || 'gpt-3.5-turbo';
+        imageFile = formData.get('file') as File | undefined;
+        
+        console.log('Parsed FormData - toolSlug:', toolSlug, 'input:', input, 'hasFile:', !!imageFile);
+      } catch (formDataError) {
+        console.error('FormData parsing error:', formDataError);
+        return NextResponse.json(
+          { error: 'Failed to parse form data. Please try again.' },
+          { status: 400 }
+        );
+      }
     } else {
       // Handle JSON request
-      const body = await request.json();
-      toolSlug = body.toolSlug;
-      input = body.input;
-      modelId = body.modelId || 'gpt-3.5-turbo';
+      try {
+        const body = await request.json();
+        toolSlug = body.toolSlug;
+        input = body.input || '';
+        modelId = body.modelId || 'gpt-3.5-turbo';
+      } catch (jsonError) {
+        console.error('JSON parsing error:', jsonError);
+        return NextResponse.json(
+          { error: 'Failed to parse request data. Please try again.' },
+          { status: 400 }
+        );
+      }
     }
 
     // Validate input
