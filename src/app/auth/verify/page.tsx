@@ -12,7 +12,9 @@ export default function VerifyPage() {
   const [loading, setLoading] = useState(true);
   const [verified, setVerified] = useState(false);
   const [error, setError] = useState('');
+  const [message, setMessage] = useState('');
   const [email, setEmail] = useState('');
+  const [resendEmail, setResendEmail] = useState('');
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -21,9 +23,17 @@ export default function VerifyPage() {
       const token = searchParams.get('token');
       const type = searchParams.get('type');
       const emailFromUrl = searchParams.get('email');
+      const errorCode = searchParams.get('error_code');
+
+      // Check for specific error codes from URL
+      if (errorCode === 'otp_expired') {
+        setError('The verification link has expired. Please request a new verification email below.');
+        setLoading(false);
+        return;
+      }
 
       if (!token || type !== 'signup') {
-        setError('Invalid verification link');
+        setError('Invalid verification link. Please request a new verification email below.');
         setLoading(false);
         return;
       }
@@ -43,7 +53,14 @@ export default function VerifyPage() {
         const { data, error } = await supabase.auth.verifyOtp(verifyParams);
 
         if (error) {
-          setError(error.message);
+          // Handle specific error cases
+          if (error.message.includes('expired')) {
+            setError('The verification link has expired. Please request a new verification email below.');
+          } else if (error.message.includes('invalid')) {
+            setError('Invalid verification link. Please request a new verification email below.');
+          } else {
+            setError(error.message);
+          }
         } else if (data.user) {
           setVerified(true);
           setEmail(data.user.email || '');
@@ -53,7 +70,7 @@ export default function VerifyPage() {
           }, 3000);
         }
       } catch (err) {
-        setError('An unexpected error occurred during verification');
+        setError('An unexpected error occurred during verification. Please try again or request a new verification email.');
       } finally {
         setLoading(false);
       }
@@ -67,9 +84,17 @@ export default function VerifyPage() {
     setError('');
 
     try {
+      const emailToUse = resendEmail || email;
+      
+      if (!emailToUse) {
+        setError('Please enter your email address');
+        setLoading(false);
+        return;
+      }
+
       const { error } = await supabase.auth.resend({
         type: 'signup',
-        email: email,
+        email: emailToUse,
       });
 
       if (error) {
@@ -77,7 +102,9 @@ export default function VerifyPage() {
       } else {
         setVerified(false);
         setError('');
-        // Show success message
+        setMessage('Verification email sent! Please check your inbox.');
+        // Clear the resend email after successful send
+        setResendEmail('');
       }
     } catch (err) {
       setError('Failed to resend verification email');

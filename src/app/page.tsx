@@ -103,7 +103,7 @@ export default function HomePage() {
               Free forever, no credit card required.
             </p>
             
-            <div className="flex flex-col sm:flex-row gap-3 md:gap-4 justify-center items-center px-4 md:px-0">
+            <div className="flex flex-col sm:flex-row gap-3 md:gap-4 justify-center items-center max-w-2xl mx-auto">
               <Link
                 href="/tools"
                 className="btn-responsive-lg w-full sm:w-auto bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-medium shadow-lg transition-all duration-200 transform hover:scale-105 gpu-accelerated"

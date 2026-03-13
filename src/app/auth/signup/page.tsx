@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Eye, EyeOff, Mail, Lock, User, Sparkles, CheckCircle, ArrowRight, Zap, Shield, Star } from 'lucide-react';
@@ -19,6 +19,7 @@ export default function SignupPage() {
   const [error, setError] = useState('');
   const [message, setMessage] = useState('');
   const [agreedToTerms, setAgreedToTerms] = useState(false);
+  const messageRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -30,6 +31,16 @@ export default function SignupPage() {
     };
     checkUser();
   }, [router]);
+
+  // Auto-scroll to message when it appears
+  useEffect(() => {
+    if (message && messageRef.current) {
+      messageRef.current.scrollIntoView({ 
+        behavior: 'smooth', 
+        block: 'center' 
+      });
+    }
+  }, [message]);
 
   const validateForm = () => {
     if (!fullName.trim()) {
@@ -222,16 +233,10 @@ export default function SignupPage() {
                 </p>
               </div>
 
-              {/* Error/Success Messages */}
+              {/* Error Messages */}
               {error && (
                 <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 dark:bg-red-900/20 dark:border-red-800 dark:text-red-400">
                   {error}
-                </div>
-              )}
-
-              {message && (
-                <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg text-green-700 dark:bg-green-900/20 dark:border-green-800 dark:text-green-400">
-                  {message}
                 </div>
               )}
 
@@ -365,6 +370,17 @@ export default function SignupPage() {
                 </div>
 
                 {/* Submit Button */}
+                <div ref={messageRef}>
+                  {message && (
+                    <div className="mb-4 p-4 bg-green-50 border border-green-200 rounded-lg text-green-700 dark:bg-green-900/20 dark:border-green-800 dark:text-green-400 animate-pulse">
+                      <div className="flex items-center">
+                        <CheckCircle className="h-5 w-5 mr-2 text-green-600 dark:text-green-400" />
+                        {message}
+                      </div>
+                    </div>
+                  )}
+                </div>
+
                 <button
                   type="submit"
                   disabled={loading}
