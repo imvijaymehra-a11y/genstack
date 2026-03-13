@@ -195,14 +195,14 @@ export default function Navbar() {
             <div className="hidden md:flex items-center space-x-1">
               <Link
                 href="/tools"
-                className="px-2 py-2 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-indigo-600 dark:hover:text-indigo-400 transition-all duration-200"
+                className="px-2 py-2 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-indigo-600 dark:hover:text-indigo-400 transition-all duration-200 mobile-touch"
               >
                 All Tools
               </Link>
 
               {/* Categories Dropdown */}
               <div className="relative group">
-                <button className="px-2 py-2 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-indigo-600 dark:hover:text-indigo-400 transition-all duration-200 flex items-center gap-1">
+                <button className="px-2 py-2 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-indigo-600 dark:hover:text-indigo-400 transition-all duration-200 flex items-center gap-1 mobile-touch">
                   Categories
                   <ChevronDown className="h-4 w-4" />
                 </button>
@@ -212,7 +212,7 @@ export default function Navbar() {
                       <Link
                         key={category}
                         href={getCategoryUrl(category)}
-                        className="block px-4 py-3 text-sm text-gray-700 dark:text-gray-300 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 hover:text-indigo-600 dark:hover:text-indigo-400 rounded-lg transition-colors"
+                        className="block px-4 py-3 text-sm text-gray-700 dark:text-gray-300 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 hover:text-indigo-600 dark:hover:text-indigo-400 rounded-lg transition-colors mobile-touch"
                       >
                         {category}
                       </Link>
@@ -223,7 +223,7 @@ export default function Navbar() {
 
               <Link
                 href="/pricing"
-                className="px-2 py-2 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-indigo-600 dark:hover:text-indigo-400 transition-all duration-200"
+                className="px-2 py-2 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-indigo-600 dark:hover:text-indigo-400 transition-all duration-200 mobile-touch"
               >
                 Pricing
               </Link>

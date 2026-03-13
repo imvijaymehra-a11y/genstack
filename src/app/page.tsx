@@ -80,45 +80,43 @@ export default function HomePage() {
           <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-purple-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 dark:opacity-10"></div>
           <div className="absolute top-1/2 left-1/4 w-96 h-96 bg-gradient-to-br from-indigo-100/20 to-purple-100/20 dark:from-indigo-900/10 dark:to-purple-900/10 rounded-full blur-3xl"></div>
         </div>
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
+        <div className="relative max-w-7xl mx-auto responsive-px py-8 md:py-16 lg:py-24">
           <div className="text-center">
-            <div className="flex justify-center mb-8">
-              <div className="inline-flex items-center px-4 py-2 bg-indigo-100 dark:bg-indigo-900/30 rounded-full border border-indigo-200 dark:border-indigo-700">
-                <Sparkles className="h-4 w-4 text-indigo-600 dark:text-indigo-400 mr-2" />
-                <span className="text-sm font-semibold text-indigo-600 dark:text-indigo-400">
+            <div className="flex justify-center mb-6 md:mb-8">
+              <div className="inline-flex items-center px-3 md:px-4 py-2 bg-indigo-100 dark:bg-indigo-900/30 rounded-full border border-indigo-200 dark:border-indigo-700">
+                <Sparkles className="h-3 w-3 md:h-4 md:w-4 text-indigo-600 dark:text-indigo-400 mr-2" />
+                <span className="text-xs md:text-sm font-semibold text-indigo-600 dark:text-indigo-400">
                   Trusted by 10,000+ creators
                 </span>
               </div>
             </div>
             
-            <h1 className="text-5xl md:text-7xl font-extrabold bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent mb-6 leading-tight">
-              Your AI Sidekick for Content, Creativity & Copy
+            <h1 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-gray-900 dark:text-white mb-4 md:mb-6 leading-tight">
+              <span className="block">41+ AI Tools for</span>
+              <span className="block bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+                Content Creation
+              </span>
             </h1>
             
-            <p className="text-xl md:text-2xl text-gray-700 dark:text-gray-300 mb-8 max-w-4xl mx-auto leading-relaxed">
-              <span className="font-semibold text-indigo-600 dark:text-indigo-400">41 powerful tools</span> under one roof – write, brainstorm, design and scale faster than ever.
+            <p className="text-base md:text-lg lg:text-xl text-gray-600 dark:text-gray-300 mb-6 md:mb-8 max-w-2xl mx-auto px-4 md:px-0 mobile-text">
+              Generate high-quality content, marketing copy, images, and more with our advanced AI tools. 
+              Free forever, no credit card required.
             </p>
             
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
+            <div className="flex flex-col sm:flex-row gap-3 md:gap-4 justify-center items-center px-4 md:px-0">
               <Link
                 href="/tools"
-                className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 shadow-xl hover:shadow-2xl"
+                className="btn-responsive-lg w-full sm:w-auto bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-medium shadow-lg transition-all duration-200 transform hover:scale-105 gpu-accelerated"
               >
-                Explore All Tools
-                <ArrowRight className="ml-2 h-5 w-5" />
+                Start Creating Free
+                <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
               <Link
-                href="/auth/signup"
-                className="inline-flex items-center px-8 py-4 bg-white dark:bg-gray-800 text-indigo-600 dark:text-indigo-400 font-semibold rounded-xl transition-all duration-300 border-2 border-indigo-200 dark:border-indigo-700 hover:bg-indigo-50 dark:hover:bg-indigo-900/50 transform hover:scale-105 shadow-lg"
+                href="#features"
+                className="btn-responsive w-full sm:w-auto bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 font-medium transition-all duration-200"
               >
-                Start Free Trial
-                <CheckCircle className="ml-2 h-5 w-5" />
+                View All Tools
               </Link>
-            </div>
-
-            {/* Stats */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto mb-16">
-              <div className="text-center">
                 <div className="flex justify-center items-center mb-2">
                   <div className="p-2 bg-indigo-100 dark:bg-indigo-900/30 rounded-lg">
                     <Zap className="h-6 w-6 text-indigo-600 dark:text-indigo-400" />
