@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { ArrowRight, Sparkles, Star, DollarSign, Zap, List } from 'lucide-react';
+import { generateImageSeoProps } from '@/lib/utils';
 
 interface ToolCardProps {
   tool: {
@@ -10,6 +11,7 @@ interface ToolCardProps {
     featured?: boolean;
     pricing?: 'free' | 'freemium' | 'paid';
     tags?: string[];
+    image?: string;
   };
   viewMode?: 'grid' | 'list';
 }
@@ -27,6 +29,12 @@ export default function ToolCard({ tool, viewMode = 'grid' }: ToolCardProps) {
         return 'bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-400';
     }
   };
+
+  const imageUrl = tool.image || `/api/og/${tool.slug}`;
+  const imageAlt = `${tool.name} - Free AI ${tool.name} Generator`;
+  const imageTitle = `${tool.name} AI Tool - ${tool.category}`;
+
+  const imageSeoProps = generateImageSeoProps(imageUrl, imageAlt, imageTitle);
 
   const getPricingText = (pricing?: string) => {
     switch (pricing) {

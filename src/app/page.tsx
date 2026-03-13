@@ -4,6 +4,66 @@ import { tools, categories, getCategoryUrl } from '@/lib/tools';
 import ToolCard from '@/components/ToolCard';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'GenStacker - 41+ Free AI Tools for Content Creation & Marketing',
+  description: 'Generate high-quality content, marketing copy, images, and more with 41+ powerful AI tools. Free AI writer, blog generator, social media tools, and marketing automation. Start creating for free today!',
+  keywords: [
+    'free AI tools',
+    'AI content generator',
+    'AI writing tools',
+    'AI marketing tools',
+    'content creation AI',
+    'AI image generator',
+    'AI copywriting',
+    'AI SEO tools',
+    'AI blog writer',
+    'AI social media tools',
+    'AI video generator',
+    'AI code generator',
+    'AI email marketing',
+    'AI ad copy',
+    'AI product descriptions',
+    'AI headline generator',
+    'AI paraphrasing tool',
+    'AI summarizer',
+    'AI translation',
+    'AI proofreading',
+    'ChatGPT alternatives',
+    'AI assistant',
+    'artificial intelligence tools',
+    'machine learning tools',
+    'automation tools',
+    'productivity AI',
+    'business AI tools',
+    'free AI writer',
+    'AI content creation',
+    'AI marketing assistant'
+  ],
+  openGraph: {
+    title: 'GenStacker - 41+ Free AI Tools for Content Creation & Marketing',
+    description: 'Generate high-quality content, marketing copy, images, and more with 41+ powerful AI tools. Free AI writer, blog generator, social media tools, and marketing automation.',
+    url: 'https://genstacker.com',
+    images: [
+      {
+        url: '/og-homepage.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'GenStacker - 41+ Free AI Tools Platform',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'GenStacker - 41+ Free AI Tools for Content Creation & Marketing',
+    description: 'Generate high-quality content, marketing copy, images, and more with 41+ powerful AI tools. Start creating for free today!',
+    images: ['/og-homepage.jpg'],
+  },
+  alternates: {
+    canonical: 'https://genstacker.com',
+  },
+}
 
 export default function HomePage() {
   const popularTools = tools.slice(0, 6);

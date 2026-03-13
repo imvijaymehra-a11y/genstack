@@ -1,0 +1,116 @@
+import { tools, categories } from '@/lib/tools'
+
+export default function sitemap() {
+  const baseUrl = 'https://genstacker.com'
+  const currentDate = new Date().toISOString()
+
+  // Static pages
+  const staticPages = [
+    {
+      url: baseUrl,
+      lastModified: currentDate,
+      changeFrequency: 'daily',
+      priority: 1.0,
+    },
+    {
+      url: `${baseUrl}/tools`,
+      lastModified: currentDate,
+      changeFrequency: 'daily',
+      priority: 0.9,
+    },
+    {
+      url: `${baseUrl}/pricing`,
+      lastModified: currentDate,
+      changeFrequency: 'weekly',
+      priority: 0.8,
+    },
+    {
+      url: `${baseUrl}/blog`,
+      lastModified: currentDate,
+      changeFrequency: 'daily',
+      priority: 0.8,
+    },
+    {
+      url: `${baseUrl}/faq`,
+      lastModified: currentDate,
+      changeFrequency: 'weekly',
+      priority: 0.7,
+    },
+    {
+      url: `${baseUrl}/contact`,
+      lastModified: currentDate,
+      changeFrequency: 'monthly',
+      priority: 0.6,
+    },
+    {
+      url: `${baseUrl}/auth/login`,
+      lastModified: currentDate,
+      changeFrequency: 'monthly',
+      priority: 0.5,
+    },
+    {
+      url: `${baseUrl}/auth/signup`,
+      lastModified: currentDate,
+      changeFrequency: 'monthly',
+      priority: 0.5,
+    },
+    {
+      url: `${baseUrl}/dashboard`,
+      lastModified: currentDate,
+      changeFrequency: 'weekly',
+      priority: 0.4,
+    },
+  ]
+
+  // Tool pages
+  const toolPages = tools.map((tool) => ({
+    url: `${baseUrl}/tools/${tool.slug}`,
+    lastModified: currentDate,
+    changeFrequency: 'weekly',
+    priority: 0.8,
+  }))
+
+  // Category pages
+  const categoryPages = categories.map((category) => ({
+    url: `${baseUrl}/category/${category.toLowerCase().replace(/\s+/g, '-')}`,
+    lastModified: currentDate,
+    changeFrequency: 'weekly',
+    priority: 0.7,
+  }))
+
+  // Blog pages (placeholder - would be dynamic in real implementation)
+  const blogPages = [
+    {
+      url: `${baseUrl}/blog/ai-tools-guide`,
+      lastModified: currentDate,
+      changeFrequency: 'monthly',
+      priority: 0.6,
+    },
+    {
+      url: `${baseUrl}/blog/chatgpt-alternatives`,
+      lastModified: currentDate,
+      changeFrequency: 'monthly',
+      priority: 0.6,
+    },
+    {
+      url: `${baseUrl}/blog/ai-content-creation`,
+      lastModified: currentDate,
+      changeFrequency: 'monthly',
+      priority: 0.6,
+    },
+  ]
+
+  const allPages = [
+    ...staticPages,
+    ...toolPages,
+    ...categoryPages,
+    ...blogPages,
+  ]
+
+  return allPages.map((page) => ({
+    url: page.url,
+    lastModified: page.lastModified,
+    changeFrequency: page.changeFrequency,
+    priority: page.priority,
+  }))
+}
