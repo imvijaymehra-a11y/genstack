@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { Search, Megaphone, Target, TrendingUp, CheckCircle, ArrowRight, Star, Zap, Shield, BarChart, Mail, Bullhorn } from 'lucide-react';
+import { Search, Megaphone, Target, TrendingUp, CheckCircle, ArrowRight, Star, Zap, Shield, BarChart, Mail } from 'lucide-react';
 import { tools, getToolsByCategory } from '@/lib/tools';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -20,7 +20,7 @@ export default function MarketingAdvertisingCategoryPage() {
 
   const marketingTools = [
     {
-      icon: <Bullhorn className="h-6 w-6" />,
+      icon: <Megaphone className="h-6 w-6" />,
       title: "Ad Copy Generator",
       description: "Create compelling advertising copy",
       features: ["Headlines", "Body text", "Call-to-action", "A/B testing variations"]
