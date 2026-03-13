@@ -3,7 +3,7 @@ import { generateContentWithModel } from '@/lib/multi-ai';
 import { createClient } from '@supabase/supabase-js';
 
 export async function GET() {
-  const results = {
+  const results: any = {
     timestamp: new Date().toISOString(),
     providers: {} as Record<string, any>,
     supabase: {} as any,
