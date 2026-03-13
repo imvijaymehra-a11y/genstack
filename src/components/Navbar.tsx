@@ -142,7 +142,7 @@ export default function Navbar() {
             </div>
 
             {/* Search Bar */}
-            <div className="hidden lg:flex flex-1 max-w-xs mx-4" ref={searchRef}>
+            <div className="hidden lg:flex flex-1 max-w-xs mx-2 my-auto" ref={searchRef}>
               <form onSubmit={handleSearch} className="relative w-full">
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -195,14 +195,14 @@ export default function Navbar() {
             <div className="hidden md:flex items-center space-x-1">
               <Link
                 href="/tools"
-                className="px-3 py-2 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-indigo-600 dark:hover:text-indigo-400 transition-all duration-200"
+                className="px-2 py-2 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-indigo-600 dark:hover:text-indigo-400 transition-all duration-200"
               >
                 All Tools
               </Link>
 
               {/* Categories Dropdown */}
               <div className="relative group">
-                <button className="px-3 py-2 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-indigo-600 dark:hover:text-indigo-400 transition-all duration-200 flex items-center gap-1">
+                <button className="px-2 py-2 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-indigo-600 dark:hover:text-indigo-400 transition-all duration-200 flex items-center gap-1">
                   Categories
                   <ChevronDown className="h-4 w-4" />
                 </button>
@@ -223,7 +223,7 @@ export default function Navbar() {
 
               <Link
                 href="/pricing"
-                className="px-3 py-2 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-indigo-600 dark:hover:text-indigo-400 transition-all duration-200"
+                className="px-2 py-2 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-indigo-600 dark:hover:text-indigo-400 transition-all duration-200"
               >
                 Pricing
               </Link>
@@ -232,7 +232,7 @@ export default function Navbar() {
                 <div className="relative">
                   <button
                     onClick={() => setShowUserMenu(!showUserMenu)}
-                    className="flex items-center space-x-2 px-3 py-2 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-200"
+                    className="flex items-center space-x-2 px-2 py-2 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-200"
                   >
                     <div className="w-8 h-8 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-full flex items-center justify-center">
                       <User className="h-4 w-4 text-white" />
@@ -274,13 +274,13 @@ export default function Navbar() {
                 <div className="flex items-center space-x-2">
                   <Link
                     href="/auth/login"
-                    className="px-3 py-2 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-all duration-200"
+                    className="px-2 py-2 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-all duration-200"
                   >
                     Login
                   </Link>
                   <Link
                     href="/auth/signup"
-                    className="px-3 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-lg font-medium shadow-lg transition-all duration-200 transform hover:scale-105"
+                    className="px-2 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-lg font-medium shadow-lg transition-all duration-200 transform hover:scale-105"
                   >
                     Sign up
                   </Link>
