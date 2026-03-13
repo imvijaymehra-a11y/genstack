@@ -406,3 +406,13 @@ export function getFreeTools(): Tool[] {
 export function getFreemiumTools(): Tool[] {
   return tools.filter(tool => tool.pricing === 'freemium');
 }
+
+// Convert category name to URL-friendly slug
+export function categoryToSlug(category: string): string {
+  return category.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+}
+
+// Generate category page URL
+export function getCategoryUrl(category: string): string {
+  return `/tools/category/${categoryToSlug(category)}`;
+}
