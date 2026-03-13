@@ -6,6 +6,11 @@ const openai = new OpenAI({
 
 export async function generateContent(prompt: string): Promise<string> {
   try {
+    // Validate API key first
+    if (!process.env.OPENAI_API_KEY || process.env.OPENAI_API_KEY === '') {
+      throw new Error('OpenAI API key is not configured');
+    }
+
     const completion = await openai.chat.completions.create({
       model: "gpt-3.5-turbo",
       messages: [
@@ -25,23 +30,42 @@ export async function generateContent(prompt: string): Promise<string> {
       presence_penalty: 0,
     });
 
-    return completion.choices[0]?.message?.content || 'Sorry, I could not generate content. Please try again.';
+    if (!completion.choices[0]?.message?.content) {
+      throw new Error('No content generated from OpenAI');
+    }
+
+    return completion.choices[0].message.content;
   } catch (error) {
     console.error('OpenAI API Error:', error);
     
     if (error instanceof Error) {
-      if (error.message.includes('insufficient quota')) {
-        throw new Error('API quota exceeded. Please check your OpenAI billing.');
+      // API Key Issues
+      if (error.message.includes('401') || error.message.includes('invalid api_key')) {
+        throw new Error('Invalid OpenAI API key. Please check your configuration.');
       }
-      if (error.message.includes('invalid api_key')) {
-        throw new Error('Invalid API key. Please check your OpenAI configuration.');
+      
+      // Billing/Quota Issues
+      if (error.message.includes('402') || error.message.includes('insufficient_quota')) {
+        throw new Error('OpenAI billing issue. Please check your OpenAI account billing.');
       }
-      if (error.message.includes('rate_limit_exceeded')) {
-        throw new Error('Rate limit exceeded. Please try again in a moment.');
+      
+      // Rate Limiting
+      if (error.message.includes('429') || error.message.includes('rate_limit_exceeded')) {
+        throw new Error('OpenAI rate limit exceeded. Please try again in a moment.');
+      }
+      
+      // Model Issues
+      if (error.message.includes('model_not_found')) {
+        throw new Error('OpenAI model not available. Please try again later.');
+      }
+      
+      // Network Issues
+      if (error.message.includes('ENOTFOUND') || error.message.includes('ECONNREFUSED')) {
+        throw new Error('Network error. Please check your internet connection.');
       }
     }
     
-    throw new Error('Failed to generate content. Please try again later.');
+    throw new Error('Content generation failed. Please try again later.');
   }
 }
 
