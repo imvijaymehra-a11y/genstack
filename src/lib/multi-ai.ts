@@ -9,12 +9,19 @@ export async function generateWithOpenAI(prompt: string, modelId: string): Promi
   });
 
   try {
+    const systemPrompts = {
+      'gpt-3.5-turbo': "You are GPT-3.5 Turbo, a fast and efficient AI assistant. Generate clear, concise, and practical content. Focus on being helpful and direct while maintaining quality. Use a conversational but professional tone.",
+      'gpt-4': "You are GPT-4, an advanced AI assistant with superior reasoning capabilities. Generate comprehensive, well-structured, and insightful content. Use sophisticated language and provide in-depth analysis with clear explanations."
+    };
+
+    const systemPrompt = systemPrompts[modelId as keyof typeof systemPrompts] || systemPrompts['gpt-3.5-turbo'];
+
     const completion = await openai.chat.completions.create({
       model: modelId,
       messages: [
         {
           role: "system",
-          content: "You are a helpful AI assistant that generates high-quality content based on user requests. Always provide well-structured, engaging, and accurate responses."
+          content: systemPrompt
         },
         {
           role: "user",
@@ -35,6 +42,13 @@ export async function generateWithOpenAI(prompt: string, modelId: string): Promi
 // Anthropic Claude Generation
 export async function generateWithClaude(prompt: string, modelId: string): Promise<string> {
   try {
+    const systemPrompts = {
+      'claude-3-sonnet': "You are Claude 3 Sonnet, known for creative and thoughtful content generation. Generate engaging, well-researched content with a natural conversational style. Focus on clarity, creativity, and providing valuable insights while maintaining ethical standards.",
+      'claude-3-opus': "You are Claude 3 Opus, the most capable model for complex reasoning. Generate sophisticated, nuanced content with deep analysis. Use advanced vocabulary, provide comprehensive coverage, and demonstrate superior understanding of the topic."
+    };
+
+    const systemPrompt = systemPrompts[modelId as keyof typeof systemPrompts] || systemPrompts['claude-3-sonnet'];
+
     const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {
@@ -48,7 +62,7 @@ export async function generateWithClaude(prompt: string, modelId: string): Promi
         messages: [
           {
             role: "user",
-            content: `You are a helpful AI assistant that generates high-quality content. ${prompt}`
+            content: `${systemPrompt}\n\nUser request: ${prompt}`
           }
         ]
       })
@@ -74,8 +88,15 @@ export async function generateWithGemini(prompt: string, modelId: string): Promi
     const genAI = new GoogleGenerativeAI(process.env.GOOGLE_AI_API_KEY || '');
     const model = genAI.getGenerativeModel({ model: modelId });
 
+    const systemPrompts = {
+      'gemini-pro': "You are Gemini Pro, Google's advanced multimodal AI. Generate comprehensive, well-structured content with excellent clarity. Leverage Google's vast knowledge base to provide accurate, up-to-date information. Use a professional yet accessible tone.",
+      'gemini-1.5-flash': "You are Gemini 1.5 Flash, optimized for speed and efficiency. Generate quick, concise, and practical content. Focus on delivering value rapidly while maintaining quality. Use clear, straightforward language."
+    };
+
+    const systemPrompt = systemPrompts[modelId as keyof typeof systemPrompts] || systemPrompts['gemini-pro'];
+
     const result = await model.generateContent(
-      `You are a helpful AI assistant that generates high-quality content based on user requests. Always provide well-structured, engaging, and accurate responses.\n\nUser request: ${prompt}`
+      `${systemPrompt}\n\nUser request: ${prompt}`
     );
 
     return result.response.text() || 'Content generation failed. Please try again.';
@@ -88,6 +109,14 @@ export async function generateWithGemini(prompt: string, modelId: string): Promi
 // Groq (Free OpenAI-compatible models)
 export async function generateWithGroq(prompt: string, modelId: string): Promise<string> {
   try {
+    const systemPrompts = {
+      'llama-3-8b-8192': "You are Llama 3 8B, Meta's efficient open-source model. Generate clear, practical content with good reasoning. Focus on being helpful and accurate while maintaining fast response times. Use a straightforward, accessible style.",
+      'mixtral-8x7b-32768': "You are Mixtral 8x7B, Mistral's high-quality open-source model. Generate sophisticated, well-structured content with excellent coherence. Use advanced language patterns and provide comprehensive coverage of topics.",
+      'gemma-2b-it-927': "You are Gemma 2B, Google's lightweight model optimized for speed. Generate concise, focused content quickly. Use simple language and get straight to the point while maintaining accuracy."
+    };
+
+    const systemPrompt = systemPrompts[modelId as keyof typeof systemPrompts] || systemPrompts['llama-3-8b-8192'];
+
     const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -99,7 +128,7 @@ export async function generateWithGroq(prompt: string, modelId: string): Promise
         messages: [
           {
             role: "system",
-            content: "You are a helpful AI assistant that generates high-quality content based on user requests. Always provide well-structured, engaging, and accurate responses."
+            content: systemPrompt
           },
           {
             role: "user",
