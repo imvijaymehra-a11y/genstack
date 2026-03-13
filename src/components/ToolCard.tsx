@@ -99,12 +99,11 @@ export default function ToolCard({ tool, viewMode = 'grid' }: ToolCardProps) {
                 </div>
               )}
             </div>
-            </div>
+          </div>
 
-            {/* Arrow */}
-            <div className="flex-shrink-0">
-              <ArrowRight className="h-5 w-5 text-gray-400 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-all duration-300 transform group-hover:translate-x-1" />
-            </div>
+          {/* Arrow */}
+          <div className="flex-shrink-0">
+            <ArrowRight className="h-5 w-5 text-gray-400 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-all duration-300 transform group-hover:translate-x-1" />
           </div>
         </div>
       </Link>
