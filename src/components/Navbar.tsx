@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useState, useEffect, useRef } from 'react';
 import { Menu, X, Sparkles, ChevronDown, Search, Globe, User, LogOut, Settings } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
-import { categories, tools } from '@/lib/tools';
+import { categories, getCategoryUrl, tools } from '@/lib/tools';
 import { cn } from '@/lib/utils';
 import { useRouter } from 'next/navigation';
 
@@ -211,7 +211,7 @@ export default function Navbar() {
                     {categories.map((category) => (
                       <Link
                         key={category}
-                        href={`/tools?category=${category}`}
+                        href={getCategoryUrl(category)}
                         className="block px-4 py-3 text-sm text-gray-700 dark:text-gray-300 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 hover:text-indigo-600 dark:hover:text-indigo-400 rounded-lg transition-colors"
                       >
                         {category}
@@ -339,7 +339,7 @@ export default function Navbar() {
                   {categories.map((category) => (
                     <Link
                       key={category}
-                      href={`/tools?category=${category}`}
+                      href={getCategoryUrl(category)}
                       className="block px-4 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
                       onClick={() => {
                         setIsOpen(false);

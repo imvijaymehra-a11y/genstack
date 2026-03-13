@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { ArrowRight, Sparkles, Zap, Shield, Users, BarChart3, CheckCircle, TrendingUp, Star, ArrowUp } from 'lucide-react';
-import { tools, categories } from '@/lib/tools';
+import { tools, categories, getCategoryUrl } from '@/lib/tools';
 import ToolCard from '@/components/ToolCard';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -231,7 +231,7 @@ export default function HomePage() {
             {categories.map((category) => (
               <Link
                 key={category}
-                href={`/tools?category=${encodeURIComponent(category)}`}
+                href={getCategoryUrl(category)}
                 className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl p-6 hover:shadow-xl transition-all duration-300 hover:scale-105 hover:border-indigo-500 dark:hover:border-indigo-400 group"
               >
                 <div className="flex items-center justify-between mb-4">
