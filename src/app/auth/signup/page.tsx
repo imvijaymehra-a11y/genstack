@@ -119,7 +119,7 @@ export default function SignupPage() {
       
       <div className="flex min-h-[calc(100vh-80px)]">
         {/* Left Side - Hero Section */}
-        <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-indigo-600 to-purple-700 p-12 text-white relative overflow-hidden items-center justify-center">
+        <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-indigo-600 to-purple-700 p-8 text-white relative overflow-hidden items-start justify-center pt-16">
           <div className="absolute inset-0 bg-black/10"></div>
           <div className="relative z-10 max-w-lg mx-auto text-center">
             <div className="flex flex-col items-center justify-center space-y-8">

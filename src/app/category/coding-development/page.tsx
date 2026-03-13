@@ -253,7 +253,7 @@ export default function CodingDevelopmentCategoryPage() {
           </div>
 
           {/* Search Bar */}
-          <div className="max-w-md mx-auto mb-12">
+          <div className="max-w-sm mx-auto mb-16 pt-8">
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <Search className="h-4 w-4 text-gray-400" />
