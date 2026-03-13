@@ -6,11 +6,16 @@ interface EnhancedToolOutputProps {
   content: string;
   toolName: string;
   isLoading: boolean;
+  toolSlug?: string;
 }
 
-export default function EnhancedToolOutput({ content, toolName, isLoading }: EnhancedToolOutputProps) {
+export default function EnhancedToolOutput({ content, toolName, isLoading, toolSlug }: EnhancedToolOutputProps) {
   const [copied, setCopied] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
+
+  // Check if this is an image tool
+  const isImageTool = ['background-remover', 'image-enhancer', 'ai-image-generator'].includes(toolSlug || '');
+  const isImageContent = content.startsWith('data:image/');
 
   const handleCopy = async () => {
     if (!content) return;
@@ -27,15 +32,26 @@ export default function EnhancedToolOutput({ content, toolName, isLoading }: Enh
   const handleDownload = () => {
     if (!content) return;
     
-    const blob = new Blob([content], { type: 'text/plain' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `${toolName.toLowerCase().replace(/\s+/g, '-')}-${new Date().toISOString().split('T')[0]}.txt`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+    if (isImageContent) {
+      // Download as image
+      const link = document.createElement('a');
+      link.href = content;
+      link.download = `${toolName.toLowerCase().replace(/\s+/g, '-')}-${new Date().toISOString().split('T')[0]}.png`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } else {
+      // Download as text
+      const blob = new Blob([content], { type: 'text/plain' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${toolName.toLowerCase().replace(/\s+/g, '-')}-${new Date().toISOString().split('T')[0]}.txt`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
   };
 
   const getWordCount = () => {
@@ -157,9 +173,19 @@ export default function EnhancedToolOutput({ content, toolName, isLoading }: Enh
       {/* Content */}
       <div className={`p-6 ${isExpanded ? 'max-h-none' : 'max-h-96 overflow-y-auto'}`}>
         <div className="prose prose-gray dark:prose-invert max-w-none">
-          <div className="whitespace-pre-wrap text-gray-800 dark:text-gray-200 leading-relaxed">
-            {content}
-          </div>
+          {isImageContent ? (
+            <div className="flex justify-center">
+              <img 
+                src={content} 
+                alt={`${toolName} result`}
+                className="max-w-full h-auto rounded-lg shadow-lg"
+              />
+            </div>
+          ) : (
+            <div className="whitespace-pre-wrap text-gray-800 dark:text-gray-200 leading-relaxed">
+              {content}
+            </div>
+          )}
         </div>
       </div>
 

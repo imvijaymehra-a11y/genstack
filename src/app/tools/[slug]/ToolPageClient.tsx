@@ -7,6 +7,7 @@ import { AI_MODELS } from '@/lib/ai-models';
 import { selectOptimalModel, getDefaultModelForTool } from '@/lib/intelligent-model-selector';
 import EnhancedToolForm from '@/components/EnhancedToolForm';
 import EnhancedToolOutput from '@/components/EnhancedToolOutput';
+import ImageToolForm from '@/components/ImageToolForm';
 import ToolPageHeader from '@/components/ToolPageHeader';
 import ModelSelector from '@/components/ModelSelector';
 import Navbar from '@/components/Navbar';
@@ -86,7 +87,7 @@ export default function ToolPageClient({ slug }: ToolPageClientProps) {
     return () => subscription.unsubscribe();
   }, [slug]);
 
-  const handleGenerate = async (input: string): Promise<string> => {
+  const handleGenerate = async (input: string, file?: File): Promise<string> => {
     if (!session?.access_token) {
       setError('Please sign in to use this tool.');
       throw new Error('Authorization required');
@@ -94,16 +95,46 @@ export default function ToolPageClient({ slug }: ToolPageClientProps) {
 
     setIsGenerating(true);
     setError('');
+    setGeneratedContent(''); // Clear previous content to prevent caching issues
 
     try {
       const headers: Record<string,string> = { 
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${session.access_token}`
+        'Authorization': `Bearer ${session.access_token}`,
+        'Cache-Control': 'no-cache',
+        'Pragma': 'no-cache'
       };
+
+      // Create FormData if there's a file
+      let body: string | FormData;
+      let contentType: string;
+
+      if (file) {
+        const formData = new FormData();
+        formData.append('toolSlug', slug);
+        formData.append('input', input);
+        formData.append('modelId', selectedModel);
+        formData.append('timestamp', Date.now().toString());
+        formData.append('file', file);
+        body = formData;
+        contentType = 'multipart/form-data';
+      } else {
+        body = JSON.stringify({ 
+          toolSlug: slug, 
+          input, 
+          modelId: selectedModel,
+          timestamp: Date.now()
+        });
+        contentType = 'application/json';
+      }
+
       const res = await fetch('/api/generate', {
         method: 'POST',
-        headers,
-        body: JSON.stringify({ toolSlug: slug, input, modelId: selectedModel }),
+        headers: {
+          ...headers,
+          'Content-Type': contentType
+        },
+        body,
       });
 
       const data = await res.json();
@@ -133,6 +164,9 @@ export default function ToolPageClient({ slug }: ToolPageClientProps) {
     );
   }
 
+  // Determine if this is an image tool
+  const isImageTool = ['background-remover', 'image-enhancer', 'ai-image-generator'].includes(slug);
+
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <Navbar />
@@ -145,19 +179,29 @@ export default function ToolPageClient({ slug }: ToolPageClientProps) {
           <div className="grid lg:grid-cols-3 gap-8">
             {/* Main Content Area */}
             <div className="lg:col-span-2 space-y-8">
-              {/* Enhanced Tool Form */}
-              <EnhancedToolForm
-                toolName={tool.name}
-                toolSlug={slug}
-                onGenerate={handleGenerate}
-                isGenerating={isGenerating}
-              />
+              {/* Tool Form - Image or Text */}
+              {isImageTool ? (
+                <ImageToolForm
+                  toolName={tool.name}
+                  toolSlug={slug}
+                  onGenerate={handleGenerate}
+                  isGenerating={isGenerating}
+                />
+              ) : (
+                <EnhancedToolForm
+                  toolName={tool.name}
+                  toolSlug={slug}
+                  onGenerate={handleGenerate}
+                  isGenerating={isGenerating}
+                />
+              )}
 
               {/* Enhanced Tool Output */}
               <EnhancedToolOutput
                 content={generatedContent}
                 toolName={tool.name}
                 isLoading={isGenerating}
+                toolSlug={slug}
               />
             </div>
 

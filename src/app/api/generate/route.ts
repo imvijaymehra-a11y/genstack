@@ -33,22 +33,77 @@ function checkRateLimit(userId: string, limit: number = 10): { allowed: boolean;
 
 export async function POST(request: NextRequest) {
   try {
-    const { toolSlug, input, modelId = 'gpt-3.5-turbo' } = await request.json();
+    // Handle both JSON and FormData requests
+    const contentType = request.headers.get('content-type') || '';
+    let toolSlug: string;
+    let input: string;
+    let modelId = 'gpt-3.5-turbo';
+    let imageFile: File | undefined;
+
+    if (contentType.includes('multipart/form-data')) {
+      // Handle file upload
+      const formData = await request.formData();
+      toolSlug = formData.get('toolSlug') as string;
+      input = formData.get('input') as string;
+      modelId = formData.get('modelId') as string || 'gpt-3.5-turbo';
+      imageFile = formData.get('file') as File | undefined;
+    } else {
+      // Handle JSON request
+      const body = await request.json();
+      toolSlug = body.toolSlug;
+      input = body.input;
+      modelId = body.modelId || 'gpt-3.5-turbo';
+    }
 
     // Validate input
-    if (!toolSlug || !input) {
+    if (!toolSlug) {
       return NextResponse.json(
-        { error: 'Tool slug and input are required' },
+        { error: 'Tool slug is required' },
         { status: 400 }
       );
     }
 
-    // Validate input length
-    if (input.length > 10000) {
+    // For image tools, file is required
+    const imageTools = ['background-remover', 'image-enhancer'];
+    if (imageTools.includes(toolSlug) && !imageFile) {
+      return NextResponse.json(
+        { error: 'Image file is required for this tool' },
+        { status: 400 }
+      );
+    }
+
+    // For non-image tools, input is required
+    if (!imageTools.includes(toolSlug) && !input) {
+      return NextResponse.json(
+        { error: 'Input is required' },
+        { status: 400 }
+      );
+    }
+
+    // Validate input length for text tools
+    if (input && input.length > 10000) {
       return NextResponse.json(
         { error: 'Input too long. Maximum 10,000 characters allowed.' },
         { status: 400 }
       );
+    }
+
+    // Validate file size for image tools
+    if (imageFile) {
+      const maxSize = 15 * 1024 * 1024; // 15MB
+      if (imageFile.size > maxSize) {
+        return NextResponse.json(
+          { error: 'File too large. Maximum 15MB allowed.' },
+          { status: 400 }
+        );
+      }
+
+      if (!imageFile.type.startsWith('image/')) {
+        return NextResponse.json(
+          { error: 'Invalid file type. Please upload an image.' },
+          { status: 400 }
+        );
+      }
     }
 
     // Get the tool configuration
@@ -169,10 +224,10 @@ export async function POST(request: NextRequest) {
     }
 
     // Replace {input} placeholder in prompt
-    const prompt = tool.prompt.replace('{input}', input);
+    const prompt = tool.prompt.replace('{input}', input || '');
 
     // Generate content using selected AI model
-    const generatedContent = await generateContentWithModel(prompt, modelId, toolSlug);
+    const generatedContent = await generateContentWithModel(prompt, modelId, toolSlug, imageFile);
 
     // Record usage
     try {
