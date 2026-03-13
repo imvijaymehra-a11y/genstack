@@ -60,28 +60,61 @@ export default function Footer() {
             </h3>
             <ul className="space-y-2">
               <li>
-                <a 
-                  href="#" 
+                <Link 
+                  href="/about" 
                   className="text-gray-600 hover:text-primary dark:text-gray-400 dark:hover:text-white transition-colors"
                 >
                   About
-                </a>
+                </Link>
               </li>
               <li>
-                <a 
-                  href="#" 
+                <Link 
+                  href="/contact" 
+                  className="text-gray-600 hover:text-primary dark:text-gray-400 dark:hover:text-white transition-colors"
+                >
+                  Contact
+                </Link>
+              </li>
+              <li>
+                <Link 
+                  href="/faq" 
+                  className="text-gray-600 hover:text-primary dark:text-gray-400 dark:hover:text-white transition-colors"
+                >
+                  FAQ
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Legal */}
+          <div>
+            <h3 className="text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wider mb-4">
+              Legal
+            </h3>
+            <ul className="space-y-2">
+              <li>
+                <Link 
+                  href="/privacy" 
                   className="text-gray-600 hover:text-primary dark:text-gray-400 dark:hover:text-white transition-colors"
                 >
                   Privacy Policy
-                </a>
+                </Link>
               </li>
               <li>
-                <a 
-                  href="#" 
+                <Link 
+                  href="/terms" 
                   className="text-gray-600 hover:text-primary dark:text-gray-400 dark:hover:text-white transition-colors"
                 >
                   Terms of Service
-                </a>
+                </Link>
+              </li>
+              <li>
+                <Link 
+                  href="/refund-policy" 
+                  className="text-gray-600 hover:text-primary dark:text-gray-400 dark:hover:text-white transition-colors"
+                >
+                  Refund Policy
+                </Link>
               </li>
             </ul>
           </div>
