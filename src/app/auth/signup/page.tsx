@@ -122,7 +122,7 @@ export default function SignupPage() {
         <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-indigo-600 to-purple-700 p-12 text-white relative overflow-hidden">
           <div className="absolute inset-0 bg-black/10"></div>
           <div className="relative z-10 flex flex-col justify-center h-full">
-            <div className="max-w-md mx-auto">
+            <div className="max-w-lg mx-auto">
               <div className="flex items-center mb-8">
                 <div className="p-3 bg-white/20 rounded-xl backdrop-blur-sm">
                   <Sparkles className="h-8 w-8 text-white" />
@@ -135,22 +135,55 @@ export default function SignupPage() {
                 </div>
               </div>
 
-              <div className="space-y-6">
-                <div className="flex items-center space-x-3">
-                  <Zap className="h-5 w-5 text-indigo-200" />
-                  <span className="text-indigo-100">41 AI tools included</span>
+              <div className="space-y-6 mb-8">
+                <div className="flex items-start space-x-3">
+                  <div className="flex-shrink-0 mt-1">
+                    <Zap className="h-5 w-5 text-indigo-200" />
+                  </div>
+                  <div>
+                    <span className="text-indigo-100 font-medium">41 AI tools included</span>
+                    <p className="text-indigo-200 text-sm mt-1">Access to all our AI creation tools</p>
+                  </div>
                 </div>
-                <div className="flex items-center space-x-3">
-                  <Shield className="h-5 w-5 text-indigo-200" />
-                  <span className="text-indigo-100">Enterprise-grade security</span>
+                <div className="flex items-start space-x-3">
+                  <div className="flex-shrink-0 mt-1">
+                    <Shield className="h-5 w-5 text-indigo-200" />
+                  </div>
+                  <div>
+                    <span className="text-indigo-100 font-medium">Enterprise-grade security</span>
+                    <p className="text-indigo-200 text-sm mt-1">Your data is protected with industry-leading security</p>
+                  </div>
                 </div>
-                <div className="flex items-center space-x-3">
-                  <Star className="h-5 w-5 text-indigo-200" />
-                  <span className="text-indigo-100">Free to get started</span>
+                <div className="flex items-start space-x-3">
+                  <div className="flex-shrink-0 mt-1">
+                    <Star className="h-5 w-5 text-indigo-200" />
+                  </div>
+                  <div>
+                    <span className="text-indigo-100 font-medium">Free to get started</span>
+                    <p className="text-indigo-200 text-sm mt-1">No credit card required for trial</p>
+                  </div>
                 </div>
               </div>
 
-              <div className="mt-12">
+              <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 mb-8">
+                <h3 className="text-white font-semibold mb-3">What's included in your free trial:</h3>
+                <ul className="space-y-2 text-sm">
+                  <li className="flex items-center text-indigo-100">
+                    <CheckCircle className="h-4 w-4 mr-2 text-green-300" />
+                    10 free AI generations per day
+                  </li>
+                  <li className="flex items-center text-indigo-100">
+                    <CheckCircle className="h-4 w-4 mr-2 text-green-300" />
+                    Access to all 41 AI tools
+                  </li>
+                  <li className="flex items-center text-indigo-100">
+                    <CheckCircle className="h-4 w-4 mr-2 text-green-300" />
+                    Priority customer support
+                  </li>
+                </ul>
+              </div>
+
+              <div>
                 <p className="text-indigo-100 text-sm mb-4">
                   Already have an account?
                 </p>
@@ -168,6 +201,7 @@ export default function SignupPage() {
           {/* Decorative Elements */}
           <div className="absolute top-10 right-10 w-20 h-20 bg-white/10 rounded-full blur-xl"></div>
           <div className="absolute bottom-10 left-10 w-32 h-32 bg-white/5 rounded-full blur-2xl"></div>
+          <div className="absolute top-1/3 right-1/4 w-16 h-16 bg-white/10 rounded-full blur-lg"></div>
         </div>
 
         {/* Right Side - Signup Form */}
