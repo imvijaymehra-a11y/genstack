@@ -82,10 +82,47 @@ export async function POST(request: NextRequest) {
     // Check database usage limits
     const { canGenerate, reason } = await canUserGenerate(user.id);
     if (!canGenerate) {
-      return NextResponse.json(
-        { error: reason || 'Usage limit exceeded' },
-        { status: 429 }
-      );
+      // If user not found in database, create them immediately
+      if (reason === 'User not found') {
+        console.log('Creating missing user in database:', user.email);
+        try {
+          const { createClient } = await import('@supabase/supabase-js');
+          const adminSupabase = createClient(
+            process.env.NEXT_PUBLIC_SUPABASE_URL || '',
+            process.env.SUPABASE_SERVICE_ROLE_KEY || ''
+          );
+          
+          const { error: insertError } = await adminSupabase
+            .from('users')
+            .insert({
+              id: user.id,
+              email: user.email,
+              plan: 'free',
+              created_at: new Date().toISOString()
+            });
+          
+          if (insertError) {
+            console.error('Failed to create user:', insertError);
+            return NextResponse.json(
+              { error: 'Failed to create user account' },
+              { status: 500 }
+            );
+          }
+          
+          console.log('User created successfully in database');
+        } catch (createError) {
+          console.error('Failed to create user:', createError);
+          return NextResponse.json(
+            { error: 'Failed to create user account' },
+            { status: 500 }
+          );
+        }
+      } else {
+        return NextResponse.json(
+          { error: reason || 'Usage limit exceeded' },
+          { status: 429 }
+        );
+      }
     }
 
     // Get user's plan for rate limiting

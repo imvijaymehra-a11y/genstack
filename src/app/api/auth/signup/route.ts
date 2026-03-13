@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { createUserIfNotExists } from '@/lib/supabase';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL || '',
@@ -27,6 +28,16 @@ export async function POST(request: NextRequest) {
         { error: error.message },
         { status: 400 }
       );
+    }
+
+    // Create user in database if signup was successful
+    if (data.user) {
+      try {
+        await createUserIfNotExists(data.user.id, data.user.email || '');
+      } catch (dbError) {
+        console.error('Failed to create user in database:', dbError);
+        // Don't fail the signup if database creation fails
+      }
     }
 
     return NextResponse.json({

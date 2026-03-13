@@ -34,14 +34,46 @@ export default function ToolPageClient({ slug }: ToolPageClientProps) {
       const { data: { session } } = await supabase.auth.getSession();
       setUser(session?.user || null);
       setSession(session);
+      
+      // Create user in database if authenticated but not in DB
+      if (session?.user) {
+        try {
+          await fetch('/api/auth/user', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${session.access_token}`
+            },
+            body: JSON.stringify({ token: session.access_token })
+          });
+        } catch (error) {
+          console.error('Failed to ensure user in database:', error);
+        }
+      }
     };
 
     checkAuth();
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, session) => {
+      async (event, session) => {
         setUser(session?.user || null);
         setSession(session || null);
+        
+        // Create user in database when they sign in
+        if (event === 'SIGNED_IN' && session?.user) {
+          try {
+            await fetch('/api/auth/user', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${session.access_token}`
+              },
+              body: JSON.stringify({ token: session.access_token })
+            });
+          } catch (error) {
+            console.error('Failed to ensure user in database:', error);
+          }
+        }
       }
     );
 
