@@ -1,7 +1,32 @@
 import { NextResponse } from 'next/server';
 
 export async function GET() {
-  const results = {
+  const results: {
+    timestamp: string;
+    status: string;
+    message: string;
+    environment: {
+      NEXT_PUBLIC_SUPABASE_URL: boolean;
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: boolean;
+      SUPABASE_SERVICE_ROLE_KEY: boolean;
+      OPENAI_API_KEY: boolean;
+      ANTHROPIC_API_KEY: boolean;
+      GOOGLE_AI_API_KEY: boolean;
+      GROQ_API_KEY: boolean;
+    };
+    apiKeys: {
+      openai: string;
+      anthropic: string;
+      google: string;
+      groq: string;
+    };
+    recommendations: string[];
+    summary: {
+      allKeysPresent: boolean;
+      totalProviders: number;
+      readyProviders: number;
+    };
+  } = {
     timestamp: new Date().toISOString(),
     status: 'simple-test',
     message: 'Basic API test - checking environment variables',
@@ -20,22 +45,31 @@ export async function GET() {
       google: process.env.GOOGLE_AI_API_KEY ? 'Present' : 'Missing',
       groq: process.env.GROQ_API_KEY ? 'Present' : 'Missing'
     },
-    recommendations: []
+    recommendations: [],
+    summary: {
+      allKeysPresent: false,
+      totalProviders: 4,
+      readyProviders: 0
+    }
   };
 
   // Add recommendations based on what's missing
+  const recommendations: string[] = [];
+  
   if (!process.env.OPENAI_API_KEY) {
-    results.recommendations.push('Add OPENAI_API_KEY to .env.local');
+    recommendations.push('Add OPENAI_API_KEY to .env.local');
   }
   if (!process.env.ANTHROPIC_API_KEY) {
-    results.recommendations.push('Add ANTHROPIC_API_KEY to .env.local');
+    recommendations.push('Add ANTHROPIC_API_KEY to .env.local');
   }
   if (!process.env.GOOGLE_AI_API_KEY) {
-    results.recommendations.push('Add GOOGLE_AI_API_KEY to .env.local');
+    recommendations.push('Add GOOGLE_AI_API_KEY to .env.local');
   }
   if (!process.env.GROQ_API_KEY) {
-    results.recommendations.push('Add GROQ_API_KEY to .env.local');
+    recommendations.push('Add GROQ_API_KEY to .env.local');
   }
+
+  results.recommendations = recommendations;
 
   // Check if all API keys are present
   const allKeysPresent = 
