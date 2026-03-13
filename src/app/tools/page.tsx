@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useMemo, Suspense } from 'react'
-import { useSearchParams } from 'next/navigation'
+import { useSearchParams, useRouter } from 'next/navigation'
 import { Search, Filter, Star, Zap, Clock, DollarSign, TrendingUp, Sparkles } from 'lucide-react'
 import { tools, categories, getToolsByCategory, getFeaturedTools, getFreeTools, getFreemiumTools } from '@/lib/tools'
 import ToolCard from '@/components/ToolCard'
@@ -10,6 +10,7 @@ import Footer from '@/components/Footer'
 
 function ToolsContent() {
   const searchParams = useSearchParams()
+  const router = useRouter()
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedCategory, setSelectedCategory] = useState(
     searchParams.get('category') || ''
@@ -62,6 +63,14 @@ function ToolsContent() {
   const handleCategoryChange = (category: string) => {
     setSelectedCategory(category)
     setSearchQuery('')
+    // Update URL using Next.js router
+    const params = new URLSearchParams(searchParams.toString())
+    if (category) {
+      params.set('category', category)
+    } else {
+      params.delete('category')
+    }
+    router.push(`/tools?${params.toString()}`)
   }
 
   const handlePricingChange = (pricing: string) => {
@@ -73,6 +82,7 @@ function ToolsContent() {
     setPricingFilter('')
     setSearchQuery('')
     setSortBy('name')
+    router.push('/tools')
   }
 
   const getCategoryCount = (category: string) => {
