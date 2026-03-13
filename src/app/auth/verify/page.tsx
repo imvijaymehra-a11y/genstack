@@ -20,6 +20,7 @@ export default function VerifyPage() {
     const verifyEmail = async () => {
       const token = searchParams.get('token');
       const type = searchParams.get('type');
+      const emailFromUrl = searchParams.get('email');
 
       if (!token || type !== 'signup') {
         setError('Invalid verification link');
@@ -28,10 +29,18 @@ export default function VerifyPage() {
       }
 
       try {
-        const { data, error } = await supabase.auth.verifyOtp({
+        // Try to verify with email if available, otherwise use token only
+        let verifyParams: any = {
           token,
           type: 'signup',
-        });
+        };
+
+        // Add email if available in URL
+        if (emailFromUrl) {
+          verifyParams.email = emailFromUrl;
+        }
+
+        const { data, error } = await supabase.auth.verifyOtp(verifyParams);
 
         if (error) {
           setError(error.message);
