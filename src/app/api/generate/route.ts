@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getToolBySlug } from '@/lib/tools';
-import { generateContent } from '@/lib/openai';
+import { generateContentWithModel } from '@/lib/multi-ai';
 import { canUserGenerate, recordUsage, getUserPlan } from '@/lib/supabase';
 import { createClient } from '@supabase/supabase-js';
 
@@ -33,7 +33,7 @@ function checkRateLimit(userId: string, limit: number = 10): { allowed: boolean;
 
 export async function POST(request: NextRequest) {
   try {
-    const { toolSlug, input } = await request.json();
+    const { toolSlug, input, modelId = 'gpt-3.5-turbo' } = await request.json();
 
     // Validate input
     if (!toolSlug || !input) {
@@ -86,36 +86,64 @@ export async function POST(request: NextRequest) {
       if (reason === 'User not found') {
         console.log('Creating missing user in database:', user.email);
         try {
-          const { createClient } = await import('@supabase/supabase-js');
-          const adminSupabase = createClient(
+          // Use regular client with user's token for RLS policies
+          const userSupabase = createClient(
             process.env.NEXT_PUBLIC_SUPABASE_URL || '',
-            process.env.SUPABASE_SERVICE_ROLE_KEY || ''
+            process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '',
+            {
+              global: {
+                headers: {
+                  Authorization: `Bearer ${token}`
+                }
+              }
+            }
           );
           
-          const { error: insertError } = await adminSupabase
-            .from('users')
-            .insert({
-              id: user.id,
-              email: user.email,
-              plan: 'free',
-              created_at: new Date().toISOString()
-            });
+          // Try with user's token first (respects RLS)
+          let insertError = null;
+          try {
+            const { error: userInsertError } = await userSupabase
+              .from('users')
+              .insert({
+                id: user.id,
+                email: user.email,
+                plan: 'free',
+                created_at: new Date().toISOString()
+              });
+            insertError = userInsertError;
+          } catch (err) {
+            insertError = err;
+          }
           
+          // If user token fails, try with service role
           if (insertError) {
-            console.error('Failed to create user:', insertError);
-            return NextResponse.json(
-              { error: 'Failed to create user account' },
-              { status: 500 }
+            console.log('User token failed, trying service role...');
+            const { createClient } = await import('@supabase/supabase-js');
+            const adminSupabase = createClient(
+              process.env.NEXT_PUBLIC_SUPABASE_URL || '',
+              process.env.SUPABASE_SERVICE_ROLE_KEY || ''
             );
+            
+            const { error: adminInsertError } = await adminSupabase
+              .from('users')
+              .insert({
+                id: user.id,
+                email: user.email,
+                plan: 'free',
+                created_at: new Date().toISOString()
+              });
+            
+            if (adminInsertError) {
+              console.error('Admin insert failed:', adminInsertError);
+              throw adminInsertError;
+            }
           }
           
           console.log('User created successfully in database');
         } catch (createError) {
           console.error('Failed to create user:', createError);
-          return NextResponse.json(
-            { error: 'Failed to create user account' },
-            { status: 500 }
-          );
+          // Don't fail the request - continue with free model
+          console.log('Continuing with free model due to user creation failure');
         }
       } else {
         return NextResponse.json(
@@ -143,8 +171,8 @@ export async function POST(request: NextRequest) {
     // Replace {input} placeholder in prompt
     const prompt = tool.prompt.replace('{input}', input);
 
-    // Generate content using OpenAI
-    const generatedContent = await generateContent(prompt);
+    // Generate content using selected AI model
+    const generatedContent = await generateContentWithModel(prompt, modelId, toolSlug);
 
     // Record usage
     try {

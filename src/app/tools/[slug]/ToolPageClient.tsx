@@ -3,8 +3,10 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import { getToolBySlug } from '@/lib/tools';
+import { AI_MODELS } from '@/lib/ai-models';
 import ToolForm from '@/components/ToolForm';
 import ToolOutput from '@/components/ToolOutput';
+import ModelSelector from '@/components/ModelSelector';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { supabase } from '@/lib/supabase';
@@ -20,6 +22,7 @@ export default function ToolPageClient({ slug }: ToolPageClientProps) {
   const [user, setUser] = useState<any>(null);
   const [session, setSession] = useState<any>(null);
   const [error, setError] = useState('');
+  const [selectedModel, setSelectedModel] = useState('gpt-3.5-turbo');
 
   useEffect(() => {
     const foundTool = getToolBySlug(slug);
@@ -97,7 +100,7 @@ export default function ToolPageClient({ slug }: ToolPageClientProps) {
       const res = await fetch('/api/generate', {
         method: 'POST',
         headers,
-        body: JSON.stringify({ toolSlug: slug, input }),
+        body: JSON.stringify({ toolSlug: slug, input, modelId: selectedModel }),
       });
 
       const data = await res.json();
@@ -135,6 +138,18 @@ export default function ToolPageClient({ slug }: ToolPageClientProps) {
           <>
             <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-6">{tool.name}</h1>
             <p className="text-lg text-gray-600 dark:text-gray-400 mb-8">{tool.description}</p>
+
+            {/* Model Selection */}
+            <div className="mb-6">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                AI Model
+              </label>
+              <ModelSelector
+                selectedModel={selectedModel}
+                onModelChange={setSelectedModel}
+                className="w-full"
+              />
+            </div>
 
             <ToolForm
               toolName={tool.name}
