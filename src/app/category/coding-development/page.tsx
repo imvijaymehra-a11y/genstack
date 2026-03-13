@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { Search, Code, Terminal, Database, Globe, CheckCircle, ArrowRight, Star, Zap, Shield, Cpu, Git, Bug } from 'lucide-react';
+import { Search, Code, Terminal, Database, Globe, CheckCircle, ArrowRight, Star, Zap, Shield, Cpu, Github, Bug } from 'lucide-react';
 import { tools, getToolsByCategory } from '@/lib/tools';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -44,9 +44,9 @@ export default function CodingDevelopmentCategoryPage() {
       features: ["REST APIs", "GraphQL", "Documentation", "Testing"]
     },
     {
-      icon: <Git className="h-6 w-6" />,
+      icon: <Github className="h-6 w-6" />,
       title: "Version Control",
-      description: "Manage code with Git workflows",
+      description: "Manage code with GitHub workflows",
       features: ["Git commands", "Branch strategies", "Merge conflicts", "CI/CD"]
     }
   ];
