@@ -6,399 +6,176 @@ export interface Tool {
   prompt: string;
   seoTitle?: string;
   seoDescription?: string;
+  featured?: boolean;
+  isNew?: boolean;
+  tags?: string[];
+  pricing?: 'free' | 'freemium' | 'paid';
 }
 
 export const tools: Tool[] = [
-  // AI Writing Tools
+  // Writing & Editing
   {
     slug: "blog-generator",
     name: "Blog Generator",
     description: "Generate SEO optimized blog posts with engaging content",
-    category: "AI Writing Tools",
+    category: "Writing & Editing",
     prompt: "Write a detailed SEO optimized blog post about {input}. Include a compelling title, introduction, main content with headings, and conclusion. Make it engaging and informative.",
     seoTitle: "AI Blog Post Generator | Create SEO-Optimized Blog Content",
-    seoDescription: "Generate high-quality, SEO-optimized blog posts instantly with our AI blog generator. Create engaging content that ranks well in search engines."
-  },
-  {
-    slug: "blog-outline-generator",
-    name: "Blog Outline Generator",
-    description: "Create structured blog outlines for better content organization",
-    category: "AI Writing Tools",
-    prompt: "Create a comprehensive blog outline about {input}. Include main sections, subsections, key points to cover, and a logical flow for the content.",
-    seoTitle: "Blog Outline Generator | Structure Your Content Perfectly",
-    seoDescription: "Generate well-structured blog outlines instantly. Organize your thoughts and create comprehensive content frameworks with AI assistance."
+    seoDescription: "Generate high-quality, SEO-optimized blog posts instantly with our AI blog generator. Create engaging content that ranks well in search engines.",
+    featured: true,
+    tags: ["blog", "seo", "content", "writing"],
+    pricing: "freemium"
   },
   {
     slug: "email-writer",
     name: "Email Writer",
     description: "Write professional and persuasive emails",
-    category: "AI Writing Tools",
+    category: "Writing & Editing",
     prompt: "Write a professional email about {input}. Include a clear subject line, appropriate greeting, well-structured body, and professional closing.",
     seoTitle: "AI Email Writer | Professional Email Generator",
-    seoDescription: "Craft professional emails instantly with our AI email writer. Generate persuasive business communications for any purpose."
-  },
-  {
-    slug: "product-description-generator",
-    name: "Product Description Generator",
-    description: "Create compelling product descriptions that sell",
-    category: "AI Writing Tools",
-    prompt: "Write a compelling product description for {input}. Highlight key features, benefits, and unique selling points. Make it persuasive and customer-focused.",
-    seoTitle: "Product Description Generator | Convert Customers with AI",
-    seoDescription: "Create compelling product descriptions that drive sales. Generate persuasive copy that highlights features and benefits effectively."
+    seoDescription: "Craft professional emails instantly with our AI email writer. Generate persuasive business communications for any purpose.",
+    featured: true,
+    tags: ["email", "professional", "business", "communication"],
+    pricing: "freemium"
   },
   {
     slug: "social-media-caption-generator",
     name: "Social Media Caption Generator",
-    description: "Generate engaging social media captions",
-    category: "AI Writing Tools",
-    prompt: "Write engaging social media captions about {input}. Include relevant hashtags, emojis, and a call-to-action. Make it suitable for platforms like Instagram, Twitter, and Facebook.",
+    description: "Generate engaging captions for social media posts",
+    category: "Social Media",
+    prompt: "Create engaging social media captions for {input}. Include relevant hashtags, emojis, and a call-to-action. Make it platform-appropriate and engaging.",
     seoTitle: "Social Media Caption Generator | Create Viral Content",
-    seoDescription: "Generate engaging social media captions with hashtags and emojis. Create viral content for Instagram, Twitter, Facebook, and more."
-  },
-  {
-    slug: "article-rewriter",
-    name: "Article Rewriter",
-    description: "Rewrite articles to avoid plagiarism and improve readability",
-    category: "AI Writing Tools",
-    prompt: "Rewrite the following article about {input} to make it unique while maintaining the original meaning. Improve readability, flow, and engagement.",
-    seoTitle: "Article Rewriter | Unique Content Generator",
-    seoDescription: "Rewrite articles to create unique, plagiarism-free content. Improve readability and maintain original meaning with AI assistance."
-  },
-  {
-    slug: "grammar-improver",
-    name: "Grammar Improver",
-    description: "Fix grammar and improve writing quality",
-    category: "AI Writing Tools",
-    prompt: "Improve the grammar, spelling, and overall quality of this text about {input}. Fix errors, enhance clarity, and make it more professional.",
-    seoTitle: "Grammar Improver | Perfect Your Writing Instantly",
-    seoDescription: "Fix grammar, spelling, and writing quality instantly. Professional proofreading and editing powered by AI."
-  },
-  {
-    slug: "linkedin-post-generator",
-    name: "LinkedIn Post Generator",
-    description: "Create professional LinkedIn posts",
-    category: "AI Writing Tools",
-    prompt: "Write a professional LinkedIn post about {input}. Include relevant hashtags, a strong hook, valuable insights, and engagement questions. Make it suitable for a professional audience.",
-    seoTitle: "LinkedIn Post Generator | Professional Content Creation",
-    seoDescription: "Create engaging LinkedIn posts that build your professional brand. Generate content with hashtags and engagement hooks."
+    seoDescription: "Generate captivating social media captions instantly. Create viral content with AI-powered hashtag suggestions and engagement optimization.",
+    featured: true,
+    tags: ["social media", "caption", "hashtags", "engagement"],
+    pricing: "free"
   },
 
-  // Creator Tools
+  // Image Generation & Editing
   {
-    slug: "youtube-script-generator",
-    name: "YouTube Script Generator",
-    description: "Generate engaging YouTube video scripts",
-    category: "Creator Tools",
-    prompt: "Write an engaging YouTube video script about {input}. Include a hook, main content, and call-to-action. Make it conversational and suitable for video format.",
-    seoTitle: "YouTube Script Generator | Create Viral Video Content",
-    seoDescription: "Generate engaging YouTube scripts that captivate audiences. Create viral video content with professional storytelling."
+    slug: "ai-image-generator",
+    name: "AI Image Generator",
+    description: "Generate stunning images from text descriptions",
+    category: "Image Generation & Editing",
+    prompt: "Generate a high-quality image based on this description: {input}. Create a visually appealing image that accurately represents the concept with good composition and detail.",
+    seoTitle: "AI Image Generator | Create Images from Text",
+    seoDescription: "Generate stunning AI images from text descriptions. Create unique artwork, photos, and graphics with advanced AI image generation.",
+    featured: true,
+    tags: ["image", "art", "design", "visual"],
+    pricing: "freemium"
   },
   {
-    slug: "youtube-title-generator",
-    name: "YouTube Title Generator",
-    description: "Create catchy YouTube video titles",
-    category: "Creator Tools",
-    prompt: "Generate 10 catchy YouTube video titles about {input}. Make them SEO-friendly, attention-grabbing, and optimized for click-through rates.",
-    seoTitle: "YouTube Title Generator | Create Viral Video Titles",
-    seoDescription: "Generate catchy YouTube titles that boost views and engagement. Create SEO-optimized video titles that attract clicks."
-  },
-  {
-    slug: "youtube-description-generator",
-    name: "YouTube Description Generator",
-    description: "Write optimized YouTube video descriptions",
-    category: "Creator Tools",
-    prompt: "Write an optimized YouTube description for a video about {input}. Include relevant keywords, timestamps, links, and a compelling summary.",
-    seoTitle: "YouTube Description Generator | SEO-Optimized Descriptions",
-    seoDescription: "Create SEO-optimized YouTube descriptions that improve discoverability. Generate professional video descriptions with keywords and links."
-  },
-  {
-    slug: "video-idea-generator",
-    name: "Video Idea Generator",
-    description: "Generate creative video content ideas",
-    category: "Creator Tools",
-    prompt: "Generate 10 creative video ideas about {input}. Include different formats, angles, and target audiences. Make them unique and engaging.",
-    seoTitle: "Video Idea Generator | Creative Content Ideas",
-    seoDescription: "Generate creative video ideas that stand out. Get unique content concepts for YouTube, TikTok, and other platforms."
-  },
-  {
-    slug: "podcast-show-notes-generator",
-    name: "Podcast Show Notes Generator",
-    description: "Create comprehensive podcast show notes",
-    category: "Creator Tools",
-    prompt: "Write comprehensive show notes for a podcast episode about {input}. Include key takeaways, guest information, resources mentioned, and timestamps.",
-    seoTitle: "Podcast Show Notes Generator | Professional Episode Notes",
-    seoDescription: "Create professional podcast show notes that enhance listener experience. Generate comprehensive episode summaries and resources."
-  },
-  {
-    slug: "tiktok-caption-generator",
-    name: "TikTok Caption Generator",
-    description: "Create viral TikTok captions",
-    category: "Creator Tools",
-    prompt: "Write viral TikTok captions about {input}. Include trending hashtags, emojis, and engagement hooks. Make it short, catchy, and shareable.",
-    seoTitle: "TikTok Caption Generator | Create Viral Captions",
-    seoDescription: "Generate viral TikTok captions with trending hashtags. Create engaging short-form content that drives shares and likes."
+    slug: "logo-maker",
+    name: "Logo Maker",
+    description: "Design professional logos for your brand",
+    category: "Art & Creative Design",
+    prompt: "Design a professional logo for {input}. Create a clean, memorable design that represents the brand identity and works well at different sizes.",
+    seoTitle: "AI Logo Maker | Professional Logo Design",
+    seoDescription: "Create professional logos instantly with AI. Design unique brand identities that stand out and make a lasting impression.",
+    featured: true,
+    tags: ["logo", "brand", "design", "identity"],
+    pricing: "freemium"
   },
 
-  // Business Productivity Tools
+  // Video & Animation
   {
-    slug: "meeting-notes-summarizer",
-    name: "Meeting Notes Summarizer",
-    description: "Summarize meeting notes effectively",
-    category: "Business Productivity Tools",
-    prompt: "Summarize these meeting notes about {input}. Extract key decisions, action items, deadlines, and important points. Make it clear and actionable.",
-    seoTitle: "Meeting Notes Summarizer | Efficient Meeting Summaries",
-    seoDescription: "Summarize meeting notes instantly with AI. Extract key decisions, action items, and important points efficiently."
+    slug: "video-script-generator",
+    name: "Video Script Generator",
+    description: "Create compelling video scripts for any topic",
+    category: "Video & Animation",
+    prompt: "Write a compelling video script about {input}. Include scene descriptions, dialogue, camera directions, and timing notes for a professional production.",
+    seoTitle: "AI Video Script Generator | Create Video Content",
+    seoDescription: "Generate professional video scripts instantly. Create engaging content for YouTube, marketing, and entertainment with AI assistance.",
+    featured: true,
+    tags: ["video", "script", "youtube", "content"],
+    pricing: "freemium"
   },
+
+  // Coding & Development
+  {
+    slug: "code-generator",
+    name: "Code Generator",
+    description: "Generate code in any programming language",
+    category: "Coding & Development",
+    prompt: "Generate clean, well-commented code for {input}. Include error handling, best practices, and documentation where appropriate.",
+    seoTitle: "AI Code Generator | Write Code Instantly",
+    seoDescription: "Generate clean, efficient code in any programming language instantly. Build applications faster with AI-powered coding assistance.",
+    featured: true,
+    tags: ["code", "programming", "development", "coding"],
+    pricing: "freemium"
+  },
+
+  // Marketing & Advertising
+  {
+    slug: "ad-copy-generator",
+    name: "Ad Copy Generator",
+    description: "Create persuasive advertising copy",
+    category: "Marketing & Advertising",
+    prompt: "Write compelling ad copy for {input}. Include attention-grabbing headlines, persuasive body text, and strong calls-to-action.",
+    seoTitle: "AI Ad Copy Generator | Create High-Converting Ads",
+    seoDescription: "Generate high-converting ad copy instantly. Create persuasive advertising that drives results and increases ROI.",
+    featured: true,
+    tags: ["advertising", "copy", "marketing", "conversion"],
+    pricing: "freemium"
+  },
+
+  // Business Management
   {
     slug: "business-plan-generator",
     name: "Business Plan Generator",
     description: "Create comprehensive business plans",
-    category: "Business Productivity Tools",
-    prompt: "Create a comprehensive business plan for {input}. Include executive summary, market analysis, products/services, marketing strategy, and financial projections.",
-    seoTitle: "Business Plan Generator | Professional Business Planning",
-    seoDescription: "Create comprehensive business plans with AI assistance. Generate professional documents covering all essential business aspects."
-  },
-  {
-    slug: "proposal-generator",
-    name: "Proposal Generator",
-    description: "Write winning business proposals",
-    category: "Business Productivity Tools",
-    prompt: "Write a winning business proposal for {input}. Include problem statement, solution, benefits, timeline, and pricing. Make it persuasive and professional.",
-    seoTitle: "Proposal Generator | Create Winning Business Proposals",
-    seoDescription: "Generate winning business proposals that convert clients. Create professional, persuasive proposals with AI assistance."
-  },
-  {
-    slug: "resume-improver",
-    name: "Resume Improver",
-    description: "Enhance and optimize resumes",
-    category: "Business Productivity Tools",
-    prompt: "Improve and optimize this resume for {input}. Highlight achievements, use action verbs, optimize for ATS systems, and make it stand out to recruiters.",
-    seoTitle: "Resume Improver | Optimize Your Resume for Success",
-    seoDescription: "Enhance your resume with AI optimization. Improve ATS compatibility, highlight achievements, and stand out to recruiters."
-  },
-  {
-    slug: "job-description-generator",
-    name: "Job Description Generator",
-    description: "Create effective job descriptions",
-    category: "Business Productivity Tools",
-    prompt: "Write an effective job description for {input}. Include responsibilities, requirements, benefits, and company information. Make it attractive to qualified candidates.",
-    seoTitle: "Job Description Generator | Attract Top Talent",
-    seoDescription: "Create compelling job descriptions that attract qualified candidates. Generate professional listings that stand out in the job market."
-  },
-  {
-    slug: "swot-analysis-generator",
-    name: "SWOT Analysis Generator",
-    description: "Generate comprehensive SWOT analyses",
-    category: "Business Productivity Tools",
-    prompt: "Create a comprehensive SWOT analysis for {input}. Analyze strengths, weaknesses, opportunities, and threats. Provide actionable insights and recommendations.",
-    seoTitle: "SWOT Analysis Generator | Strategic Business Analysis",
-    seoDescription: "Generate comprehensive SWOT analyses for strategic planning. Analyze strengths, weaknesses, opportunities, and threats effectively."
-  },
-  {
-    slug: "startup-idea-generator",
-    name: "Startup Idea Generator",
-    description: "Generate innovative startup ideas",
-    category: "Business Productivity Tools",
-    prompt: "Generate 10 innovative startup ideas related to {input}. Include business models, target markets, revenue streams, and competitive advantages.",
-    seoTitle: "Startup Idea Generator | Innovative Business Concepts",
-    seoDescription: "Generate innovative startup ideas with business models. Create unique concepts with market analysis and revenue strategies."
+    category: "Business Management",
+    prompt: "Create a comprehensive business plan for: {input}. Include executive summary, company description, market analysis, products/services, marketing strategy, and financial projections.",
+    seoTitle: "AI Business Plan Generator | Professional Business Plans",
+    seoDescription: "Generate professional business plans instantly. Create comprehensive documents for investors, loans, and strategic planning.",
+    featured: true,
+    tags: ["business plan", "strategy", "startup", "planning"],
+    pricing: "freemium"
   },
 
-  // Marketing & SEO Tools
+  // Education & Translation
   {
-    slug: "seo-title-generator",
-    name: "SEO Title Generator",
-    description: "Generate SEO-optimized titles",
-    category: "Marketing & SEO Tools",
-    prompt: "Generate 10 SEO-optimized titles for {input}. Make them under 60 characters, include target keywords, and optimize for click-through rates.",
-    seoTitle: "SEO Title Generator | Create Search-Optimized Titles",
-    seoDescription: "Generate SEO-optimized titles that rank well in search engines. Create compelling titles that improve click-through rates."
-  },
-  {
-    slug: "seo-meta-description-generator",
-    name: "SEO Meta Description Generator",
-    description: "Create compelling meta descriptions",
-    category: "Marketing & SEO Tools",
-    prompt: "Write compelling SEO meta descriptions for {input}. Make them under 160 characters, include target keywords, and encourage clicks.",
-    seoTitle: "SEO Meta Description Generator | Boost Search Rankings",
-    seoDescription: "Create compelling meta descriptions that improve search rankings. Generate SEO-optimized descriptions that drive clicks."
-  },
-  {
-    slug: "keyword-ideas-generator",
-    name: "Keyword Ideas Generator",
-    description: "Generate relevant keyword ideas",
-    category: "Marketing & SEO Tools",
-    prompt: "Generate 20 relevant keyword ideas for {input}. Include long-tail keywords, question keywords, and local variations. Group them by search intent.",
-    seoTitle: "Keyword Ideas Generator | Discover Profitable Keywords",
-    seoDescription: "Generate relevant keyword ideas for SEO and content marketing. Discover long-tail keywords and search intent variations."
-  },
-  {
-    slug: "landing-page-copy-generator",
-    name: "Landing Page Copy Generator",
-    description: "Create high-converting landing page copy",
-    category: "Marketing & SEO Tools",
-    prompt: "Write high-converting landing page copy for {input}. Include headline, subheadline, benefits, social proof, and strong call-to-action.",
-    seoTitle: "Landing Page Copy Generator | Convert Visitors to Customers",
-    seoDescription: "Create high-converting landing page copy that drives conversions. Generate persuasive copy with compelling CTAs and benefits."
-  },
-  {
-    slug: "ad-copy-generator",
-    name: "Ad Copy Generator",
-    description: "Generate effective advertising copy",
-    category: "Marketing & SEO Tools",
-    prompt: "Write effective ad copy for {input}. Create multiple variations for different platforms. Include compelling headlines, benefits, and clear CTAs.",
-    seoTitle: "Ad Copy Generator | Create High-Performing Ads",
-    seoDescription: "Generate effective ad copy for Google, Facebook, and social media. Create compelling ads that drive conversions and ROI."
-  },
-  {
-    slug: "marketing-hooks-generator",
-    name: "Marketing Hooks Generator",
-    description: "Create attention-grabbing marketing hooks",
-    category: "Marketing & SEO Tools",
-    prompt: "Generate 10 attention-grabbing marketing hooks for {input}. Use psychological triggers, curiosity gaps, and emotional appeals to capture attention.",
-    seoTitle: "Marketing Hooks Generator | Capture Audience Attention",
-    seoDescription: "Generate attention-grabbing marketing hooks that stop the scroll. Create compelling opening lines and psychological triggers."
-  },
-  {
-    slug: "cta-generator",
-    name: "CTA Generator",
-    description: "Create compelling call-to-action buttons",
-    category: "Marketing & SEO Tools",
-    prompt: "Generate 10 compelling call-to-action variations for {input}. Make them action-oriented, urgent, and benefit-focused. Test different psychological triggers.",
-    seoTitle: "CTA Generator | Create High-Converting Call-to-Actions",
-    seoDescription: "Generate high-converting CTAs that drive action. Create compelling call-to-action buttons with psychological triggers."
-  },
-  {
-    slug: "content-brief-generator",
-    name: "Content Brief Generator",
-    description: "Create comprehensive content briefs",
-    category: "Marketing & SEO Tools",
-    prompt: "Create a comprehensive content brief for {input}. Include target keywords, content structure, word count, tone, and SEO requirements.",
-    seoTitle: "Content Brief Generator | Streamline Content Creation",
-    seoDescription: "Create comprehensive content briefs that streamline content creation. Generate detailed briefs with SEO requirements and structure."
+    slug: "translation-tool",
+    name: "AI Translation Tool",
+    description: "Translate text between multiple languages",
+    category: "Education & Translation",
+    prompt: "Translate this text from {source language} to {target language}: {input}. Maintain the original meaning and tone while ensuring cultural appropriateness.",
+    seoTitle: "AI Translation Tool | Accurate Language Translation",
+    seoDescription: "Translate text between 100+ languages instantly with AI. Get accurate, context-aware translations for personal and professional use.",
+    featured: true,
+    tags: ["translation", "language", "multilingual", "global"],
+    pricing: "freemium"
   },
 
-  // Image Tools
+  // Health & Wellness
   {
-    slug: "ai-image-generator",
-    name: "AI Image Generator",
-    description: "Generate images using AI",
-    category: "Image Tools",
-    prompt: "Generate a detailed image prompt for {input}. Include style, composition, lighting, and specific details. Make it suitable for AI image generation models.",
-    seoTitle: "AI Image Generator | Create Stunning Images with AI",
-    seoDescription: "Generate stunning images using AI technology. Create custom visuals for any purpose with advanced AI image generation."
-  },
-  {
-    slug: "image-prompt-generator",
-    name: "Image Prompt Generator",
-    description: "Create detailed prompts for AI image generation",
-    category: "Image Tools",
-    prompt: "Create a detailed AI image generation prompt for {input}. Include artistic style, composition, lighting, mood, and specific elements to include.",
-    seoTitle: "Image Prompt Generator | Perfect AI Art Prompts",
-    seoDescription: "Create detailed prompts for AI image generation. Generate perfect prompts for Midjourney, DALL-E, and Stable Diffusion."
-  },
-  {
-    slug: "thumbnail-generator",
-    name: "Thumbnail Generator",
-    description: "Generate ideas for video thumbnails",
-    category: "Image Tools",
-    prompt: "Generate thumbnail ideas for a video about {input}. Include composition, text overlay, color scheme, and visual elements that attract clicks.",
-    seoTitle: "Thumbnail Generator | Create Click-Worthy Thumbnails",
-    seoDescription: "Generate click-worthy thumbnail ideas for YouTube and social media. Create compelling visuals that boost video views."
-  },
-  {
-    slug: "background-remover",
-    name: "Background Remover",
-    description: "Remove backgrounds from images",
-    category: "Image Tools",
-    prompt: "Provide instructions and best practices for removing backgrounds from images of {input}. Include tips for achieving clean, professional results.",
-    seoTitle: "Background Remover | Professional Image Editing",
-    seoDescription: "Remove backgrounds from images professionally. Get clean, transparent backgrounds for product photos and portraits."
-  },
-  {
-    slug: "image-upscaler",
-    name: "Image Upscaler",
-    description: "Enhance image resolution and quality",
-    category: "Image Tools",
-    prompt: "Provide guidance on upscaling and enhancing images of {input}. Include best practices for maintaining quality and improving resolution.",
-    seoTitle: "Image Upscaler | Enhance Image Quality & Resolution",
-    seoDescription: "Enhance image resolution and quality with AI upscaling. Improve image clarity and detail for professional results."
-  },
-  {
-    slug: "logo-generator",
-    name: "Logo Generator",
-    description: "Generate logo concepts and ideas",
-    category: "Image Tools",
-    prompt: "Generate logo concepts for {input}. Include design principles, color psychology, typography suggestions, and brand identity considerations.",
-    seoTitle: "Logo Generator | Create Professional Logo Designs",
-    seoDescription: "Generate professional logo concepts and designs. Create brand identities with AI-powered logo generation tools."
+    slug: "meal-plan-generator",
+    name: "Meal Plan Generator",
+    description: "Create personalized nutrition and meal plans",
+    category: "Health & Wellness",
+    prompt: "Create a personalized meal plan for: {input}. Include breakfast, lunch, dinner, and snacks with nutritional information and preparation instructions.",
+    seoTitle: "AI Meal Plan Generator | Personalized Nutrition",
+    seoDescription: "Generate personalized meal plans instantly. Create nutritionally balanced meal plans tailored to your dietary needs and goals.",
+    tags: ["meal plan", "nutrition", "diet", "health"],
+    pricing: "freemium"
   },
 
-  // AI Prompt Tools
+  // Music & Audio
   {
-    slug: "chatgpt-prompt-generator",
-    name: "ChatGPT Prompt Generator",
-    description: "Create effective ChatGPT prompts",
-    category: "AI Prompt Tools",
-    prompt: "Create effective ChatGPT prompts for {input}. Include context, clear instructions, desired output format, and examples for better results.",
-    seoTitle: "ChatGPT Prompt Generator | Master AI Conversations",
-    seoDescription: "Create effective ChatGPT prompts that get better results. Generate structured prompts for various AI conversation scenarios."
-  },
-  {
-    slug: "midjourney-prompt-generator",
-    name: "Midjourney Prompt Generator",
-    description: "Create detailed Midjourney prompts",
-    category: "AI Prompt Tools",
-    prompt: "Create detailed Midjourney prompts for {input}. Include parameters, style modifiers, aspect ratios, and advanced techniques for stunning results.",
-    seoTitle: "Midjourney Prompt Generator | Create Amazing AI Art",
-    seoDescription: "Create detailed Midjourney prompts for stunning AI art. Generate professional prompts with parameters and style modifiers."
-  },
-  {
-    slug: "stable-diffusion-prompt-generator",
-    name: "Stable Diffusion Prompt Generator",
-    description: "Create optimized Stable Diffusion prompts",
-    category: "AI Prompt Tools",
-    prompt: "Create optimized Stable Diffusion prompts for {input}. Include negative prompts, weighting, steps, and technical parameters for best results.",
-    seoTitle: "Stable Diffusion Prompt Generator | Optimize AI Art",
-    seoDescription: "Create optimized Stable Diffusion prompts for best results. Generate detailed prompts with technical parameters and negative prompts."
-  },
-  {
-    slug: "marketing-prompt-generator",
-    name: "Marketing Prompt Generator",
-    description: "Create marketing-specific AI prompts",
-    category: "AI Prompt Tools",
-    prompt: "Create marketing-focused AI prompts for {input}. Include brand voice, target audience, marketing goals, and desired outcomes.",
-    seoTitle: "Marketing Prompt Generator | AI-Powered Marketing",
-    seoDescription: "Create marketing-focused AI prompts for better campaigns. Generate prompts that align with marketing goals and brand voice."
-  },
-  {
-    slug: "coding-prompt-generator",
-    name: "Coding Prompt Generator",
-    description: "Create effective coding prompts",
-    category: "AI Prompt Tools",
-    prompt: "Create effective coding prompts for {input}. Include programming language, requirements, constraints, and expected output format.",
-    seoTitle: "Coding Prompt Generator | Better AI Code Generation",
-    seoDescription: "Create effective coding prompts for AI code generation. Generate structured prompts that produce better, cleaner code."
-  },
-  {
-    slug: "writing-prompt-generator",
-    name: "Writing Prompt Generator",
-    description: "Generate creative writing prompts",
-    category: "AI Prompt Tools",
-    prompt: "Generate creative writing prompts for {input}. Include genre, tone, characters, setting, and plot elements to inspire creativity.",
-    seoTitle: "Writing Prompt Generator | Spark Creative Writing",
-    seoDescription: "Generate creative writing prompts for fiction and non-fiction. Spark creativity with detailed writing inspiration and ideas."
+    slug: "song-lyrics-generator",
+    name: "Song Lyrics Generator",
+    description: "Create original song lyrics and poetry",
+    category: "Music & Audio",
+    prompt: "Create original song lyrics about: {input}. Include verses, chorus, bridge, and rhyme scheme with emotional depth.",
+    seoTitle: "AI Song Lyrics Generator | Create Original Music",
+    seoDescription: "Generate original song lyrics instantly with AI. Create poetry and song lyrics with emotional depth and artistic expression.",
+    featured: true,
+    tags: ["lyrics", "song", "music", "poetry"],
+    pricing: "free"
   }
 ];
 
-export const categories = [
-  "AI Writing Tools",
-  "Creator Tools", 
-  "Business Productivity Tools",
-  "Marketing & SEO Tools",
-  "Image Tools",
-  "AI Prompt Tools"
-];
+export const categories = Array.from(new Set(tools.map(tool => tool.category)));
 
 export function getToolBySlug(slug: string): Tool | undefined {
   return tools.find(tool => tool.slug === slug);
@@ -413,6 +190,23 @@ export function searchTools(query: string): Tool[] {
   return tools.filter(tool => 
     tool.name.toLowerCase().includes(lowercaseQuery) ||
     tool.description.toLowerCase().includes(lowercaseQuery) ||
-    tool.category.toLowerCase().includes(lowercaseQuery)
+    tool.category.toLowerCase().includes(lowercaseQuery) ||
+    tool.tags?.some(tag => tag.toLowerCase().includes(lowercaseQuery))
   );
+}
+
+export function getFeaturedTools(): Tool[] {
+  return tools.filter(tool => tool.featured);
+}
+
+export function getNewTools(): Tool[] {
+  return tools.filter(tool => tool.isNew);
+}
+
+export function getFreeTools(): Tool[] {
+  return tools.filter(tool => tool.pricing === 'free');
+}
+
+export function getFreemiumTools(): Tool[] {
+  return tools.filter(tool => tool.pricing === 'freemium');
 }

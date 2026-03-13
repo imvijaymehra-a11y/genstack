@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ArrowRight, Sparkles } from 'lucide-react';
+import { ArrowRight, Sparkles, Star, DollarSign, Zap } from 'lucide-react';
 
 interface ToolCardProps {
   tool: {
@@ -7,13 +7,52 @@ interface ToolCardProps {
     name: string;
     description: string;
     category: string;
+    featured?: boolean;
+    pricing?: 'free' | 'freemium' | 'paid';
+    tags?: string[];
   };
 }
 
 export default function ToolCard({ tool }: ToolCardProps) {
+  const getPricingColor = (pricing?: string) => {
+    switch (pricing) {
+      case 'free':
+        return 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400';
+      case 'freemium':
+        return 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400';
+      case 'paid':
+        return 'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400';
+      default:
+        return 'bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-400';
+    }
+  };
+
+  const getPricingText = (pricing?: string) => {
+    switch (pricing) {
+      case 'free':
+        return 'Free';
+      case 'freemium':
+        return 'Freemium';
+      case 'paid':
+        return 'Paid';
+      default:
+        return 'Free';
+    }
+  };
+
   return (
     <Link href={`/tools/${tool.slug}`}>
-      <div className="bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl p-6 hover:shadow-2xl transition-all duration-300 hover:border-indigo-500/50 hover:scale-105 cursor-pointer group h-full">
+      <div className="bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl p-6 hover:shadow-2xl transition-all duration-300 hover:border-indigo-500/50 hover:scale-105 cursor-pointer group h-full relative overflow-hidden">
+        {/* Featured Badge */}
+        {tool.featured && (
+          <div className="absolute top-2 right-2 z-10">
+            <div className="flex items-center space-x-1 bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400 px-2 py-1 rounded-full text-xs font-semibold">
+              <Star className="h-3 w-3 fill-current" />
+              <span>Featured</span>
+            </div>
+          </div>
+        )}
+
         <div className="flex items-start justify-between mb-4">
           <div className="flex items-center space-x-3 flex-1">
             <div className="p-2 bg-gradient-to-br from-indigo-100 to-purple-100 dark:from-indigo-900/30 dark:to-purple-900/30 rounded-lg group-hover:shadow-lg transition-all duration-300">
@@ -23,17 +62,42 @@ export default function ToolCard({ tool }: ToolCardProps) {
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
                 {tool.name}
               </h3>
-              <p className="text-sm text-indigo-600 dark:text-indigo-400 font-medium">
-                {tool.category}
-              </p>
+              <div className="flex items-center space-x-2">
+                <p className="text-sm text-indigo-600 dark:text-indigo-400 font-medium">
+                  {tool.category}
+                </p>
+                {/* Pricing Badge */}
+                <span className={`text-xs px-2 py-1 rounded-full font-medium ${getPricingColor(tool.pricing)}`}>
+                  {getPricingText(tool.pricing)}
+                </span>
+              </div>
             </div>
           </div>
           <ArrowRight className="h-5 w-5 text-gray-400 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-all duration-300 transform group-hover:translate-x-1" />
         </div>
         
-        <p className="text-gray-600 dark:text-gray-300 line-clamp-2 text-sm leading-relaxed">
+        <p className="text-gray-600 dark:text-gray-300 line-clamp-2 text-sm leading-relaxed mb-4">
           {tool.description}
         </p>
+
+        {/* Tags */}
+        {tool.tags && tool.tags.length > 0 && (
+          <div className="flex flex-wrap gap-1">
+            {tool.tags.slice(0, 3).map((tag, index) => (
+              <span
+                key={index}
+                className="text-xs bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400 px-2 py-1 rounded"
+              >
+                {tag}
+              </span>
+            ))}
+            {tool.tags.length > 3 && (
+              <span className="text-xs bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400 px-2 py-1 rounded">
+                +{tool.tags.length - 3}
+              </span>
+            )}
+          </div>
+        )}
       </div>
     </Link>
   );
