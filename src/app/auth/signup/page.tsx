@@ -119,10 +119,10 @@ export default function SignupPage() {
       
       <div className="flex min-h-[calc(100vh-80px)]">
         {/* Left Side - Hero Section */}
-        <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-indigo-600 to-purple-700 p-12 text-white relative overflow-hidden">
+        <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-indigo-600 to-purple-700 p-12 text-white relative overflow-hidden items-center justify-center">
           <div className="absolute inset-0 bg-black/10"></div>
-          <div className="relative z-10 flex flex-col justify-center h-full">
-            <div className="max-w-lg mx-auto text-center">
+          <div className="relative z-10 max-w-lg mx-auto text-center">
+            <div className="flex flex-col items-center justify-center space-y-8">
               <div className="flex items-center justify-center mb-8">
                 <div className="p-3 bg-white/20 rounded-xl backdrop-blur-sm">
                   <Sparkles className="h-8 w-8 text-white" />
@@ -130,9 +130,9 @@ export default function SignupPage() {
               </div>
               
               <h1 className="text-4xl font-bold mb-4">Welcome to GenStacker</h1>
-              <p className="text-xl text-indigo-100 mb-8">Your gateway to the world's most powerful AI tools</p>
+              <p className="text-xl text-indigo-100 mb-8">Your gateway to world's most powerful AI tools</p>
               
-              <div className="space-y-4 mb-8">
+              <div className="space-y-4 mb-8 max-w-md">
                 <div className="flex items-center justify-center space-x-3">
                   <div className="flex-shrink-0 mt-1">
                     <Zap className="h-5 w-5 text-indigo-200" />
@@ -162,7 +162,7 @@ export default function SignupPage() {
                 </div>
               </div>
 
-              <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 mb-8">
+              <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 mb-8 max-w-md">
                 <h3 className="text-white font-semibold mb-3">What's included in your free trial:</h3>
                 <ul className="space-y-2 text-sm">
                   <li className="flex items-center text-indigo-100">

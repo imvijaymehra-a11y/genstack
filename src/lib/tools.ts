@@ -115,10 +115,10 @@ export const tools: Tool[] = [
     description: "Create persuasive advertising copy",
     category: "Marketing & Advertising",
     prompt: "Write compelling ad copy for {input}. Include attention-grabbing headlines, persuasive body text, and strong calls-to-action.",
-    seoTitle: "AI Ad Copy Generator | Create High-Converting Ads",
-    seoDescription: "Generate high-converting ad copy instantly. Create persuasive advertising that drives results and increases ROI.",
-    featured: true,
-    tags: ["advertising", "copy", "marketing", "conversion"],
+    seoTitle: "Ad Copy Generator | AI Advertising Copy",
+    seoDescription: "Create compelling advertising copy instantly with AI. Generate high-converting ad copy for any product or service.",
+    trending: true,
+    tags: ["marketing", "advertising", "copy", "conversion"],
     pricing: "freemium"
   },
 
