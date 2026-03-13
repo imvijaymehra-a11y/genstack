@@ -26,10 +26,12 @@
     --radius: 0.5rem;
   }
 
+  * {
+    @apply border-border;
+  }
   body {
+    @apply bg-background text-foreground;
     font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
-    color: hsl(var(--foreground));
-    background-color: hsl(var(--background));
     /* Performance optimizations */
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
@@ -41,11 +43,6 @@
   }
 
   /* Core Web Vitals optimizations */
-  * {
-    /* Reduce paint on scroll */
-    will-change: auto;
-  }
-  
   img {
     /* Prevent layout shift */
     height: auto;
@@ -59,14 +56,6 @@
   button, a, input, textarea, select {
     touch-action: manipulation;
     -webkit-tap-highlight-color: transparent;
-  }
-  
-  /* Prevent text selection on mobile */
-  .no-select {
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
   }
   
   /* Optimize animations for performance */
