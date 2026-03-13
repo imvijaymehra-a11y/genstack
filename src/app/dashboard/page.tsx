@@ -17,7 +17,7 @@ import {
   Sparkles
 } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
-import { getUserUsage } from '@/lib/supabase';
+import { getUserUsage, getUserPlan } from '@/lib/supabase';
 import { tools } from '@/lib/tools';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -25,6 +25,7 @@ import Footer from '@/components/Footer';
 export default function DashboardPage() {
   const [user, setUser] = useState<any>(null);
   const [usage, setUsage] = useState(0);
+  const [userPlan, setUserPlan] = useState<'free' | 'pro'>('free');
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
@@ -43,6 +44,10 @@ export default function DashboardPage() {
         // Fetch user's daily usage
         const dailyUsage = await getUserUsage(user.id);
         setUsage(dailyUsage);
+        
+        // Fetch user's plan from database
+        const plan = await getUserPlan(user.id);
+        setUserPlan(plan || 'free');
       } catch (error) {
         console.error('Error fetching user data:', error);
       } finally {
@@ -58,6 +63,8 @@ export default function DashboardPage() {
           router.push('/');
         } else if (event === 'SIGNED_IN' && session?.user) {
           setUser(session.user);
+          // Refetch plan when user signs in
+          getUserPlan(session.user.id).then(plan => setUserPlan(plan || 'free'));
         }
       }
     );
@@ -77,8 +84,19 @@ export default function DashboardPage() {
   };
 
   const getUsagePercentage = () => {
-    const dailyLimit = 10; // Free plan limit
+    const dailyLimit = userPlan === 'pro' ? -1 : 10; // Pro has unlimited, free has 10
+    if (dailyLimit === -1) return 0; // Don't show progress for pro users
     return Math.min((usage / dailyLimit) * 100, 100);
+  };
+
+  const getDailyLimit = () => {
+    return userPlan === 'pro' ? -1 : 10;
+  };
+
+  const getRemainingGenerations = () => {
+    const dailyLimit = getDailyLimit();
+    if (dailyLimit === -1) return 'Unlimited';
+    return Math.max(0, dailyLimit - usage);
   };
 
   if (loading) {
@@ -96,7 +114,7 @@ export default function DashboardPage() {
     return null; // Will redirect
   }
 
-  const isPro = user.plan === 'pro';
+  const isPro = userPlan === 'pro';
   const mostUsedTool = getMostUsedTool();
 
   return (
@@ -201,7 +219,7 @@ export default function DashboardPage() {
                 Daily Usage Progress
               </h2>
               <span className="text-sm text-gray-500 dark:text-gray-400">
-                {usage}/10 generations
+                {isPro ? 'Unlimited' : `${usage}/10`} generations
               </span>
             </div>
             <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-4 mb-4">
@@ -212,7 +230,7 @@ export default function DashboardPage() {
             </div>
             <div className="flex items-center justify-between text-sm">
               <span className="text-gray-600 dark:text-gray-400">
-                {10 - usage} generations remaining today
+                {getRemainingGenerations()} generations remaining today
               </span>
               {usage >= 8 && (
                 <Link
