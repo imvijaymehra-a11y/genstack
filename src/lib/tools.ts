@@ -41,6 +41,30 @@ export const tools: Tool[] = [
     pricing: "freemium"
   },
   {
+    slug: "content-rewriter",
+    name: "Content Rewriter",
+    description: "Rewrite existing content to make it unique and engaging",
+    category: "Writing & Editing",
+    prompt: "Rewrite this content to make it unique and engaging: {input}. Maintain the original meaning while improving clarity, flow, and impact.",
+    seoTitle: "AI Content Rewriter | Unique Content Generation",
+    seoDescription: "Rewrite existing content instantly with AI. Create unique, engaging versions while preserving the original message.",
+    tags: ["rewrite", "content", "unique", "seo"],
+    pricing: "freemium"
+  },
+  {
+    slug: "grammar-checker",
+    name: "Grammar Checker",
+    description: "Check and correct grammar, spelling, and style",
+    category: "Writing & Editing",
+    prompt: "Check and correct the grammar, spelling, and style of this text: {input}. Provide suggestions for improvement and explain the changes.",
+    seoTitle: "AI Grammar Checker | Perfect Your Writing",
+    seoDescription: "Check and correct grammar instantly with AI. Improve your writing with advanced grammar and style suggestions.",
+    tags: ["grammar", "spelling", "style", "editing"],
+    pricing: "free"
+  },
+
+  // Social Media
+  {
     slug: "social-media-caption-generator",
     name: "Social Media Caption Generator",
     description: "Generate engaging captions for social media posts",
@@ -51,6 +75,28 @@ export const tools: Tool[] = [
     featured: true,
     tags: ["social media", "caption", "hashtags", "engagement"],
     pricing: "free"
+  },
+  {
+    slug: "tweet-generator",
+    name: "Tweet Generator",
+    description: "Create compelling tweets and Twitter threads",
+    category: "Social Media",
+    prompt: "Create compelling tweets about {input}. Include hashtags, mentions, and optimal formatting for Twitter engagement.",
+    seoTitle: "AI Tweet Generator | Create Engaging Tweets",
+    seoDescription: "Generate engaging tweets instantly with AI. Create viral Twitter content with optimal formatting and hashtags.",
+    tags: ["twitter", "tweet", "social media", "engagement"],
+    pricing: "free"
+  },
+  {
+    slug: "instagram-post-creator",
+    name: "Instagram Post Creator",
+    description: "Create Instagram posts with captions and hashtags",
+    category: "Social Media",
+    prompt: "Create an Instagram post about {input}. Include an engaging caption, relevant hashtags, and suggestions for visual content.",
+    seoTitle: "AI Instagram Post Creator | Visual Content Strategy",
+    seoDescription: "Create Instagram posts instantly with AI. Generate engaging captions and hashtag strategies for maximum reach.",
+    tags: ["instagram", "visual", "hashtags", "engagement"],
+    pricing: "freemium"
   },
 
   // Image Generation & Editing
@@ -68,15 +114,25 @@ export const tools: Tool[] = [
     pricing: "freemium"
   },
   {
-    slug: "logo-maker",
-    name: "Logo Maker",
-    description: "Design professional logos for your brand",
-    category: "Art & Creative Design",
-    prompt: "Design a professional logo for {input}. Create a clean, memorable design that represents the brand identity and works well at different sizes.",
-    seoTitle: "AI Logo Maker | Professional Logo Design",
-    seoDescription: "Create professional logos instantly with AI. Design unique brand identities that stand out and make a lasting impression.",
-    trending: true,
-    tags: ["logo", "brand", "design", "professional"],
+    slug: "image-enhancer",
+    name: "Image Enhancer",
+    description: "Enhance and improve image quality automatically",
+    category: "Image Generation & Editing",
+    prompt: "Enhance this image: {input}. Improve resolution, clarity, colors, and overall quality while maintaining the original content.",
+    seoTitle: "AI Image Enhancer | Improve Photo Quality",
+    seoDescription: "Enhance image quality instantly with AI. Improve resolution, clarity, and colors automatically.",
+    tags: ["enhance", "quality", "photo", "improvement"],
+    pricing: "freemium"
+  },
+  {
+    slug: "background-remover",
+    name: "Background Remover",
+    description: "Remove backgrounds from images automatically",
+    category: "Image Generation & Editing",
+    prompt: "Remove the background from this image: {input}. Create a clean, professional cutout with precise edges.",
+    seoTitle: "AI Background Remover | Clean Image Cutouts",
+    seoDescription: "Remove image backgrounds instantly with AI. Create professional cutouts with precise edge detection.",
+    tags: ["background", "remove", "cutout", "professional"],
     pricing: "freemium"
   },
 
@@ -93,6 +149,17 @@ export const tools: Tool[] = [
     tags: ["video", "script", "content", "youtube"],
     pricing: "freemium"
   },
+  {
+    slug: "video-description-generator",
+    name: "Video Description Generator",
+    description: "Generate SEO-optimized video descriptions",
+    category: "Video & Animation",
+    prompt: "Create an SEO-optimized video description for: {input}. Include relevant keywords, timestamps, and engagement elements.",
+    seoTitle: "AI Video Description Generator | SEO Optimization",
+    seoDescription: "Generate video descriptions instantly with AI. Create SEO-optimized descriptions for better discoverability.",
+    tags: ["video", "description", "seo", "youtube"],
+    pricing: "free"
+  },
 
   // Coding & Development
   {
@@ -105,6 +172,28 @@ export const tools: Tool[] = [
     seoDescription: "Generate clean, efficient code instantly with AI. Support for multiple programming languages with best practices included.",
     trending: true,
     tags: ["code", "programming", "development", "ai"],
+    pricing: "freemium"
+  },
+  {
+    slug: "code-debugger",
+    name: "Code Debugger",
+    description: "Find and fix bugs in your code",
+    category: "Coding & Development",
+    prompt: "Debug this code and identify the issues: {input}. Provide fixes and explanations for each problem found.",
+    seoTitle: "AI Code Debugger | Find and Fix Bugs",
+    seoDescription: "Debug code instantly with AI. Identify and fix bugs with detailed explanations and solutions.",
+    tags: ["debug", "bugs", "fix", "development"],
+    pricing: "freemium"
+  },
+  {
+    slug: "api-documentation-generator",
+    name: "API Documentation Generator",
+    description: "Generate comprehensive API documentation",
+    category: "Coding & Development",
+    prompt: "Generate comprehensive API documentation for: {input}. Include endpoints, parameters, responses, and examples.",
+    seoTitle: "AI API Documentation Generator | Automatic Docs",
+    seoDescription: "Generate API documentation instantly with AI. Create comprehensive docs with examples and specifications.",
+    tags: ["api", "documentation", "development", "technical"],
     pricing: "freemium"
   },
 
@@ -121,6 +210,17 @@ export const tools: Tool[] = [
     tags: ["marketing", "advertising", "copy", "conversion"],
     pricing: "freemium"
   },
+  {
+    slug: "landing-page-copy",
+    name: "Landing Page Copy",
+    description: "Create high-converting landing page content",
+    category: "Marketing & Advertising",
+    prompt: "Create high-converting landing page copy for {input}. Include headlines, subheadlines, benefit statements, and calls-to-action.",
+    seoTitle: "AI Landing Page Copy | Conversion Optimization",
+    seoDescription: "Create landing page copy instantly with AI. Generate high-converting content that drives action.",
+    tags: ["landing page", "conversion", "copy", "marketing"],
+    pricing: "freemium"
+  },
 
   // Business Management
   {
@@ -133,6 +233,66 @@ export const tools: Tool[] = [
     seoDescription: "Generate professional business plans instantly. Create comprehensive documents for investors, loans, and strategic planning.",
     featured: true,
     tags: ["business plan", "strategy", "startup", "planning"],
+    pricing: "freemium"
+  },
+  {
+    slug: "swot-analysis-generator",
+    name: "SWOT Analysis Generator",
+    description: "Generate detailed SWOT analysis reports",
+    category: "Business Management",
+    prompt: "Create a comprehensive SWOT analysis for: {input}. Include strengths, weaknesses, opportunities, and threats with detailed explanations.",
+    seoTitle: "AI SWOT Analysis Generator | Strategic Planning",
+    seoDescription: "Generate SWOT analysis instantly with AI. Create detailed strategic planning documents for business growth.",
+    tags: ["swot", "analysis", "strategy", "planning"],
+    pricing: "freemium"
+  },
+
+  // Art & Creative Design
+  {
+    slug: "logo-maker",
+    name: "Logo Maker",
+    description: "Design professional logos for your brand",
+    category: "Art & Creative Design",
+    prompt: "Design a professional logo for {input}. Create a clean, memorable design that represents the brand identity and works well at different sizes.",
+    seoTitle: "AI Logo Maker | Professional Logo Design",
+    seoDescription: "Create professional logos instantly with AI. Design unique brand identities that stand out and make a lasting impression.",
+    trending: true,
+    tags: ["logo", "brand", "design", "professional"],
+    pricing: "freemium"
+  },
+  {
+    slug: "color-palette-generator",
+    name: "Color Palette Generator",
+    description: "Generate beautiful color palettes for design",
+    category: "Art & Creative Design",
+    prompt: "Generate a beautiful color palette for {input}. Create harmonious color combinations with hex codes and usage suggestions.",
+    seoTitle: "AI Color Palette Generator | Design Inspiration",
+    seoDescription: "Generate color palettes instantly with AI. Create beautiful, harmonious color combinations for any design project.",
+    tags: ["color", "palette", "design", "creative"],
+    pricing: "free"
+  },
+
+  // Data & Analytics
+  {
+    slug: "data-visualization-generator",
+    name: "Data Visualization Generator",
+    description: "Create charts and visualizations from data",
+    category: "Data & Analytics",
+    prompt: "Create data visualizations for: {input}. Generate appropriate chart types and explain the insights revealed.",
+    seoTitle: "AI Data Visualization | Chart Generation",
+    seoDescription: "Create data visualizations instantly with AI. Generate charts and graphs that reveal insights in your data.",
+    tags: ["data", "visualization", "charts", "analytics"],
+    pricing: "freemium"
+  },
+  {
+    slug: "data-analysis-report",
+    name: "Data Analysis Report",
+    description: "Generate comprehensive data analysis reports",
+    category: "Data & Analytics",
+    prompt: "Analyze this data and generate a comprehensive report: {input}. Include insights, trends, recommendations, and visualizations.",
+    seoTitle: "AI Data Analysis Report | Business Intelligence",
+    seoDescription: "Generate data analysis reports instantly with AI. Create comprehensive business intelligence documents.",
+    tags: ["data", "analysis", "report", "insights"],
     pricing: "freemium"
   },
 
@@ -149,6 +309,17 @@ export const tools: Tool[] = [
     tags: ["translation", "language", "multilingual", "global"],
     pricing: "freemium"
   },
+  {
+    slug: "lesson-plan-generator",
+    name: "Lesson Plan Generator",
+    description: "Create comprehensive educational lesson plans",
+    category: "Education & Translation",
+    prompt: "Create a comprehensive lesson plan for {input}. Include objectives, materials, activities, assessment, and timing.",
+    seoTitle: "AI Lesson Plan Generator | Educational Content",
+    seoDescription: "Generate lesson plans instantly with AI. Create comprehensive educational content for teachers and trainers.",
+    tags: ["education", "lesson", "teaching", "curriculum"],
+    pricing: "freemium"
+  },
 
   // Health & Wellness
   {
@@ -160,6 +331,17 @@ export const tools: Tool[] = [
     seoTitle: "AI Meal Plan Generator | Personalized Nutrition",
     seoDescription: "Generate personalized meal plans instantly. Create nutritionally balanced meal plans tailored to your dietary needs and goals.",
     tags: ["meal plan", "nutrition", "diet", "health"],
+    pricing: "freemium"
+  },
+  {
+    slug: "workout-plan-generator",
+    name: "Workout Plan Generator",
+    description: "Create personalized fitness workout plans",
+    category: "Health & Wellness",
+    prompt: "Create a personalized workout plan for: {input}. Include exercises, sets, reps, rest periods, and progression guidelines.",
+    seoTitle: "AI Workout Plan Generator | Personal Fitness",
+    seoDescription: "Generate workout plans instantly with AI. Create personalized fitness routines for any goal and fitness level.",
+    tags: ["workout", "fitness", "exercise", "health"],
     pricing: "freemium"
   },
 
@@ -175,6 +357,17 @@ export const tools: Tool[] = [
     featured: true,
     tags: ["lyrics", "song", "music", "poetry"],
     pricing: "free"
+  },
+  {
+    slug: "podcast-script-generator",
+    name: "Podcast Script Generator",
+    description: "Create engaging podcast scripts and outlines",
+    category: "Music & Audio",
+    prompt: "Create an engaging podcast script about {input}. Include introduction, main topics, transitions, and conclusion with talking points.",
+    seoTitle: "AI Podcast Script Generator | Audio Content",
+    seoDescription: "Generate podcast scripts instantly with AI. Create engaging audio content with structured narratives and talking points.",
+    tags: ["podcast", "audio", "script", "content"],
+    pricing: "freemium"
   }
 ];
 
