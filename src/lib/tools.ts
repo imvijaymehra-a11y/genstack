@@ -8,6 +8,7 @@ export interface Tool {
   seoDescription?: string;
   featured?: boolean;
   isNew?: boolean;
+  trending?: boolean;
   tags?: string[];
   pricing?: 'free' | 'freemium' | 'paid';
 }
@@ -23,6 +24,7 @@ export const tools: Tool[] = [
     seoTitle: "AI Blog Post Generator | Create SEO-Optimized Blog Content",
     seoDescription: "Generate high-quality, SEO-optimized blog posts instantly with our AI blog generator. Create engaging content that ranks well in search engines.",
     featured: true,
+    trending: true,
     tags: ["blog", "seo", "content", "writing"],
     pricing: "freemium"
   },
@@ -61,7 +63,8 @@ export const tools: Tool[] = [
     seoTitle: "AI Image Generator | Create Images from Text",
     seoDescription: "Generate stunning AI images from text descriptions. Create unique artwork, photos, and graphics with advanced AI image generation.",
     featured: true,
-    tags: ["image", "art", "design", "visual"],
+    trending: true,
+    tags: ["image", "ai", "generation", "art"],
     pricing: "freemium"
   },
   {
@@ -72,8 +75,8 @@ export const tools: Tool[] = [
     prompt: "Design a professional logo for {input}. Create a clean, memorable design that represents the brand identity and works well at different sizes.",
     seoTitle: "AI Logo Maker | Professional Logo Design",
     seoDescription: "Create professional logos instantly with AI. Design unique brand identities that stand out and make a lasting impression.",
-    featured: true,
-    tags: ["logo", "brand", "design", "identity"],
+    trending: true,
+    tags: ["logo", "brand", "design", "professional"],
     pricing: "freemium"
   },
 
@@ -84,10 +87,10 @@ export const tools: Tool[] = [
     description: "Create compelling video scripts for any topic",
     category: "Video & Animation",
     prompt: "Write a compelling video script about {input}. Include scene descriptions, dialogue, camera directions, and timing notes for a professional production.",
-    seoTitle: "AI Video Script Generator | Create Video Content",
-    seoDescription: "Generate professional video scripts instantly. Create engaging content for YouTube, marketing, and entertainment with AI assistance.",
-    featured: true,
-    tags: ["video", "script", "youtube", "content"],
+    seoTitle: "Video Script Generator | AI Script Writer",
+    seoDescription: "Create compelling video scripts instantly with AI. Generate professional scripts for YouTube, TikTok, and social media.",
+    trending: true,
+    tags: ["video", "script", "content", "youtube"],
     pricing: "freemium"
   },
 
@@ -98,10 +101,10 @@ export const tools: Tool[] = [
     description: "Generate code in any programming language",
     category: "Coding & Development",
     prompt: "Generate clean, well-commented code for {input}. Include error handling, best practices, and documentation where appropriate.",
-    seoTitle: "AI Code Generator | Write Code Instantly",
-    seoDescription: "Generate clean, efficient code in any programming language instantly. Build applications faster with AI-powered coding assistance.",
-    featured: true,
-    tags: ["code", "programming", "development", "coding"],
+    seoTitle: "AI Code Generator | Write Code with AI",
+    seoDescription: "Generate clean, efficient code instantly with AI. Support for multiple programming languages with best practices included.",
+    trending: true,
+    tags: ["code", "programming", "development", "ai"],
     pricing: "freemium"
   },
 

@@ -122,30 +122,27 @@ export default function SignupPage() {
         <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-indigo-600 to-purple-700 p-12 text-white relative overflow-hidden">
           <div className="absolute inset-0 bg-black/10"></div>
           <div className="relative z-10 flex flex-col justify-center h-full">
-            <div className="max-w-lg mx-auto">
-              <div className="flex items-center mb-8">
+            <div className="max-w-lg mx-auto text-center">
+              <div className="flex items-center justify-center mb-8">
                 <div className="p-3 bg-white/20 rounded-xl backdrop-blur-sm">
                   <Sparkles className="h-8 w-8 text-white" />
                 </div>
-                <div className="ml-4">
-                  <h1 className="text-3xl font-bold mb-2">Join GenStacker</h1>
-                  <p className="text-indigo-100 text-lg">
-                    Start creating with AI today
-                  </p>
-                </div>
               </div>
-
-              <div className="space-y-6 mb-8">
-                <div className="flex items-start space-x-3">
+              
+              <h1 className="text-4xl font-bold mb-4">Welcome to GenStacker</h1>
+              <p className="text-xl text-indigo-100 mb-8">Your gateway to the world's most powerful AI tools</p>
+              
+              <div className="space-y-4 mb-8">
+                <div className="flex items-center justify-center space-x-3">
                   <div className="flex-shrink-0 mt-1">
                     <Zap className="h-5 w-5 text-indigo-200" />
                   </div>
                   <div>
-                    <span className="text-indigo-100 font-medium">41 AI tools included</span>
-                    <p className="text-indigo-200 text-sm mt-1">Access to all our AI creation tools</p>
+                    <span className="text-indigo-100 font-medium">Lightning fast AI generation</span>
+                    <p className="text-indigo-200 text-sm mt-1">Get results in seconds, not minutes</p>
                   </div>
                 </div>
-                <div className="flex items-start space-x-3">
+                <div className="flex items-center justify-center space-x-3">
                   <div className="flex-shrink-0 mt-1">
                     <Shield className="h-5 w-5 text-indigo-200" />
                   </div>
@@ -154,7 +151,7 @@ export default function SignupPage() {
                     <p className="text-indigo-200 text-sm mt-1">Your data is protected with industry-leading security</p>
                   </div>
                 </div>
-                <div className="flex items-start space-x-3">
+                <div className="flex items-center justify-center space-x-3">
                   <div className="flex-shrink-0 mt-1">
                     <Star className="h-5 w-5 text-indigo-200" />
                   </div>
@@ -183,7 +180,7 @@ export default function SignupPage() {
                 </ul>
               </div>
 
-              <div>
+              <div className="text-center">
                 <p className="text-indigo-100 text-sm mb-4">
                   Already have an account?
                 </p>
