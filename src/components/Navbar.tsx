@@ -159,7 +159,7 @@ export default function Navbar() {
                 
                 {/* Search Results Dropdown */}
                 {showSearchResults && searchResults.length > 0 && (
-                  <div className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-xl max-h-96 overflow-y-auto">
+                  <div className="absolute top-full left-0 right-0 mt-0.5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-xl max-h-96 overflow-y-auto">
                     {searchResults.map((tool) => (
                       <button
                         key={tool.slug}
@@ -206,7 +206,7 @@ export default function Navbar() {
                   Categories
                   <ChevronDown className="h-4 w-4" />
                 </button>
-                <div className="absolute left-0 mt-2 w-56 bg-white dark:bg-gray-800 rounded-xl shadow-xl hidden group-hover:block border border-gray-200 dark:border-gray-700 overflow-hidden">
+                <div className="absolute left-0 mt-0.5 w-56 bg-white dark:bg-gray-800 rounded-xl shadow-xl hidden group-hover:block border border-gray-200 dark:border-gray-700 overflow-hidden">
                   <div className="p-2">
                     {categories.map((category) => (
                       <Link
@@ -241,7 +241,7 @@ export default function Navbar() {
                   </button>
                   
                   {showUserMenu && (
-                    <div className="absolute right-0 mt-2 w-56 bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden">
+                    <div className="absolute right-0 mt-0.5 w-56 bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden">
                       <div className="p-4 border-b border-gray-200 dark:border-gray-700">
                         <p className="text-sm font-medium text-gray-900 dark:text-white">{user.email}</p>
                         <p className="text-xs text-gray-500 dark:text-gray-400">Free Plan</p>
