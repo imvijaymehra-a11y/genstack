@@ -15,18 +15,6 @@ const nextConfig = {
   compress: true,
   poweredByHeader: false,
   
-  // Experimental features for better performance
-  experimental: {
-    optimizeCss: true,
-    optimizePackageImports: ['lucide-react', '@radix-ui/react-icons'],
-    scrollRestoration: true,
-  },
-
-  // Compiler optimizations
-  compiler: {
-    removeConsole: process.env.NODE_ENV === 'production',
-  },
-
   // Static generation optimizations
   generateEtags: true,
   
@@ -93,25 +81,6 @@ const nextConfig = {
         permanent: true,
       },
     ];
-  },
-
-  // Webpack optimizations
-  webpack: (config, { isServer }) => {
-    // Optimize bundle size
-    if (!isServer) {
-      config.resolve.fallback = {
-        ...config.resolve.fallback,
-        fs: false,
-        net: false,
-        tls: false,
-      };
-    }
-
-    // Enable tree shaking
-    config.optimization.usedExports = true;
-    config.optimization.sideEffects = false;
-
-    return config;
   },
 };
 
