@@ -1,26 +1,33 @@
 'use client';
 
-import { useState, useRef } from 'react';
-import { Upload, X, Image as ImageIcon, Sparkles, Wand2, Palette, Sun, Camera, ShoppingCart } from 'lucide-react';
+import { useState, useRef, useEffect } from 'react';
+import { Upload, X, Image as ImageIcon, Sparkles, Wand2, Palette, Sun, Camera, ShoppingCart, ArrowLeftRight, Eye } from 'lucide-react';
 
 interface ImageToolFormProps {
   toolName: string;
   toolSlug: string;
   onGenerate: (input: string, file?: File) => Promise<string>;
   isGenerating: boolean;
+  generatedImage?: string;
 }
 
-export default function ImageToolForm({ toolName, toolSlug, onGenerate, isGenerating }: ImageToolFormProps) {
+export default function ImageToolForm({ toolName, toolSlug, onGenerate, isGenerating, generatedImage }: ImageToolFormProps) {
   const [input, setInput] = useState('');
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string>('');
   const [dragActive, setDragActive] = useState(false);
   const [enhancementType, setEnhancementType] = useState<string>('auto');
+  const [showComparison, setShowComparison] = useState(false);
+  const [sliderPosition, setSliderPosition] = useState(50);
+  const [isDragging, setIsDragging] = useState(false);
+  
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const comparisonRef = useRef<HTMLDivElement>(null);
 
   const imageTools = ['background-remover', 'image-enhancer', 'ai-image-generator'];
   const isImageTool = imageTools.includes(toolSlug);
   const isEnhancer = toolSlug === 'image-enhancer';
+  const hasGeneratedImage = generatedImage && (toolSlug === 'background-remover' || toolSlug === 'image-enhancer');
 
   const handleFileSelect = (file: File) => {
     if (file && file.type.startsWith('image/')) {
@@ -28,6 +35,7 @@ export default function ImageToolForm({ toolName, toolSlug, onGenerate, isGenera
       const reader = new FileReader();
       reader.onload = (e) => {
         setPreviewUrl(e.target?.result as string);
+        setShowComparison(false);
       };
       reader.readAsDataURL(file);
     }
@@ -66,6 +74,7 @@ export default function ImageToolForm({ toolName, toolSlug, onGenerate, isGenera
   const removeFile = () => {
     setSelectedFile(null);
     setPreviewUrl('');
+    setShowComparison(false);
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
     }
@@ -74,7 +83,6 @@ export default function ImageToolForm({ toolName, toolSlug, onGenerate, isGenera
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Validation based on tool type
     if (isImageTool && !selectedFile && !input.trim()) {
       return;
     }
@@ -88,10 +96,65 @@ export default function ImageToolForm({ toolName, toolSlug, onGenerate, isGenera
     try {
       const enhancedInput = isEnhancer ? `${enhancementType}: ${input}` : input;
       await onGenerate(enhancedInput, selectedFile || undefined);
+      if (hasGeneratedImage) {
+        setShowComparison(true);
+      }
     } catch (error) {
       console.error('Generation failed:', error);
     }
   };
+
+  const handleMouseDown = (e: React.MouseEvent) => {
+    setIsDragging(true);
+    e.preventDefault();
+  };
+
+  const handleMouseMove = (e: MouseEvent) => {
+    if (!isDragging || !comparisonRef.current) return;
+    
+    const rect = comparisonRef.current.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const percentage = (x / rect.width) * 100;
+    setSliderPosition(Math.max(0, Math.min(100, percentage)));
+  };
+
+  const handleMouseUp = () => {
+    setIsDragging(false);
+  };
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setIsDragging(true);
+    e.preventDefault();
+  };
+
+  const handleTouchMove = (e: TouchEvent) => {
+    if (!isDragging || !comparisonRef.current) return;
+    
+    const rect = comparisonRef.current.getBoundingClientRect();
+    const x = e.touches[0].clientX - rect.left;
+    const percentage = (x / rect.width) * 100;
+    setSliderPosition(Math.max(0, Math.min(100, percentage)));
+  };
+
+  const handleTouchEnd = () => {
+    setIsDragging(false);
+  };
+
+  useEffect(() => {
+    if (isDragging) {
+      document.addEventListener('mousemove', handleMouseMove);
+      document.addEventListener('mouseup', handleMouseUp);
+      document.addEventListener('touchmove', handleTouchMove);
+      document.addEventListener('touchend', handleTouchEnd);
+      
+      return () => {
+        document.removeEventListener('mousemove', handleMouseMove);
+        document.removeEventListener('mouseup', handleMouseUp);
+        document.removeEventListener('touchmove', handleTouchMove);
+        document.removeEventListener('touchend', handleTouchEnd);
+      };
+    }
+  }, [isDragging]);
 
   const getPlaceholder = () => {
     const placeholders: Record<string, string> = {
@@ -159,6 +222,47 @@ export default function ImageToolForm({ toolName, toolSlug, onGenerate, isGenera
     ];
   };
 
+  const getPromptExamples = () => {
+    const examples: Record<string, string[]> = {
+      'ai-image-generator': [
+        'A photorealistic portrait of a woman with freckles, soft natural lighting, shallow depth of field, professional photography',
+        'A futuristic cityscape at sunset with flying cars, neon lights, cyberpunk aesthetic, highly detailed, 8k',
+        'A cute cartoon panda eating bamboo in a bamboo forest, digital art, vibrant colors, adorable',
+        'A minimalist product photo of a luxury watch on a marble surface, studio lighting, clean background',
+        'An oil painting of a stormy sea with lighthouse, dramatic lighting, romanticism style'
+      ]
+    };
+    return examples[toolSlug] || [];
+  };
+
+  const getBestPractices = () => {
+    const practices: Record<string, string[]> = {
+      'ai-image-generator': [
+        'Be specific about style: photorealistic, digital art, oil painting, watercolor, etc.',
+        'Include lighting details: soft morning light, dramatic sunset, studio lighting',
+        'Specify composition: close-up, wide angle, bird\'s eye view, rule of thirds',
+        'Add mood and atmosphere: mysterious, cheerful, melancholic, energetic',
+        'Describe colors and textures: vibrant pastels, earthy tones, metallic finish',
+        'Include quality terms: highly detailed, 8k, professional photography, sharp focus'
+      ],
+      'background-remover': [
+        'Use images with clear subject-background separation',
+        'Avoid complex backgrounds with similar colors to subject',
+        'Higher resolution images give better results',
+        'PNG format preserves transparency best',
+        'For portraits, ensure hair is well-lit and separated'
+      ],
+      'image-enhancer': [
+        'Choose enhancement type based on your needs',
+        'Auto enhancement works well for most images',
+        '4K upscaling works best with high-quality originals',
+        'Portrait enhancement optimizes skin tones and facial features',
+        'Product enhancement focuses on clarity and color accuracy'
+      ]
+    };
+    return practices[toolSlug] || [];
+  };
+
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       {/* Image Upload Section */}
@@ -224,6 +328,73 @@ export default function ImageToolForm({ toolName, toolSlug, onGenerate, isGenera
               </div>
             </div>
           </div>
+        </div>
+      )}
+
+      {/* Before/After Comparison */}
+      {hasGeneratedImage && (
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+              Before & After Comparison
+            </h3>
+            <button
+              type="button"
+              onClick={() => setShowComparison(!showComparison)}
+              className="flex items-center space-x-2 px-3 py-1.5 bg-indigo-100 dark:bg-indigo-900 text-indigo-700 dark:text-indigo-300 rounded-lg hover:bg-indigo-200 dark:hover:bg-indigo-800 transition-colors"
+            >
+              <Eye className="h-4 w-4" />
+              <span className="text-sm">{showComparison ? 'Hide' : 'Show'} Comparison</span>
+            </button>
+          </div>
+
+          {showComparison && (
+            <div className="relative rounded-lg overflow-hidden border border-gray-200 dark:border-gray-600">
+              <div
+                ref={comparisonRef}
+                className="relative w-full h-96 cursor-ew-resize select-none"
+                onMouseDown={handleMouseDown}
+                onTouchStart={handleTouchStart}
+              >
+                {/* Before Image */}
+                <img
+                  src={previewUrl}
+                  alt="Before"
+                  className="absolute inset-0 w-full h-full object-contain bg-gray-100 dark:bg-gray-800"
+                />
+                
+                {/* After Image */}
+                <div
+                  className="absolute inset-0 overflow-hidden"
+                  style={{ clipPath: `inset(0 ${100 - sliderPosition}% 0 0)` }}
+                >
+                  <img
+                    src={generatedImage}
+                    alt="After"
+                    className="absolute inset-0 w-full h-full object-contain bg-gray-100 dark:bg-gray-800"
+                  />
+                </div>
+
+                {/* Slider Line */}
+                <div
+                  className="absolute top-0 bottom-0 w-0.5 bg-white shadow-lg"
+                  style={{ left: `${sliderPosition}%` }}
+                >
+                  <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-10 h-10 bg-white rounded-full shadow-lg flex items-center justify-center">
+                    <ArrowLeftRight className="h-4 w-4 text-gray-600" />
+                  </div>
+                </div>
+
+                {/* Labels */}
+                <div className="absolute top-4 left-4 px-2 py-1 bg-black bg-opacity-50 text-white text-sm rounded">
+                  Before
+                </div>
+                <div className="absolute top-4 right-4 px-2 py-1 bg-black bg-opacity-50 text-white text-sm rounded">
+                  After
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       )}
 
@@ -305,11 +476,38 @@ export default function ImageToolForm({ toolName, toolSlug, onGenerate, isGenera
         )}
       </button>
 
+      {/* Prompt Examples */}
+      {toolSlug === 'ai-image-generator' && (
+        <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+          <h4 className="font-medium text-blue-900 dark:text-blue-100 mb-3">💡 Prompt Examples:</h4>
+          <div className="space-y-2">
+            {getPromptExamples().map((example, index) => (
+              <div key={index} className="text-sm text-blue-800 dark:text-blue-200 bg-white dark:bg-blue-900/30 p-2 rounded border border-blue-200 dark:border-blue-700">
+                "{example}"
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Best Practices */}
+      <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-4">
+        <h4 className="font-medium text-green-900 dark:text-green-100 mb-3">🎯 Best Practices:</h4>
+        <ul className="text-sm text-green-800 dark:text-green-200 space-y-1">
+          {getBestPractices().map((practice, index) => (
+            <li key={index} className="flex items-start">
+              <span className="mr-2">•</span>
+              <span>{practice}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+
       {/* Tool-specific tips */}
       {isImageTool && (
-        <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
-          <h4 className="font-medium text-blue-900 dark:text-blue-100 mb-2">💡 Professional Tips:</h4>
-          <ul className="text-sm text-blue-800 dark:text-blue-200 space-y-1">
+        <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg p-4">
+          <h4 className="font-medium text-amber-900 dark:text-amber-100 mb-2">💡 Professional Tips:</h4>
+          <ul className="text-sm text-amber-800 dark:text-amber-200 space-y-1">
             {toolSlug === 'background-remover' && (
               <>
                 <li>• Use high-contrast images for best results</li>
