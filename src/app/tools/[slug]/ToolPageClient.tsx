@@ -207,72 +207,69 @@ export default function ToolPageClient({ slug }: ToolPageClientProps) {
                 toolSlug={slug}
               />
 
-              {/* Tabs Section - Below Image Generator - DEBUG: Always Show */}
-              <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 border border-gray-200 dark:border-gray-700">
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-6">
-                  🎨 AI Image Generator Features
-                </h3>
-                
-                {/* Debug Info */}
-                <div className="bg-blue-100 dark:bg-blue-900 p-3 rounded-lg mb-4 text-sm">
-                  <strong>DEBUG:</strong> Current slug = "{slug}" | Should show tabs = {slug === 'ai-image-generator' ? 'YES' : 'NO'}
-                </div>
-                
-                {/* Tabs Navigation */}
-                <div className="border-b border-gray-200 dark:border-gray-600 mb-6">
-                  <nav className="-mb-px flex space-x-8" aria-label="Tabs">
-                    <button className="py-2 px-1 border-b-2 border-indigo-500 font-medium text-sm text-indigo-600">
-                      Overview
-                    </button>
-                    <button className="py-2 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300">
-                      Prompt Examples
-                    </button>
-                    <button className="py-2 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300">
-                      Best Practices
-                    </button>
-                    <button className="py-2 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300">
-                      Models
-                    </button>
-                  </nav>
-                </div>
+              {/* Tabs Section - Below Image Generator */}
+              {slug === 'ai-image-generator' && (
+                <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 border border-gray-200 dark:border-gray-700">
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-6">
+                    🎨 AI Image Generator Features
+                  </h3>
+                  
+                  {/* Tabs Navigation */}
+                  <div className="border-b border-gray-200 dark:border-gray-600 mb-6">
+                    <nav className="-mb-px flex space-x-8" aria-label="Tabs">
+                      <button className="py-2 px-1 border-b-2 border-indigo-500 font-medium text-sm text-indigo-600">
+                        Overview
+                      </button>
+                      <button className="py-2 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300">
+                        Prompt Examples
+                      </button>
+                      <button className="py-2 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300">
+                        Best Practices
+                      </button>
+                      <button className="py-2 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300">
+                        Models
+                      </button>
+                    </nav>
+                  </div>
 
-                {/* Tab Content */}
-                <div className="space-y-6">
-                  {/* Overview Tab */}
-                  <div className="space-y-4">
-                    <h4 className="text-md font-semibold text-gray-900 dark:text-white mb-3">
-                      🚀 AI Image Generation Overview
-                    </h4>
-                    <div className="text-sm text-gray-700 dark:text-gray-300 space-y-3">
-                      <p>
-                        Generate stunning images from text descriptions using advanced AI models. 
-                        Our AI Image Generator supports multiple professional models including DALL-E 3, 
-                        Stable Diffusion XL, and more.
-                      </p>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-                        <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-gray-700 dark:to-gray-600 p-4 rounded-lg">
-                          <h5 className="font-medium text-gray-900 dark:text-white mb-2">✨ Key Features</h5>
-                          <ul className="text-sm space-y-1 text-gray-700 dark:text-gray-300">
-                            <li>• Multiple AI models</li>
-                            <li>• High-resolution output</li>
-                            <li>• Custom styles</li>
-                            <li>• Commercial-safe options</li>
-                          </ul>
-                        </div>
-                        <div className="bg-gradient-to-r from-purple-50 to-pink-50 dark:from-gray-700 dark:to-gray-600 p-4 rounded-lg">
-                          <h5 className="font-medium text-gray-900 dark:text-white mb-2">🎯 Use Cases</h5>
-                          <ul className="text-sm space-y-1 text-gray-700 dark:text-gray-300">
-                            <li>• Social media content</li>
-                            <li>• Marketing materials</li>
-                            <li>• Product mockups</li>
-                            <li>• Creative projects</li>
-                          </ul>
+                  {/* Tab Content */}
+                  <div className="space-y-6">
+                    {/* Overview Tab */}
+                    <div className="space-y-4">
+                      <h4 className="text-md font-semibold text-gray-900 dark:text-white mb-3">
+                        🚀 AI Image Generation Overview
+                      </h4>
+                      <div className="text-sm text-gray-700 dark:text-gray-300 space-y-3">
+                        <p>
+                          Generate stunning images from text descriptions using advanced AI models. 
+                          Our AI Image Generator supports multiple professional models including DALL-E 3, 
+                          Stable Diffusion XL, and more.
+                        </p>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                          <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-gray-700 dark:to-gray-600 p-4 rounded-lg">
+                            <h5 className="font-medium text-gray-900 dark:text-white mb-2">✨ Key Features</h5>
+                            <ul className="text-sm space-y-1 text-gray-700 dark:text-gray-300">
+                              <li>• Multiple AI models</li>
+                              <li>• High-resolution output</li>
+                              <li>• Custom styles</li>
+                              <li>• Commercial-safe options</li>
+                            </ul>
+                          </div>
+                          <div className="bg-gradient-to-r from-purple-50 to-pink-50 dark:from-gray-700 dark:to-gray-600 p-4 rounded-lg">
+                            <h5 className="font-medium text-gray-900 dark:text-white mb-2">🎯 Use Cases</h5>
+                            <ul className="text-sm space-y-1 text-gray-700 dark:text-gray-300">
+                              <li>• Social media content</li>
+                              <li>• Marketing materials</li>
+                              <li>• Product mockups</li>
+                              <li>• Creative projects</li>
+                            </ul>
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
+              )}
 
               {/* Debug Info - Remove in production */}
               {process.env.NODE_ENV === 'development' && (
