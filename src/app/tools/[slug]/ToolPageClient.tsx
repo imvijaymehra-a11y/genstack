@@ -247,7 +247,7 @@ export default function ToolPageClient({ slug }: ToolPageClientProps) {
                   }}>
                     <nav style={{
                       display: 'flex',
-                      spaceX: '2rem',
+                      gap: '2rem',
                       marginBottom: '-1px'
                     }}>
                       <button style={{
