@@ -208,7 +208,7 @@ export default function ToolPageClient({ slug }: ToolPageClientProps) {
               />
 
               {/* Tabs Section - Below Image Generator */}
-              {toolSlug === 'ai-image-generator' && (
+              {slug === 'ai-image-generator' && (
                 <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 border border-gray-200 dark:border-gray-700">
                   <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-6">
                     🎨 AI Image Generator Features
