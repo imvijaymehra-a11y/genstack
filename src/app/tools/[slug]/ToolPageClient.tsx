@@ -207,6 +207,23 @@ export default function ToolPageClient({ slug }: ToolPageClientProps) {
                 toolSlug={slug}
               />
 
+              {/* VERY OBVIOUS TEST - SHOULD BE IMPOSSIBLE TO MISS */}
+              <div style={{
+                backgroundColor: '#ff0000',
+                color: '#ffffff',
+                fontSize: '48px',
+                fontWeight: 'bold',
+                textAlign: 'center',
+                padding: '50px',
+                margin: '50px 0',
+                border: '10px solid #000000',
+                borderRadius: '20px'
+              }}>
+                🚨 IF YOU SEE THIS - CODE CHANGES ARE WORKING! 🚨
+                <br />
+                Current Time: {new Date().toLocaleString()}
+              </div>
+
               {/* Tabs Section - Below Image Generator */}
               {slug === 'ai-image-generator' && (
                 <div style={{
