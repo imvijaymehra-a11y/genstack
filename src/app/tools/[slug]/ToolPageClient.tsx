@@ -207,6 +207,20 @@ export default function ToolPageClient({ slug }: ToolPageClientProps) {
                 toolSlug={slug}
               />
 
+              {/* CSS TEST - VERY OBVIOUS STYLING */}
+              <div style={{
+                backgroundColor: 'red',
+                color: 'white',
+                padding: '20px',
+                fontSize: '24px',
+                fontWeight: 'bold',
+                textAlign: 'center',
+                margin: '20px 0',
+                border: '5px solid blue'
+              }}>
+                🚨 CSS TEST: If you see this with red background and blue border, CSS is working!
+              </div>
+
               {/* Tabs Section - Below Image Generator */}
               {slug === 'ai-image-generator' && (
                 <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 border border-gray-200 dark:border-gray-700">
