@@ -207,6 +207,17 @@ export default function ToolPageClient({ slug }: ToolPageClientProps) {
                 toolSlug={slug}
               />
 
+              {/* TEST SECTION - VERY OBVIOUS CHANGE */}
+              <div className="bg-red-500 text-white p-6 rounded-lg mb-8 text-center font-bold text-xl">
+                🚀 DEPLOYMENT TEST - If you see this, the deployment worked! 🚀
+                <br />
+                Current Tool: {tool?.name || 'Loading...'}
+                <br />
+                Slug: {slug}
+                <br />
+                Time: {new Date().toLocaleString()}
+              </div>
+
               {/* Tabs Section - Below Image Generator */}
               {slug === 'ai-image-generator' && (
                 <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 border border-gray-200 dark:border-gray-700">
