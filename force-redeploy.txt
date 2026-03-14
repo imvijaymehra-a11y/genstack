@@ -1,0 +1,6 @@
+FORCE REDEPLOY - 2026-03-14 06:09:00
+This file forces a new deployment to clear Vercel cache.
+Changes should now be visible:
+- Tabs section below AI Image Generator
+- Before/After comparison for all image tools
+- CapCut.pro style drag slider

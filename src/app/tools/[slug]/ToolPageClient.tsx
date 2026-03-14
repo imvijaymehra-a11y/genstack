@@ -270,6 +270,19 @@ export default function ToolPageClient({ slug }: ToolPageClientProps) {
                   </div>
                 </div>
               )}
+
+              {/* Debug Info - Remove in production */}
+              {process.env.NODE_ENV === 'development' && (
+                <div className="bg-yellow-100 dark:bg-yellow-900 p-4 rounded-lg mt-4">
+                  <h4 className="font-semibold text-yellow-800 dark:text-yellow-200">Debug Info:</h4>
+                  <p className="text-sm text-yellow-700 dark:text-yellow-300">
+                    Current slug: {slug}<br/>
+                    Should show tabs: {slug === 'ai-image-generator' ? 'YES' : 'NO'}<br/>
+                    Tool name: {tool?.name}<br/>
+                    Is image tool: {isImageTool ? 'YES' : 'NO'}
+                  </p>
+                </div>
+              )}
             </div>
 
             {/* Sidebar */}
