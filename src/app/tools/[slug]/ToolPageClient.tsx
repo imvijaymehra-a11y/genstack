@@ -207,178 +207,158 @@ export default function ToolPageClient({ slug }: ToolPageClientProps) {
                 toolSlug={slug}
               />
 
-              {/* CSS TEST - VERY OBVIOUS STYLING */}
-              <div style={{
-                backgroundColor: 'red',
-                color: 'white',
-                padding: '20px',
-                fontSize: '24px',
-                fontWeight: 'bold',
-                textAlign: 'center',
-                margin: '20px 0',
-                border: '5px solid blue'
-              }}>
-                🚨 CSS TEST: If you see this with red background and blue border, CSS is working!
-              </div>
-
-              {/* Tabs Section - Below Image Generator - INLINE STYLES TEST */}
+              {/* Tabs Section - Below Image Generator */}
               {slug === 'ai-image-generator' && (
                 <div style={{
-                  backgroundColor: 'white',
+                  backgroundColor: '#ffffff',
                   border: '1px solid #e5e7eb',
-                  borderRadius: '1rem',
-                  boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
-                  padding: '1.5rem',
-                  marginBottom: '2rem'
+                  borderRadius: '16px',
+                  boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
+                  padding: '24px',
+                  marginBottom: '32px'
                 }}>
                   <h3 style={{
-                    fontSize: '1.125rem',
+                    fontSize: '18px',
                     fontWeight: '600',
                     color: '#111827',
-                    marginBottom: '1.5rem'
+                    marginBottom: '24px'
                   }}>
                     🎨 AI Image Generator Features
                   </h3>
                   
-                  {/* Tabs Navigation */}
                   <div style={{
                     borderBottom: '1px solid #e5e7eb',
-                    marginBottom: '1.5rem'
+                    marginBottom: '24px'
                   }}>
-                    <nav style={{
+                    <div style={{
                       display: 'flex',
-                      gap: '2rem',
-                      marginBottom: '-1px'
+                      gap: '32px'
                     }}>
                       <button style={{
-                        paddingTop: '0.5rem',
-                        paddingBottom: '0.5rem',
-                        paddingLeft: '0.25rem',
-                        paddingRight: '0.25rem',
-                        borderBottom: '2px solid #6366f1',
-                        fontSize: '0.875rem',
+                        paddingBottom: '8px',
+                        borderBottom: '2px solid #4f46e5',
+                        fontSize: '14px',
                         fontWeight: '500',
-                        color: '#4f46e5'
+                        color: '#4f46e5',
+                        background: 'none',
+                        border: 'none',
+                        cursor: 'pointer'
                       }}>
                         Overview
                       </button>
                       <button style={{
-                        paddingTop: '0.5rem',
-                        paddingBottom: '0.5rem',
-                        paddingLeft: '0.25rem',
-                        paddingRight: '0.25rem',
+                        paddingBottom: '8px',
                         borderBottom: '2px solid transparent',
-                        fontSize: '0.875rem',
+                        fontSize: '14px',
                         fontWeight: '500',
-                        color: '#6b7280'
+                        color: '#6b7280',
+                        background: 'none',
+                        border: 'none',
+                        cursor: 'pointer'
                       }}>
                         Prompt Examples
                       </button>
                       <button style={{
-                        paddingTop: '0.5rem',
-                        paddingBottom: '0.5rem',
-                        paddingLeft: '0.25rem',
-                        paddingRight: '0.25rem',
+                        paddingBottom: '8px',
                         borderBottom: '2px solid transparent',
-                        fontSize: '0.875rem',
+                        fontSize: '14px',
                         fontWeight: '500',
-                        color: '#6b7280'
+                        color: '#6b7280',
+                        background: 'none',
+                        border: 'none',
+                        cursor: 'pointer'
                       }}>
                         Best Practices
                       </button>
                       <button style={{
-                        paddingTop: '0.5rem',
-                        paddingBottom: '0.5rem',
-                        paddingLeft: '0.25rem',
-                        paddingRight: '0.25rem',
+                        paddingBottom: '8px',
                         borderBottom: '2px solid transparent',
-                        fontSize: '0.875rem',
+                        fontSize: '14px',
                         fontWeight: '500',
-                        color: '#6b7280'
+                        color: '#6b7280',
+                        background: 'none',
+                        border: 'none',
+                        cursor: 'pointer'
                       }}>
                         Models
                       </button>
-                    </nav>
+                    </div>
                   </div>
 
-                  {/* Tab Content */}
-                  <div style={{ marginTop: '1.5rem' }}>
-                    {/* Overview Tab */}
-                    <div style={{ marginTop: '1rem' }}>
-                      <h4 style={{
-                        fontSize: '1rem',
-                        fontWeight: '600',
-                        color: '#111827',
-                        marginBottom: '0.75rem'
-                      }}>
-                        🚀 AI Image Generation Overview
-                      </h4>
+                  <div>
+                    <h4 style={{
+                      fontSize: '16px',
+                      fontWeight: '600',
+                      color: '#111827',
+                      marginBottom: '16px'
+                    }}>
+                      🚀 AI Image Generation Overview
+                    </h4>
+                    <div style={{
+                      fontSize: '14px',
+                      color: '#374151',
+                      lineHeight: '1.5'
+                    }}>
+                      <p style={{ marginBottom: '16px' }}>
+                        Generate stunning images from text descriptions using advanced AI models. 
+                        Our AI Image Generator supports multiple professional models including DALL-E 3, 
+                        Stable Diffusion XL, and more.
+                      </p>
                       <div style={{
-                        fontSize: '0.875rem',
-                        color: '#374151',
-                        marginTop: '0.75rem'
+                        display: 'grid',
+                        gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+                        gap: '16px',
+                        marginTop: '16px'
                       }}>
-                        <p style={{ marginBottom: '0.75rem' }}>
-                          Generate stunning images from text descriptions using advanced AI models. 
-                          Our AI Image Generator supports multiple professional models including DALL-E 3, 
-                          Stable Diffusion XL, and more.
-                        </p>
                         <div style={{
-                          display: 'grid',
-                          gridTemplateColumns: 'repeat(1, minmax(0, 1fr))',
-                          gap: '1rem',
-                          marginTop: '1rem'
+                          background: 'linear-gradient(135deg, #dbeafe, #bfdbfe)',
+                          padding: '16px',
+                          borderRadius: '8px'
                         }}>
-                          <div style={{
-                            background: 'linear-gradient(to right, #eff6ff, #e0e7ff)',
-                            padding: '1rem',
-                            borderRadius: '0.5rem'
+                          <h5 style={{
+                            fontSize: '14px',
+                            fontWeight: '500',
+                            color: '#111827',
+                            marginBottom: '8px'
                           }}>
-                            <h5 style={{
-                              fontSize: '0.875rem',
-                              fontWeight: '500',
-                              color: '#111827',
-                              marginBottom: '0.5rem'
-                            }}>
-                              ✨ Key Features
-                            </h5>
-                            <ul style={{
-                              fontSize: '0.875rem',
-                              marginTop: '0.25rem',
-                              color: '#374151',
-                              paddingLeft: '1rem'
-                            }}>
-                              <li style={{ marginBottom: '0.25rem' }}>• Multiple AI models</li>
-                              <li style={{ marginBottom: '0.25rem' }}>• High-resolution output</li>
-                              <li style={{ marginBottom: '0.25rem' }}>• Custom styles</li>
-                              <li style={{ marginBottom: '0.25rem' }}>• Commercial-safe options</li>
-                            </ul>
-                          </div>
-                          <div style={{
-                            background: 'linear-gradient(to right, #faf5ff, #f3e8ff)',
-                            padding: '1rem',
-                            borderRadius: '0.5rem'
+                            ✨ Key Features
+                          </h5>
+                          <ul style={{
+                            fontSize: '14px',
+                            color: '#374151',
+                            margin: 0,
+                            paddingLeft: '20px'
                           }}>
-                            <h5 style={{
-                              fontSize: '0.875rem',
-                              fontWeight: '500',
-                              color: '#111827',
-                              marginBottom: '0.5rem'
-                            }}>
-                              🎯 Use Cases
-                            </h5>
-                            <ul style={{
-                              fontSize: '0.875rem',
-                              marginTop: '0.25rem',
-                              color: '#374151',
-                              paddingLeft: '1rem'
-                            }}>
-                              <li style={{ marginBottom: '0.25rem' }}>• Social media content</li>
-                              <li style={{ marginBottom: '0.25rem' }}>• Marketing materials</li>
-                              <li style={{ marginBottom: '0.25rem' }}>• Product mockups</li>
-                              <li style={{ marginBottom: '0.25rem' }}>• Creative projects</li>
-                            </ul>
-                          </div>
+                            <li style={{ marginBottom: '4px' }}>Multiple AI models</li>
+                            <li style={{ marginBottom: '4px' }}>High-resolution output</li>
+                            <li style={{ marginBottom: '4px' }}>Custom styles</li>
+                            <li style={{ marginBottom: '4px' }}>Commercial-safe options</li>
+                          </ul>
+                        </div>
+                        <div style={{
+                          background: 'linear-gradient(135deg, #faf5ff, #f3e8ff)',
+                          padding: '16px',
+                          borderRadius: '8px'
+                        }}>
+                          <h5 style={{
+                            fontSize: '14px',
+                            fontWeight: '500',
+                            color: '#111827',
+                            marginBottom: '8px'
+                          }}>
+                            🎯 Use Cases
+                          </h5>
+                          <ul style={{
+                            fontSize: '14px',
+                            color: '#374151',
+                            margin: 0,
+                            paddingLeft: '20px'
+                          }}>
+                            <li style={{ marginBottom: '4px' }}>Social media content</li>
+                            <li style={{ marginBottom: '4px' }}>Marketing materials</li>
+                            <li style={{ marginBottom: '4px' }}>Product mockups</li>
+                            <li style={{ marginBottom: '4px' }}>Creative projects</li>
+                          </ul>
                         </div>
                       </div>
                     </div>
@@ -386,19 +366,7 @@ export default function ToolPageClient({ slug }: ToolPageClientProps) {
                 </div>
               )}
 
-              {/* Debug Info - Remove in production */}
-              {process.env.NODE_ENV === 'development' && (
-                <div className="bg-yellow-100 dark:bg-yellow-900 p-4 rounded-lg mt-4">
-                  <h4 className="font-semibold text-yellow-800 dark:text-yellow-200">Debug Info:</h4>
-                  <p className="text-sm text-yellow-700 dark:text-yellow-300">
-                    Current slug: {slug}<br/>
-                    Should show tabs: {slug === 'ai-image-generator' ? 'YES' : 'NO'}<br/>
-                    Tool name: {tool?.name}<br/>
-                    Is image tool: {isImageTool ? 'YES' : 'NO'}
-                  </p>
-                </div>
-              )}
-            </div>
+              </div>
 
             {/* Sidebar */}
             <div className="space-y-6">
