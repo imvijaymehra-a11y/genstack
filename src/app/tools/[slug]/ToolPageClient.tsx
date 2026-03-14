@@ -221,61 +221,162 @@ export default function ToolPageClient({ slug }: ToolPageClientProps) {
                 🚨 CSS TEST: If you see this with red background and blue border, CSS is working!
               </div>
 
-              {/* Tabs Section - Below Image Generator */}
+              {/* Tabs Section - Below Image Generator - INLINE STYLES TEST */}
               {slug === 'ai-image-generator' && (
-                <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 border border-gray-200 dark:border-gray-700">
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-6">
+                <div style={{
+                  backgroundColor: 'white',
+                  border: '1px solid #e5e7eb',
+                  borderRadius: '1rem',
+                  boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+                  padding: '1.5rem',
+                  marginBottom: '2rem'
+                }}>
+                  <h3 style={{
+                    fontSize: '1.125rem',
+                    fontWeight: '600',
+                    color: '#111827',
+                    marginBottom: '1.5rem'
+                  }}>
                     🎨 AI Image Generator Features
                   </h3>
                   
                   {/* Tabs Navigation */}
-                  <div className="border-b border-gray-200 dark:border-gray-600 mb-6">
-                    <nav className="-mb-px flex space-x-8" aria-label="Tabs">
-                      <button className="py-2 px-1 border-b-2 border-indigo-500 font-medium text-sm text-indigo-600">
+                  <div style={{
+                    borderBottom: '1px solid #e5e7eb',
+                    marginBottom: '1.5rem'
+                  }}>
+                    <nav style={{
+                      display: 'flex',
+                      spaceX: '2rem',
+                      marginBottom: '-1px'
+                    }}>
+                      <button style={{
+                        paddingTop: '0.5rem',
+                        paddingBottom: '0.5rem',
+                        paddingLeft: '0.25rem',
+                        paddingRight: '0.25rem',
+                        borderBottom: '2px solid #6366f1',
+                        fontSize: '0.875rem',
+                        fontWeight: '500',
+                        color: '#4f46e5'
+                      }}>
                         Overview
                       </button>
-                      <button className="py-2 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300">
+                      <button style={{
+                        paddingTop: '0.5rem',
+                        paddingBottom: '0.5rem',
+                        paddingLeft: '0.25rem',
+                        paddingRight: '0.25rem',
+                        borderBottom: '2px solid transparent',
+                        fontSize: '0.875rem',
+                        fontWeight: '500',
+                        color: '#6b7280'
+                      }}>
                         Prompt Examples
                       </button>
-                      <button className="py-2 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300">
+                      <button style={{
+                        paddingTop: '0.5rem',
+                        paddingBottom: '0.5rem',
+                        paddingLeft: '0.25rem',
+                        paddingRight: '0.25rem',
+                        borderBottom: '2px solid transparent',
+                        fontSize: '0.875rem',
+                        fontWeight: '500',
+                        color: '#6b7280'
+                      }}>
                         Best Practices
                       </button>
-                      <button className="py-2 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300">
+                      <button style={{
+                        paddingTop: '0.5rem',
+                        paddingBottom: '0.5rem',
+                        paddingLeft: '0.25rem',
+                        paddingRight: '0.25rem',
+                        borderBottom: '2px solid transparent',
+                        fontSize: '0.875rem',
+                        fontWeight: '500',
+                        color: '#6b7280'
+                      }}>
                         Models
                       </button>
                     </nav>
                   </div>
 
                   {/* Tab Content */}
-                  <div className="space-y-6">
+                  <div style={{ marginTop: '1.5rem' }}>
                     {/* Overview Tab */}
-                    <div className="space-y-4">
-                      <h4 className="text-md font-semibold text-gray-900 dark:text-white mb-3">
+                    <div style={{ marginTop: '1rem' }}>
+                      <h4 style={{
+                        fontSize: '1rem',
+                        fontWeight: '600',
+                        color: '#111827',
+                        marginBottom: '0.75rem'
+                      }}>
                         🚀 AI Image Generation Overview
                       </h4>
-                      <div className="text-sm text-gray-700 dark:text-gray-300 space-y-3">
-                        <p>
+                      <div style={{
+                        fontSize: '0.875rem',
+                        color: '#374151',
+                        marginTop: '0.75rem'
+                      }}>
+                        <p style={{ marginBottom: '0.75rem' }}>
                           Generate stunning images from text descriptions using advanced AI models. 
                           Our AI Image Generator supports multiple professional models including DALL-E 3, 
                           Stable Diffusion XL, and more.
                         </p>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-                          <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-gray-700 dark:to-gray-600 p-4 rounded-lg">
-                            <h5 className="font-medium text-gray-900 dark:text-white mb-2">✨ Key Features</h5>
-                            <ul className="text-sm space-y-1 text-gray-700 dark:text-gray-300">
-                              <li>• Multiple AI models</li>
-                              <li>• High-resolution output</li>
-                              <li>• Custom styles</li>
-                              <li>• Commercial-safe options</li>
+                        <div style={{
+                          display: 'grid',
+                          gridTemplateColumns: 'repeat(1, minmax(0, 1fr))',
+                          gap: '1rem',
+                          marginTop: '1rem'
+                        }}>
+                          <div style={{
+                            background: 'linear-gradient(to right, #eff6ff, #e0e7ff)',
+                            padding: '1rem',
+                            borderRadius: '0.5rem'
+                          }}>
+                            <h5 style={{
+                              fontSize: '0.875rem',
+                              fontWeight: '500',
+                              color: '#111827',
+                              marginBottom: '0.5rem'
+                            }}>
+                              ✨ Key Features
+                            </h5>
+                            <ul style={{
+                              fontSize: '0.875rem',
+                              marginTop: '0.25rem',
+                              color: '#374151',
+                              paddingLeft: '1rem'
+                            }}>
+                              <li style={{ marginBottom: '0.25rem' }}>• Multiple AI models</li>
+                              <li style={{ marginBottom: '0.25rem' }}>• High-resolution output</li>
+                              <li style={{ marginBottom: '0.25rem' }}>• Custom styles</li>
+                              <li style={{ marginBottom: '0.25rem' }}>• Commercial-safe options</li>
                             </ul>
                           </div>
-                          <div className="bg-gradient-to-r from-purple-50 to-pink-50 dark:from-gray-700 dark:to-gray-600 p-4 rounded-lg">
-                            <h5 className="font-medium text-gray-900 dark:text-white mb-2">🎯 Use Cases</h5>
-                            <ul className="text-sm space-y-1 text-gray-700 dark:text-gray-300">
-                              <li>• Social media content</li>
-                              <li>• Marketing materials</li>
-                              <li>• Product mockups</li>
-                              <li>• Creative projects</li>
+                          <div style={{
+                            background: 'linear-gradient(to right, #faf5ff, #f3e8ff)',
+                            padding: '1rem',
+                            borderRadius: '0.5rem'
+                          }}>
+                            <h5 style={{
+                              fontSize: '0.875rem',
+                              fontWeight: '500',
+                              color: '#111827',
+                              marginBottom: '0.5rem'
+                            }}>
+                              🎯 Use Cases
+                            </h5>
+                            <ul style={{
+                              fontSize: '0.875rem',
+                              marginTop: '0.25rem',
+                              color: '#374151',
+                              paddingLeft: '1rem'
+                            }}>
+                              <li style={{ marginBottom: '0.25rem' }}>• Social media content</li>
+                              <li style={{ marginBottom: '0.25rem' }}>• Marketing materials</li>
+                              <li style={{ marginBottom: '0.25rem' }}>• Product mockups</li>
+                              <li style={{ marginBottom: '0.25rem' }}>• Creative projects</li>
                             </ul>
                           </div>
                         </div>
