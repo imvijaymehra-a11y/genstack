@@ -27,7 +27,7 @@ export default function ImageToolForm({ toolName, toolSlug, onGenerate, isGenera
   const imageTools = ['background-remover', 'image-enhancer', 'ai-image-generator'];
   const isImageTool = imageTools.includes(toolSlug);
   const isEnhancer = toolSlug === 'image-enhancer';
-  const hasGeneratedImage = generatedImage && (toolSlug === 'background-remover' || toolSlug === 'image-enhancer');
+  const hasGeneratedImage = generatedImage && (toolSlug === 'background-remover' || toolSlug === 'image-enhancer' || toolSlug === 'ai-image-generator');
 
   const handleFileSelect = (file: File) => {
     if (file && file.type.startsWith('image/')) {
