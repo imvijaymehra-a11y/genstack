@@ -207,55 +207,38 @@ export default function ToolPageClient({ slug }: ToolPageClientProps) {
                 toolSlug={slug}
               />
 
-              {/* VERY OBVIOUS TEST - SHOULD BE IMPOSSIBLE TO MISS */}
-              <div style={{
-                backgroundColor: '#ff0000',
-                color: '#ffffff',
-                fontSize: '48px',
-                fontWeight: 'bold',
-                textAlign: 'center',
-                padding: '50px',
-                margin: '50px 0',
-                border: '10px solid #000000',
-                borderRadius: '20px'
-              }}>
-                🚨 IF YOU SEE THIS - CODE CHANGES ARE WORKING! 🚨
-                <br />
-                Current Time: {new Date().toLocaleString()}
-              </div>
-
-              {/* Tabs Section - Below Image Generator */}
+              {/* Tabs Section - Below Image Generator - SIMPLE CSS */}
               {slug === 'ai-image-generator' && (
                 <div style={{
-                  backgroundColor: '#ffffff',
-                  border: '1px solid #e5e7eb',
-                  borderRadius: '16px',
-                  boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
-                  padding: '24px',
-                  marginBottom: '32px'
+                  background: 'white',
+                  border: '2px solid #ccc',
+                  borderRadius: '8px',
+                  padding: '20px',
+                  marginBottom: '20px',
+                  boxShadow: '0 4px 6px rgba(0,0,0,0.1)'
                 }}>
                   <h3 style={{
-                    fontSize: '18px',
-                    fontWeight: '600',
-                    color: '#111827',
-                    marginBottom: '24px'
+                    fontSize: '20px',
+                    fontWeight: 'bold',
+                    color: '#333',
+                    marginBottom: '20px'
                   }}>
                     🎨 AI Image Generator Features
                   </h3>
                   
                   <div style={{
-                    borderBottom: '1px solid #e5e7eb',
-                    marginBottom: '24px'
+                    borderBottom: '2px solid #ccc',
+                    marginBottom: '20px'
                   }}>
                     <div style={{
                       display: 'flex',
-                      gap: '32px'
+                      gap: '20px'
                     }}>
                       <button style={{
-                        paddingBottom: '8px',
-                        borderBottom: '2px solid #4f46e5',
-                        fontSize: '14px',
-                        fontWeight: '500',
+                        padding: '10px',
+                        borderBottom: '3px solid #4f46e5',
+                        fontSize: '16px',
+                        fontWeight: 'bold',
                         color: '#4f46e5',
                         background: 'none',
                         border: 'none',
@@ -264,11 +247,9 @@ export default function ToolPageClient({ slug }: ToolPageClientProps) {
                         Overview
                       </button>
                       <button style={{
-                        paddingBottom: '8px',
-                        borderBottom: '2px solid transparent',
-                        fontSize: '14px',
-                        fontWeight: '500',
-                        color: '#6b7280',
+                        padding: '10px',
+                        fontSize: '16px',
+                        color: '#666',
                         background: 'none',
                         border: 'none',
                         cursor: 'pointer'
@@ -276,11 +257,9 @@ export default function ToolPageClient({ slug }: ToolPageClientProps) {
                         Prompt Examples
                       </button>
                       <button style={{
-                        paddingBottom: '8px',
-                        borderBottom: '2px solid transparent',
-                        fontSize: '14px',
-                        fontWeight: '500',
-                        color: '#6b7280',
+                        padding: '10px',
+                        fontSize: '16px',
+                        color: '#666',
                         background: 'none',
                         border: 'none',
                         cursor: 'pointer'
@@ -288,11 +267,9 @@ export default function ToolPageClient({ slug }: ToolPageClientProps) {
                         Best Practices
                       </button>
                       <button style={{
-                        paddingBottom: '8px',
-                        borderBottom: '2px solid transparent',
-                        fontSize: '14px',
-                        fontWeight: '500',
-                        color: '#6b7280',
+                        padding: '10px',
+                        fontSize: '16px',
+                        color: '#666',
                         background: 'none',
                         border: 'none',
                         cursor: 'pointer'
@@ -304,77 +281,79 @@ export default function ToolPageClient({ slug }: ToolPageClientProps) {
 
                   <div>
                     <h4 style={{
-                      fontSize: '16px',
-                      fontWeight: '600',
-                      color: '#111827',
-                      marginBottom: '16px'
+                      fontSize: '18px',
+                      fontWeight: 'bold',
+                      color: '#333',
+                      marginBottom: '15px'
                     }}>
                       🚀 AI Image Generation Overview
                     </h4>
                     <div style={{
-                      fontSize: '14px',
-                      color: '#374151',
+                      fontSize: '16px',
+                      color: '#555',
                       lineHeight: '1.5'
                     }}>
-                      <p style={{ marginBottom: '16px' }}>
+                      <p style={{ marginBottom: '15px' }}>
                         Generate stunning images from text descriptions using advanced AI models. 
                         Our AI Image Generator supports multiple professional models including DALL-E 3, 
                         Stable Diffusion XL, and more.
                       </p>
                       <div style={{
                         display: 'grid',
-                        gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-                        gap: '16px',
-                        marginTop: '16px'
+                        gridTemplateColumns: '1fr 1fr',
+                        gap: '20px',
+                        marginTop: '20px'
                       }}>
                         <div style={{
-                          background: 'linear-gradient(135deg, #dbeafe, #bfdbfe)',
-                          padding: '16px',
-                          borderRadius: '8px'
+                          background: '#e3f2fd',
+                          padding: '20px',
+                          borderRadius: '8px',
+                          border: '1px solid #2196f3'
                         }}>
                           <h5 style={{
-                            fontSize: '14px',
-                            fontWeight: '500',
-                            color: '#111827',
-                            marginBottom: '8px'
+                            fontSize: '16px',
+                            fontWeight: 'bold',
+                            color: '#333',
+                            marginBottom: '10px'
                           }}>
                             ✨ Key Features
                           </h5>
                           <ul style={{
-                            fontSize: '14px',
-                            color: '#374151',
+                            fontSize: '16px',
+                            color: '#555',
                             margin: 0,
                             paddingLeft: '20px'
                           }}>
-                            <li style={{ marginBottom: '4px' }}>Multiple AI models</li>
-                            <li style={{ marginBottom: '4px' }}>High-resolution output</li>
-                            <li style={{ marginBottom: '4px' }}>Custom styles</li>
-                            <li style={{ marginBottom: '4px' }}>Commercial-safe options</li>
+                            <li style={{ marginBottom: '5px' }}>Multiple AI models</li>
+                            <li style={{ marginBottom: '5px' }}>High-resolution output</li>
+                            <li style={{ marginBottom: '5px' }}>Custom styles</li>
+                            <li style={{ marginBottom: '5px' }}>Commercial-safe options</li>
                           </ul>
                         </div>
                         <div style={{
-                          background: 'linear-gradient(135deg, #faf5ff, #f3e8ff)',
-                          padding: '16px',
-                          borderRadius: '8px'
+                          background: '#f3e5f5',
+                          padding: '20px',
+                          borderRadius: '8px',
+                          border: '1px solid #9c27b0'
                         }}>
                           <h5 style={{
-                            fontSize: '14px',
-                            fontWeight: '500',
-                            color: '#111827',
-                            marginBottom: '8px'
+                            fontSize: '16px',
+                            fontWeight: 'bold',
+                            color: '#333',
+                            marginBottom: '10px'
                           }}>
                             🎯 Use Cases
                           </h5>
                           <ul style={{
-                            fontSize: '14px',
-                            color: '#374151',
+                            fontSize: '16px',
+                            color: '#555',
                             margin: 0,
                             paddingLeft: '20px'
                           }}>
-                            <li style={{ marginBottom: '4px' }}>Social media content</li>
-                            <li style={{ marginBottom: '4px' }}>Marketing materials</li>
-                            <li style={{ marginBottom: '4px' }}>Product mockups</li>
-                            <li style={{ marginBottom: '4px' }}>Creative projects</li>
+                            <li style={{ marginBottom: '5px' }}>Social media content</li>
+                            <li style={{ marginBottom: '5px' }}>Marketing materials</li>
+                            <li style={{ marginBottom: '5px' }}>Product mockups</li>
+                            <li style={{ marginBottom: '5px' }}>Creative projects</li>
                           </ul>
                         </div>
                       </div>
