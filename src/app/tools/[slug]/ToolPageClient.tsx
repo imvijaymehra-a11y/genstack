@@ -182,7 +182,7 @@ export default function ToolPageClient({ slug }: ToolPageClientProps) {
             
             {/* Left Sidebar - Tool Form */}
             <div className="lg:col-span-3">
-              <ToolPageHeader tool={tool} />
+              {tool && <ToolPageHeader tool={tool} />}
               {tool && (
                 <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 border border-gray-200 dark:border-gray-700">
                   {isImageTool ? (
