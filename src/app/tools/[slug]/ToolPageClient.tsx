@@ -295,27 +295,29 @@ export default function ToolPageClient({ slug }: ToolPageClientProps) {
               </div>
 
               {/* Tool Stats */}
-              <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 border border-gray-200 dark:border-gray-700">
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                  Tool Statistics
-                </h3>
-                <div className="space-y-3">
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600 dark:text-gray-400">Category</span>
-                    <span className="text-sm font-medium text-gray-900 dark:text-white">{tool.category}</span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600 dark:text-gray-400">Pricing</span>
-                    <span className="text-sm font-medium text-gray-900 dark:text-white">
-                      {tool.pricing === 'free' ? 'Free' : 'Premium'}
-                    </span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600 dark:text-gray-400">Status</span>
-                    <span className="text-sm font-medium text-green-600 dark:text-green-400">Active</span>
+              {tool && (
+                <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 border border-gray-200 dark:border-gray-700">
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                    Tool Statistics
+                  </h3>
+                  <div className="space-y-3">
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm text-gray-600 dark:text-gray-400">Category</span>
+                      <span className="text-sm font-medium text-gray-900 dark:text-white">{tool.category}</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm text-gray-600 dark:text-gray-400">Pricing</span>
+                      <span className="text-sm font-medium text-gray-900 dark:text-white">
+                        {tool.pricing === 'free' ? 'Free' : 'Premium'}
+                      </span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm text-gray-600 dark:text-gray-400">Status</span>
+                      <span className="text-sm font-medium text-green-600 dark:text-green-400">Active</span>
+                    </div>
                   </div>
                 </div>
-              </div>
+              )}
             </div>
           </div>
         </div>
