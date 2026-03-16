@@ -207,6 +207,22 @@ export default function ToolPageClient({ slug }: ToolPageClientProps) {
                 toolSlug={slug}
               />
 
+              {/* ALWAYS VISIBLE TEST - NO CONDITIONAL */}
+              <div style={{
+                backgroundColor: '#ff6b6b',
+                color: 'white',
+                padding: '20px',
+                textAlign: 'center',
+                fontSize: '24px',
+                fontWeight: 'bold',
+                margin: '20px 0',
+                borderRadius: '10px'
+              }}>
+                🚨 ALWAYS VISIBLE TEST - This should appear on ALL tool pages
+                <br />
+                Current slug: {slug}
+              </div>
+
               {/* Tabs Section - Below Image Generator - SIMPLE CSS */}
               {slug === 'ai-image-generator' && (
                 <div style={{
