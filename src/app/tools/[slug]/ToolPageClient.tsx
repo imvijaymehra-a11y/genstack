@@ -181,8 +181,10 @@ export default function ToolPageClient({ slug }: ToolPageClientProps) {
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
             
             {/* Left Sidebar - Tool Form */}
-            <div className="lg:col-span-3">
+            <div className="lg:col-span-3 space-y-8">
               {tool && <ToolPageHeader tool={tool} />}
+              
+              {/* Tool Form - At Top */}
               {tool && (
                 <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 border border-gray-200 dark:border-gray-700">
                   {isImageTool ? (
@@ -211,9 +213,9 @@ export default function ToolPageClient({ slug }: ToolPageClientProps) {
                 </div>
               )}
 
-              {/* Tabs Section - Only for image tools */}
+              {/* Tabs Section - At Bottom for image tools */}
               {isImageTool && tool && (
-                <div className="mt-8 bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden border border-gray-200 dark:border-gray-700">
+                <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden border border-gray-200 dark:border-gray-700">
                   {/* Tab Headers */}
                   <div className="border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900">
                     <div className="flex">
@@ -229,12 +231,9 @@ export default function ToolPageClient({ slug }: ToolPageClientProps) {
                     </div>
                   </div>
 
-                  {/* Tab Content */}
+                  {/* Tab Content - No duplicate header */}
                   <div className="p-8">
-                    <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
-                      {tool.name}
-                    </h2>
-                    <p className="text-gray-600 dark:text-gray-300 mb-6">
+                    <p className="text-gray-600 dark:text-gray-300">
                       {tool.description}
                     </p>
                   </div>
