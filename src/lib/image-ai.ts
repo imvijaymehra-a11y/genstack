@@ -519,7 +519,8 @@ export async function enhanceImage(imageFile: File, enhancementType: string = 'a
 
 // Simple image enhancement function
 function applySimpleEnhancement(data: Buffer, type: string): Buffer {
-  const enhanced = Buffer.alloc(data.length);
+  try {
+    const enhanced = Buffer.alloc(data.length);
   
   for (let i = 0; i < data.length; i += 4) {
     const r = data[i];
@@ -573,7 +574,6 @@ function applySimpleEnhancement(data: Buffer, type: string): Buffer {
   }
   
   return enhanced;
-
   } catch (error) {
     return {
       success: false,
