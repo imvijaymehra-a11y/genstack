@@ -521,59 +521,59 @@ export async function enhanceImage(imageFile: File, enhancementType: string = 'a
 function applySimpleEnhancement(data: Buffer, type: string): Buffer {
   try {
     const enhanced = Buffer.alloc(data.length);
-  
-  for (let i = 0; i < data.length; i += 4) {
-    const r = data[i];
-    const g = data[i + 1];
-    const b = data[i + 2];
-    const a = data[i + 3]; // Alpha channel
     
-    let newR = r, newG = g, newB = b, newA = a;
-    
-    switch (type) {
-      case 'sharpen':
-        // Simple sharpening effect
-        newR = Math.min(255, Math.max(0, r * 1.2));
-        newG = Math.min(255, Math.max(0, g * 1.2));
-        newB = Math.min(255, Math.max(0, b * 1.2));
-        break;
+    for (let i = 0; i < data.length; i += 4) {
+      const r = data[i];
+      const g = data[i + 1];
+      const b = data[i + 2];
+      const a = data[i + 3]; // Alpha channel
+      
+      let newR = r, newG = g, newB = b, newA = a;
+      
+      switch (type) {
+        case 'sharpen':
+          // Simple sharpening effect
+          newR = Math.min(255, Math.max(0, r * 1.2));
+          newG = Math.min(255, Math.max(0, g * 1.2));
+          newB = Math.min(255, Math.max(0, b * 1.2));
+          break;
         
       case 'color':
-        // Color enhancement
-        newR = Math.min(255, Math.max(0, r * 1.3));
-        newG = Math.min(255, Math.max(0, g * 1.3));
-        newB = Math.min(255, Math.max(0, b * 1.3));
-        break;
-        
-      case 'portrait':
-        // Portrait enhancement (skin smoothing + contrast)
-        newR = Math.min(255, Math.max(0, r * 1.1));
-        newG = Math.min(255, Math.max(0, g * 1.1));
-        newB = Math.min(255, Math.max(0, b * 1.1));
-        break;
-        
-      case 'landscape':
-        // Landscape enhancement (vibrant colors + contrast)
-        newR = Math.min(255, Math.max(0, r * 1.4));
-        newG = Math.min(255, Math.max(0, g * 1.4));
-        newB = Math.min(255, Math.max(0, b * 1.4));
-        break;
-        
-      default:
-        // General enhancement
-        newR = Math.min(255, Math.max(0, r * 1.15));
-        newG = Math.min(255, Math.max(0, g * 1.15));
-        newB = Math.min(255, Math.max(0, b * 1.15));
-        break;
+          // Color enhancement
+          newR = Math.min(255, Math.max(0, r * 1.3));
+          newG = Math.min(255, Math.max(0, g * 1.3));
+          newB = Math.min(255, Math.max(0, b * 1.3));
+          break;
+          
+        case 'portrait':
+          // Portrait enhancement (skin smoothing + contrast)
+          newR = Math.min(255, Math.max(0, r * 1.1));
+          newG = Math.min(255, Math.max(0, g * 1.1));
+          newB = Math.min(255, Math.max(0, b * 1.1));
+          break;
+          
+        case 'landscape':
+          // Landscape enhancement (vibrant colors + contrast)
+          newR = Math.min(255, Math.max(0, r * 1.4));
+          newG = Math.min(255, Math.max(0, g * 1.4));
+          newB = Math.min(255, Math.max(0, b * 1.4));
+          break;
+          
+        default:
+          // General enhancement
+          newR = Math.min(255, Math.max(0, r * 1.15));
+          newG = Math.min(255, Math.max(0, g * 1.15));
+          newB = Math.min(255, Math.max(0, b * 1.15));
+          break;
+      }
+      
+      enhanced[i] = newR;
+      enhanced[i + 1] = newG;
+      enhanced[i + 2] = newB;
+      enhanced[i + 3] = newA;
     }
     
-    enhanced[i] = newR;
-    enhanced[i + 1] = newG;
-    enhanced[i + 2] = newB;
-    enhanced[i + 3] = newA;
-  }
-  
-  return enhanced;
+    return enhanced;
   } catch (error) {
     return {
       success: false,
