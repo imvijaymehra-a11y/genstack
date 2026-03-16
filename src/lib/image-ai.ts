@@ -1,5 +1,125 @@
 // Image Processing AI Models - Professional Tools like CapCut.pro & Cutout.pro
 
+// Client-side image processing functions
+function applySharpenFilter(data: Uint8ClampedArray, width: number, height: number): void {
+  const kernel = [
+    0, -1, 0,
+    -1, 5, -1,
+    0, -1, 0
+  ];
+  
+  for (let y = 1; y < height - 1; y++) {
+    for (let x = 1; x < width - 1; x++) {
+      const idx = (y * width + x) * 4;
+      let r = 0, g = 0, b = 0;
+      
+      for (let ky = -1; ky <= 1; ky++) {
+        for (let kx = -1; kx <= 1; kx++) {
+          const kidx = (ky + 1) * 3 + (kx + 1);
+          const weight = kernel[kidx];
+          if (weight !== 0) {
+            const pixelIdx = ((y + ky) * width + (x + kx)) * 4;
+            r += data[pixelIdx] * weight;
+            g += data[pixelIdx + 1] * weight;
+            b += data[pixelIdx + 2] * weight;
+          }
+        }
+      }
+      
+      data[idx] = Math.min(255, Math.max(0, r));
+      data[idx + 1] = Math.min(255, Math.max(0, g));
+      data[idx + 2] = Math.min(255, Math.max(0, b));
+    }
+  }
+}
+
+function applyContrastEnhancement(data: Uint8ClampedArray, width: number, height: number, factor: number = 1.2): void {
+  for (let i = 0; i < width * height * 4; i += 4) {
+    data[i] = Math.min(255, Math.max(0, (data[i] - 128) * factor + 128));
+    data[i + 1] = Math.min(255, Math.max(0, (data[i + 1] - 128) * factor + 128));
+    data[i + 2] = Math.min(255, Math.max(0, (data[i + 2] - 128) * factor + 128));
+  }
+}
+
+function applyColorEnhancement(data: Uint8ClampedArray, width: number, height: number, factor: number = 1.3): void {
+  for (let i = 0; i < width * height * 4; i += 4) {
+    data[i] = Math.min(255, data[i] * factor);
+    data[i + 1] = Math.min(255, data[i + 1] * factor);
+    data[i + 2] = Math.min(255, data[i + 2] * factor);
+  }
+}
+
+function applySaturationBoost(data: Uint8ClampedArray, width: number, height: number, factor: number = 1.4): void {
+  for (let i = 0; i < width * height * 4; i += 4) {
+    const r = data[i];
+    const g = data[i + 1];
+    const b = data[i + 2];
+    
+    const gray = 0.2989 * r + 0.5870 * g + 0.1140 * b;
+    const saturation = factor;
+    
+    data[i] = Math.min(255, Math.max(0, gray + saturation * (r - gray)));
+    data[i + 1] = Math.min(255, Math.max(0, gray + saturation * (g - gray)));
+    data[i + 2] = Math.min(255, Math.max(0, gray + saturation * (b - gray)));
+  }
+}
+
+function applyPortraitEnhancement(data: Uint8ClampedArray, width: number, height: number): void {
+  // Apply skin smoothing and portrait-specific enhancements
+  applyContrastEnhancement(data, width, height, 1.1);
+  applyColorEnhancement(data, width, height, 1.1);
+}
+
+function applySkinSmoothing(data: Uint8ClampedArray, width: number, height: number): void {
+  // Simple skin smoothing filter
+  for (let y = 1; y < height - 1; y++) {
+    for (let x = 1; x < width - 1; x++) {
+      const idx = (y * width + x) * 4;
+      let r = 0, g = 0, b = 0;
+      
+      for (let dy = -1; dy <= 1; dy++) {
+        for (let dx = -1; dx <= 1; dx++) {
+          const pixelIdx = ((y + dy) * width + (x + dx)) * 4;
+          r += data[pixelIdx];
+          g += data[pixelIdx + 1];
+          b += data[pixelIdx + 2];
+        }
+      }
+      
+      data[idx] = r / 9;
+      data[idx + 1] = g / 9;
+      data[idx + 2] = b / 9;
+    }
+  }
+}
+
+function applyLandscapeEnhancement(data: Uint8ClampedArray, width: number, height: number): void {
+  // Apply landscape-specific enhancements
+  applyContrastEnhancement(data, width, height, 1.3);
+  applyColorEnhancement(data, width, height, 1.2);
+}
+
+function applyHDR(data: Uint8ClampedArray, width: number, height: number): void {
+  // Simple HDR-like effect
+  for (let i = 0; i < width * height * 4; i += 4) {
+    const r = data[i];
+    const g = data[i + 1];
+    const b = data[i + 2];
+    
+    // Increase brightness and contrast
+    data[i] = Math.min(255, r * 1.2);
+    data[i + 1] = Math.min(255, g * 1.2);
+    data[i + 2] = Math.min(255, b * 1.2);
+  }
+}
+
+function applyGeneralEnhancement(data: Uint8ClampedArray, width: number, height: number): void {
+  // Apply general improvements
+  applyContrastEnhancement(data, width, height, 1.15);
+  applyColorEnhancement(data, width, height, 1.1);
+  applySharpenFilter(data, width, height);
+}
+
 export interface ImageProcessingResult {
   success: boolean;
   processedImage?: string; // Base64 encoded image
@@ -265,21 +385,95 @@ export async function enhanceImage(imageFile: File, enhancementType: string = 'a
       console.log('Cloudinary failed, using fallback:', cloudinaryError);
     }
 
-    // Final fallback: Return original image
-    console.log('Using fallback: returning original image');
-    const base64String = buffer.toString('base64');
+    // Final fallback: Apply server-side image enhancement using Canvas API
+    console.log('Using server-side image enhancement');
     
-    return {
-      success: true,
-      processedImage: `data:${imageFile.type};base64,${base64String}`,
-      metadata: {
-        originalSize: { width: 1024, height: 768 },
-        processedSize: { width: 1024, height: 768 },
-        format: imageFile.type,
-        processingTime: Date.now() - startTime,
-        enhancementType: `simulated-${enhancementType}`
+    try {
+      // Use Node.js Canvas API (requires canvas package)
+      const { createCanvas, loadImage } = await import('canvas');
+      
+      // Load image first
+      const img = await loadImage(buffer);
+      
+      const canvas = createCanvas(img.width * 2, img.height * 2);
+      const ctx = canvas.getContext('2d');
+      
+      if (!ctx) throw new Error('Canvas not supported');
+      
+      // Draw original image
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      
+      // Apply enhancement based on type
+      const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      const data = imageData.data;
+      
+      switch (enhancementType) {
+        case 'auto':
+        case 'resolution':
+          // Sharpen and enhance details
+          applySharpenFilter(data, canvas.width, canvas.height);
+          applyContrastEnhancement(data, 1.2);
+          break;
+          
+        case 'color':
+          // Enhance colors
+          applyColorEnhancement(data, 1.3);
+          applySaturationBoost(data, 1.4);
+          break;
+          
+        case 'portrait':
+          // Portrait enhancement
+          applyPortraitEnhancement(data, canvas.width, canvas.height);
+          applySkinSmoothing(data);
+          break;
+          
+        case 'landscape':
+          // Landscape enhancement
+          applyLandscapeEnhancement(data, canvas.width, canvas.height);
+          applyHDR(data);
+          break;
+          
+        default:
+          // General enhancement
+          applyGeneralEnhancement(data);
+          break;
       }
-    };
+      
+      // Put enhanced data back
+      ctx.putImageData(imageData, 0, 0);
+      
+      // Convert to base64
+      const enhancedBase64 = canvas.toDataURL('image/jpeg', 0.95);
+      
+      return {
+        success: true,
+        processedImage: enhancedBase64,
+        metadata: {
+          originalSize: { width: img.width, height: img.height },
+          processedSize: { width: canvas.width, height: canvas.height },
+          format: 'image/jpeg',
+          processingTime: Date.now() - startTime,
+          enhancementType: `server-side-${enhancementType}`
+        }
+      };
+      
+    } catch (canvasError) {
+      console.log('Server-side enhancement failed, using original:', canvasError);
+      // Final fallback: Return original image
+      const base64String = buffer.toString('base64');
+      
+      return {
+        success: true,
+        processedImage: `data:${imageFile.type};base64,${base64String}`,
+        metadata: {
+          originalSize: { width: 1024, height: 768 },
+          processedSize: { width: 1024, height: 768 },
+          format: imageFile.type,
+          processingTime: Date.now() - startTime,
+          enhancementType: `original-${enhancementType}`
+        }
+      };
+    }
 
   } catch (error) {
     return {

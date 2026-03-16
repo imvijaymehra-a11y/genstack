@@ -1,7 +1,9 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import { Upload, X, Sparkles, Zap, Camera, Sun, Palette, Wand2, Download, ArrowRight } from 'lucide-react';
+import { Upload, X, Sparkles, Zap, Camera, Sun, Palette, Wand2, Download, ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
+import Navbar from '@/components/Navbar';
+import Footer from '@/components/Footer';
 
 interface CapCutImageEnhancerProps {
   toolName: string;
@@ -28,6 +30,38 @@ export default function CapCutImageEnhancer({
   
   const fileInputRef = useRef<HTMLInputElement>(null);
   const comparisonRef = useRef<HTMLDivElement>(null);
+
+  // Handle mouse move for slider
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      if (!isDragging || !comparisonRef.current) return;
+      
+      const rect = comparisonRef.current.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const percentage = (x / rect.width) * 100;
+      setSliderPosition(Math.min(100, Math.max(0, percentage)));
+    };
+
+    const handleMouseUp = () => {
+      setIsDragging(false);
+    };
+
+    if (isDragging) {
+      document.addEventListener('mousemove', handleMouseMove);
+      document.addEventListener('mouseup', handleMouseUp);
+    }
+
+    return () => {
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUp);
+    };
+  }, [isDragging]);
+
+  // Handle mouse down on slider
+  const handleSliderMouseDown = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setIsDragging(true);
+  };
 
   const handleFileSelect = (file: File) => {
     if (file && file.type.startsWith('image/')) {
@@ -126,6 +160,8 @@ export default function CapCutImageEnhancer({
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-violet-900">
+      <Navbar />
+      
       {/* Hero Section */}
       <div className="relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-purple-600/20 to-pink-600/20 backdrop-blur-3xl"></div>
@@ -308,6 +344,18 @@ export default function CapCutImageEnhancer({
                         />
                       </div>
 
+                      {/* Slider Line */}
+                      <div
+                        className="absolute top-0 bottom-0 w-0.5 bg-white shadow-lg cursor-ew-resize"
+                        style={{ left: `${sliderPosition}%` }}
+                        onMouseDown={handleSliderMouseDown}
+                      >
+                        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-8 h-8 bg-white rounded-full shadow-lg flex items-center justify-center">
+                          <ChevronLeft className="h-3 w-3 text-gray-600 -mr-1" />
+                          <ChevronRight className="h-3 w-3 text-gray-600 -ml-1" />
+                        </div>
+                      </div>
+
                       {/* Labels */}
                       <div className="absolute top-4 left-4 px-3 py-1 bg-black/70 text-white text-sm rounded">
                         Before
@@ -361,6 +409,8 @@ export default function CapCutImageEnhancer({
           </div>
         </div>
       </div>
+      
+      <Footer />
     </div>
   );
 }
