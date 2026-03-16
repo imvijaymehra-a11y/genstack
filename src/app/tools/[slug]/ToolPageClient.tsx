@@ -9,6 +9,8 @@ import EnhancedToolForm from '@/components/EnhancedToolForm';
 import EnhancedToolOutput from '@/components/EnhancedToolOutput';
 import ImageToolForm from '@/components/ImageToolForm';
 import CapCutImageEnhancer from '@/components/CapCutImageEnhancer';
+import CapCutImageGenerator from '@/components/CapCutImageGenerator';
+import CapCutBackgroundRemover from '@/components/CapCutBackgroundRemover';
 import ToolPageHeader from '@/components/ToolPageHeader';
 import ModelSelector from '@/components/ModelSelector';
 import Navbar from '@/components/Navbar';
@@ -203,7 +205,31 @@ export default function ToolPageClient({ slug }: ToolPageClientProps) {
               {/* Tool Form - At Top */}
               {tool && (
                 <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 border border-gray-200 dark:border-gray-700">
-                  {isImageTool ? (
+                  {tool.slug === 'image-enhancer' ? (
+                    <CapCutImageEnhancer
+                      toolName={tool.name}
+                      toolSlug={tool.slug}
+                      onGenerate={handleGenerate}
+                      isGenerating={isGenerating}
+                      generatedImage={generatedContent}
+                    />
+                  ) : tool.slug === 'ai-image-generator' ? (
+                    <CapCutImageGenerator
+                      toolName={tool.name}
+                      toolSlug={tool.slug}
+                      onGenerate={handleGenerate}
+                      isGenerating={isGenerating}
+                      generatedImage={generatedContent}
+                    />
+                  ) : tool.slug === 'background-remover' ? (
+                    <CapCutBackgroundRemover
+                      toolName={tool.name}
+                      toolSlug={tool.slug}
+                      onGenerate={handleGenerate}
+                      isGenerating={isGenerating}
+                      generatedImage={generatedContent}
+                    />
+                  ) : isImageTool ? (
                     <ImageToolForm
                       toolName={tool.name}
                       toolSlug={tool.slug}
@@ -220,12 +246,15 @@ export default function ToolPageClient({ slug }: ToolPageClientProps) {
                     />
                   )}
                   
-                  <EnhancedToolOutput
-                    content={generatedContent}
-                    toolName={tool.name}
-                    isLoading={isGenerating}
-                    toolSlug={tool.slug}
-                  />
+                  {/* Tool Output - Only show for non-CapCut tools */}
+                  {!['image-enhancer', 'ai-image-generator', 'background-remover'].includes(tool.slug) && (
+                    <EnhancedToolOutput
+                      content={generatedContent}
+                      toolName={tool.name}
+                      isLoading={isGenerating}
+                      toolSlug={tool.slug}
+                    />
+                  )}
                 </div>
               )}
 
