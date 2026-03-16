@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import { Upload, X, Sparkles, Zap, Camera, Sun, Palette, Wand2, Download, ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Upload, X, Sparkles, Zap, Camera, Sun, Palette, Wand2, Download, ArrowRight, ChevronLeft, ChevronRight, Scissors } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 
@@ -176,6 +176,13 @@ export default function CapCutImageEnhancer({
       icon: <Palette className="h-5 w-5" />,
       description: 'Vibrant colors',
       gradient: 'from-orange-500 to-red-500'
+    },
+    {
+      id: 'background-removal',
+      name: 'Remove Background',
+      icon: <Scissors className="h-5 w-5" />,
+      description: 'AI background removal',
+      gradient: 'from-red-500 to-pink-500'
     }
   ];
 

@@ -333,54 +333,110 @@ export async function enhanceImage(imageFile: File, enhancementType: string = 'a
       console.log('Adobe API failed, using fallback:', adobeError);
     }
 
-    // Try Cloudinary enhancement
+    // Remove.bg Background Removal (Professional AI Background Removal)
     try {
-      const cloudinaryName = process.env.CLOUDINARY_CLOUD_NAME;
+      console.log('Using Remove.bg for professional background removal');
       
-      if (cloudinaryName) {
-        console.log('Using Cloudinary for enhancement');
-        
-        // Upload to Cloudinary with enhancement
+      const removeBgApiKey = process.env.REMOVE_BG_API_KEY;
+      
+      if (removeBgApiKey && enhancementType === 'background-removal') {
+        // Upload image to Remove.bg API
         const formData = new FormData();
-        formData.append('file', new Blob([buffer]), imageFile.name);
-        formData.append('upload_preset', 'enhance_preset'); // Create this preset in Cloudinary
+        const blob = new Blob([buffer], { type: imageFile.type });
         
-        const response = await fetch(`https://api.cloudinary.com/v1_1/${cloudinaryName}/image/upload`, {
+        formData.append('image_file', blob, imageFile.name);
+        formData.append('size', 'auto');
+        formData.append('type', 'auto');
+        formData.append('format', 'auto');
+        formData.append('crop', 'true');
+        
+        const response = await fetch('https://api.remove.bg/v1.0/removebg', {
           method: 'POST',
-          body: formData,
+          headers: {
+            'X-Api-Key': removeBgApiKey,
+          },
+          body: formData
         });
-
+        
         if (response.ok) {
           const result = await response.json();
-          const enhancedUrl = result.secure_url;
-          
-          // Apply enhancement transformations
-          const transformations = {
-            'auto': 'e_auto_contrast,e_auto_color,e_improve',
-            'resolution': 'c_scale,w_2048,h_1536,e_sharpen:500',
-            'colors': 'e_auto_color,e_saturation:50',
-            'noise-reduction': 'e_noise_removal',
-            'lighting': 'e_auto_brightness,e_contrast:20',
-            'portrait': 'e_portrait',
-            'product': 'e_auto_contrast,e_sharpen:300,e_vibrance:50'
-          };
-          
-          const transform = transformations[enhancementType as keyof typeof transformations] || transformations.auto;
-          const enhancedUrlWithTransform = `${enhancedUrl}?${transform}`;
           
           return {
             success: true,
-            processedImage: enhancedUrlWithTransform,
+            processedImage: result.data.result_b64 || result.data.result_url,
             metadata: {
-              originalSize: { width: 1024, height: 768 },
-              processedSize: enhancementType === 'resolution' ? { width: 2048, height: 1536 } : { width: 1024, height: 768 },
-              format: imageFile.type,
+              originalSize: { width: result.data.result_width || 1024, height: result.data.result_height || 768 },
+              processedSize: { width: result.data.result_width || 1024, height: result.data.result_height || 768 },
+              format: 'png',
+              processingTime: Date.now() - startTime,
+              enhancementType: `remove-bg-${enhancementType}`
+            }
+          };
+        }
+      }
+      
+      console.log('Remove.bg failed, using fallback');
+    } catch (removeBgError) {
+      console.log('Remove.bg failed, using fallback:', removeBgError);
+    }
+
+    // Try Cloudinary enhancement
+    try {
+      console.log('Using Cloudinary for professional enhancement');
+      
+      const cloudName = process.env.CLOUDINARY_CLOUD_NAME;
+      const apiKey = process.env.CLOUDINARY_API_KEY;
+      const apiSecret = process.env.CLOUDINARY_API_SECRET;
+      
+      if (cloudName && apiKey && apiSecret) {
+        // Upload image to Cloudinary with enhancement
+        const formData = new FormData();
+        const base64String = buffer.toString('base64');
+        const blob = new Blob([buffer], { type: imageFile.type });
+        
+        formData.append('file', blob, imageFile.name);
+        formData.append('upload_preset', 'ml_default');
+        
+        // Apply enhancement transformations
+        const transformations = {
+          'auto': 'e_auto_contrast,e_auto_color,e_improve',
+          'resolution': 'c_scale,w_2048,h_1536,e_sharpen:500',
+          'color': 'e_auto_color,e_saturation:50',
+          'portrait': 'e_portrait,e_auto_contrast,e_sharpen:300',
+          'landscape': 'e_auto_contrast,e_saturation:40,e_sharpen:400'
+        };
+        
+        const transform = transformations[enhancementType as keyof typeof transformations] || transformations.auto;
+        const publicId = `enhanced_${Date.now()}_${imageFile.name.split('.')[0]}`;
+        
+        formData.append('public_id', publicId);
+        formData.append('transformation', transform);
+        formData.append('format', 'jpg');
+        formData.append('quality', 'auto:good');
+        
+        const response = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, {
+          method: 'POST',
+          body: formData
+        });
+        
+        if (response.ok) {
+          const result = await response.json();
+          
+          return {
+            success: true,
+            processedImage: result.secure_url,
+            metadata: {
+              originalSize: { width: result.width || 1024, height: result.height || 768 },
+              processedSize: { width: result.width || 2048, height: result.height || 1536 },
+              format: result.format || 'jpg',
               processingTime: Date.now() - startTime,
               enhancementType: `cloudinary-${enhancementType}`
             }
           };
         }
       }
+      
+      console.log('Cloudinary failed, using fallback');
     } catch (cloudinaryError) {
       console.log('Cloudinary failed, using fallback:', cloudinaryError);
     }
