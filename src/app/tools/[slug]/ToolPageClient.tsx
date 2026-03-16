@@ -207,24 +207,8 @@ export default function ToolPageClient({ slug }: ToolPageClientProps) {
                 toolSlug={slug}
               />
 
-              {/* ALWAYS VISIBLE TEST - NO CONDITIONAL */}
-              <div style={{
-                backgroundColor: '#ff6b6b',
-                color: 'white',
-                padding: '20px',
-                textAlign: 'center',
-                fontSize: '24px',
-                fontWeight: 'bold',
-                margin: '20px 0',
-                borderRadius: '10px'
-              }}>
-                🚨 ALWAYS VISIBLE TEST - This should appear on ALL tool pages
-                <br />
-                Current slug: {slug}
-              </div>
-
               {/* Tabs Section - Below Image Generator - SIMPLE CSS */}
-              {slug === 'ai-image-generator' && (
+              {isImageTool && (
                 <div style={{
                   background: 'white',
                   border: '2px solid #ccc',
@@ -239,7 +223,7 @@ export default function ToolPageClient({ slug }: ToolPageClientProps) {
                     color: '#333',
                     marginBottom: '20px'
                   }}>
-                    🎨 AI Image Generator Features
+                    🎨 Tool Features & Information
                   </h3>
                   
                   <div style={{
@@ -270,7 +254,7 @@ export default function ToolPageClient({ slug }: ToolPageClientProps) {
                         border: 'none',
                         cursor: 'pointer'
                       }}>
-                        Prompt Examples
+                        Examples
                       </button>
                       <button style={{
                         padding: '10px',
@@ -302,7 +286,7 @@ export default function ToolPageClient({ slug }: ToolPageClientProps) {
                       color: '#333',
                       marginBottom: '15px'
                     }}>
-                      🚀 AI Image Generation Overview
+                      🚀 {tool?.name || 'AI Tool'} Overview
                     </h4>
                     <div style={{
                       fontSize: '16px',
@@ -310,9 +294,14 @@ export default function ToolPageClient({ slug }: ToolPageClientProps) {
                       lineHeight: '1.5'
                     }}>
                       <p style={{ marginBottom: '15px' }}>
-                        Generate stunning images from text descriptions using advanced AI models. 
-                        Our AI Image Generator supports multiple professional models including DALL-E 3, 
-                        Stable Diffusion XL, and more.
+                        {tool?.name === 'AI Image Generator' ? 
+                          `Generate stunning images from text descriptions using advanced AI models. Our AI Image Generator supports multiple professional models including DALL-E 3, Stable Diffusion XL, and more.` :
+                          tool?.name === 'Background Remover' ?
+                          `Remove backgrounds from images instantly with our AI-powered background removal tool. Perfect for product photos, portraits, and professional images.` :
+                          tool?.name === 'Image Enhancer' ?
+                          `Enhance your images with AI-powered upscaling, color correction, and quality improvements. Transform ordinary photos into professional-quality images.` :
+                          `Professional AI-powered tool for ${tool?.name || 'content creation'}. Advanced features and high-quality results for your projects.`
+                        }
                       </p>
                       <div style={{
                         display: 'grid',
@@ -340,10 +329,10 @@ export default function ToolPageClient({ slug }: ToolPageClientProps) {
                             margin: 0,
                             paddingLeft: '20px'
                           }}>
-                            <li style={{ marginBottom: '5px' }}>Multiple AI models</li>
-                            <li style={{ marginBottom: '5px' }}>High-resolution output</li>
-                            <li style={{ marginBottom: '5px' }}>Custom styles</li>
-                            <li style={{ marginBottom: '5px' }}>Commercial-safe options</li>
+                            <li style={{ marginBottom: '5px' }}>Professional AI processing</li>
+                            <li style={{ marginBottom: '5px' }}>High-quality results</li>
+                            <li style={{ marginBottom: '5px' }}>Fast processing speed</li>
+                            <li style={{ marginBottom: '5px' }}>User-friendly interface</li>
                           </ul>
                         </div>
                         <div style={{
@@ -366,10 +355,10 @@ export default function ToolPageClient({ slug }: ToolPageClientProps) {
                             margin: 0,
                             paddingLeft: '20px'
                           }}>
-                            <li style={{ marginBottom: '5px' }}>Social media content</li>
+                            <li style={{ marginBottom: '5px' }}>Professional projects</li>
                             <li style={{ marginBottom: '5px' }}>Marketing materials</li>
-                            <li style={{ marginBottom: '5px' }}>Product mockups</li>
-                            <li style={{ marginBottom: '5px' }}>Creative projects</li>
+                            <li style={{ marginBottom: '5px' }}>Content creation</li>
+                            <li style={{ marginBottom: '5px' }}>Business applications</li>
                           </ul>
                         </div>
                       </div>
