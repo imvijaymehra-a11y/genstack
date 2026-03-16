@@ -195,7 +195,8 @@ export default function ToolPageClient({ slug }: ToolPageClientProps) {
                     />
                   ) : (
                     <EnhancedToolForm
-                      tool={tool}
+                      toolName={tool.name}
+                      toolSlug={tool.slug}
                       onGenerate={handleGenerate}
                       isGenerating={isGenerating}
                     />
