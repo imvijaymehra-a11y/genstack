@@ -118,12 +118,33 @@ export default function CapCutImageEnhancer({
 
     try {
       const enhancedInput = `${enhancementType}: enhance photo`;
-      await onGenerate(enhancedInput, selectedFile);
-      if (generatedImage) {
-        setShowComparison(true);
-      }
+      const result = await onGenerate(enhancedInput, selectedFile);
+      console.log('Enhancement result:', result);
+      setShowComparison(true);
     } catch (error) {
       console.error('Enhancement failed:', error);
+    }
+  };
+
+  const downloadEnhanced = async () => {
+    if (!generatedImage) return;
+    
+    try {
+      // Convert base64 to blob
+      const response = await fetch(generatedImage);
+      const blob = await response.blob();
+      
+      // Create download link
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `enhanced-${selectedFile?.name || 'photo.jpg'}`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('Download failed:', error);
     }
   };
 
@@ -375,7 +396,10 @@ export default function CapCutImageEnhancer({
                         className="w-full rounded-xl"
                       />
                     </div>
-                    <button className="w-full py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-medium rounded-lg hover:from-purple-700 hover:to-pink-700 transition-colors flex items-center justify-center space-x-2">
+                    <button 
+                      onClick={downloadEnhanced}
+                      className="w-full py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-medium rounded-lg hover:from-purple-700 hover:to-pink-700 transition-colors flex items-center justify-center space-x-2"
+                    >
                       <Download className="h-4 w-4" />
                       <span>Download Enhanced</span>
                     </button>
