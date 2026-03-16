@@ -115,13 +115,15 @@ export const tools: Tool[] = [
   },
   {
     slug: "image-enhancer",
-    name: "Image Enhancer",
-    description: "Enhance and improve image quality automatically",
+    name: "AI Photo Enhancer",
+    description: "Enhance photos with AI-powered one-tap editing for professional results",
     category: "Image Generation & Editing",
-    prompt: "Enhance this image: {input}. Improve resolution, clarity, colors, and overall quality while maintaining the original content.",
-    seoTitle: "AI Image Enhancer | Improve Photo Quality",
-    seoDescription: "Enhance image quality instantly with AI. Improve resolution, clarity, and colors automatically.",
-    tags: ["enhance", "quality", "photo", "improvement"],
+    prompt: "Enhance this photo using Nano Banana AI model: {input}. Improve resolution, clarity, colors, and overall quality while maintaining natural look.",
+    seoTitle: "AI Photo Enhancer | Professional Photo Editing",
+    seoDescription: "Enhance photos instantly with AI-powered one-tap editing. Get professional results with automatic enhancement using Nano Banana AI model.",
+    featured: true,
+    trending: true,
+    tags: ["enhance", "photo", "ai", "nano-banana", "professional"],
     pricing: "freemium"
   },
   {

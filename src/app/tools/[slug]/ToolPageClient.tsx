@@ -8,6 +8,7 @@ import { selectOptimalModel, getDefaultModelForTool } from '@/lib/intelligent-mo
 import EnhancedToolForm from '@/components/EnhancedToolForm';
 import EnhancedToolOutput from '@/components/EnhancedToolOutput';
 import ImageToolForm from '@/components/ImageToolForm';
+import CapCutImageEnhancer from '@/components/CapCutImageEnhancer';
 import ToolPageHeader from '@/components/ToolPageHeader';
 import ModelSelector from '@/components/ModelSelector';
 import Navbar from '@/components/Navbar';
@@ -168,6 +169,21 @@ export default function ToolPageClient({ slug }: ToolPageClientProps) {
 
   // Determine if this is an image tool
   const isImageTool = ['background-remover', 'image-enhancer', 'ai-image-generator'].includes(slug);
+
+  // Special handling for image-enhancer - use CapCut style
+  if (slug === 'image-enhancer' && tool) {
+    return (
+      <div className="min-h-screen">
+        <CapCutImageEnhancer
+          toolName={tool.name}
+          toolSlug={tool.slug}
+          onGenerate={handleGenerate}
+          isGenerating={isGenerating}
+          generatedImage={generatedContent}
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
