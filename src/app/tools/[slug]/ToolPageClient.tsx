@@ -176,36 +176,38 @@ export default function ToolPageClient({ slug }: ToolPageClientProps) {
       {/* Enhanced Tool Page Header */}
       {tool && <ToolPageHeader tool={tool} />}
       
-      <main className="max-w-7xl mx-auto px-4 py-8">
-        {tool && (
-          <div className="grid lg:grid-cols-3 gap-8">
-            {/* Main Content Area */}
-            <div className="lg:col-span-2 space-y-8">
-              {/* Tool Form - Image or Text */}
-              {isImageTool ? (
-                <ImageToolForm
-                  toolName={tool.name}
-                  toolSlug={tool.slug}
-                  onGenerate={handleGenerate}
-                  isGenerating={isGenerating}
-                  generatedImage={generatedContent}
-                />
-              ) : (
-                <EnhancedToolForm
-                  toolName={tool.name}
-                  toolSlug={slug}
-                  onGenerate={handleGenerate}
-                  isGenerating={isGenerating}
-                />
-              )}
-
-              {/* Enhanced Tool Output */}
-              <EnhancedToolOutput
-                content={generatedContent}
-                toolName={tool.name}
-                isLoading={isGenerating}
-                toolSlug={slug}
-              />
+      <main className="flex-1">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+            
+            {/* Left Sidebar - Tool Form */}
+            <div className="lg:col-span-3">
+              <ToolPageHeader tool={tool} />
+              {tool ? (
+                <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 border border-gray-200 dark:border-gray-700">
+                  {isImageTool ? (
+                    <ImageToolForm
+                      toolName={tool.name}
+                      toolSlug={tool.slug}
+                      onGenerate={handleGenerate}
+                      isGenerating={isGenerating}
+                      generatedImage={generatedContent}
+                    />
+                  ) : (
+                    <EnhancedToolForm
+                      tool={tool}
+                      onGenerate={handleGenerate}
+                      isGenerating={isGenerating}
+                    />
+                  )}
+                  
+                  {/* Tool Output */}
+                  <EnhancedToolOutput
+                    content={generatedContent}
+                    toolName={tool.name}
+                    isLoading={isGenerating}
+                    toolSlug={tool.slug}
+                  />
 
               {/* Tabs Section - Below Image Generator - CUTOUT.PRO STYLE */}
               {isImageTool && (
@@ -1025,24 +1027,106 @@ export default function ToolPageClient({ slug }: ToolPageClientProps) {
                   </div>
                 </div>
               )}
-
-              </div>
-
-            {/* Sidebar */}
-            <div className="space-y-6">
+            </div>
+            )}
+            {/* Right Sidebar - Additional Content */}
+            <div className="lg:col-span-1 space-y-6">
               {/* Model Selection */}
               <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 border border-gray-200 dark:border-gray-700">
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                  AI Model Selection
+                  🤖 Available AI Models
                 </h3>
                 <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">
                   Choose AI model that best fits your needs
                 </p>
-                <ModelSelector
-                  selectedModel={selectedModel}
-                  onModelChange={setSelectedModel}
-                  className="w-full"
-                />
+                
+                <div className="space-y-4">
+                  <div>
+                    <h4 className="font-semibold text-gray-900 dark:text-white mb-2">🖼️ Image Models</h4>
+                    <div className="grid grid-cols-1 gap-2">
+                      <div className="flex items-center justify-between p-2 bg-gray-50 dark:bg-gray-700 rounded">
+                        <span className="text-sm">Flux Krea</span>
+                        <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">Free</span>
+                      </div>
+                      <div className="flex items-center justify-between p-2 bg-gray-50 dark:bg-gray-700 rounded">
+                        <span className="text-sm">Nano Banana 2</span>
+                        <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">Free</span>
+                      </div>
+                      <div className="flex items-center justify-between p-2 bg-gray-50 dark:bg-gray-700 rounded">
+                        <span className="text-sm">Nano Banana Pro</span>
+                        <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">Free</span>
+                      </div>
+                      <div className="flex items-center justify-between p-2 bg-gray-50 dark:bg-gray-700 rounded">
+                        <span className="text-sm">Imagen 4.0</span>
+                        <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">Free</span>
+                      </div>
+                      <div className="flex items-center justify-between p-2 bg-gray-50 dark:bg-gray-700 rounded">
+                        <span className="text-sm">Seedream 4.0</span>
+                        <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">Free</span>
+                      </div>
+                      <div className="flex items-center justify-between p-2 bg-gray-50 dark:bg-gray-700 rounded">
+                        <span className="text-sm">Seedream 4.5</span>
+                        <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">Free</span>
+                      </div>
+                      <div className="flex items-center justify-between p-2 bg-gray-50 dark:bg-gray-700 rounded">
+                        <span className="text-sm">Seedream 5.0 Lite</span>
+                        <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">Free</span>
+                      </div>
+                      <div className="flex items-center justify-between p-2 bg-gray-50 dark:bg-gray-700 rounded">
+                        <span className="text-sm">Qwen Image Edit</span>
+                        <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">Free</span>
+                      </div>
+                      <div className="flex items-center justify-between p-2 bg-gray-50 dark:bg-gray-700 rounded">
+                        <span className="text-sm">Gpt Image 1.5</span>
+                        <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">Free</span>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <h4 className="font-semibold text-gray-900 dark:text-white mb-2">🎬 Video Models</h4>
+                    <div className="grid grid-cols-1 gap-2">
+                      <div className="flex items-center justify-between p-2 bg-gray-50 dark:bg-gray-700 rounded">
+                        <span className="text-sm">Seedance 1.5 Pro (With Audio)</span>
+                        <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">Free</span>
+                      </div>
+                      <div className="flex items-center justify-between p-2 bg-gray-50 dark:bg-gray-700 rounded">
+                        <span className="text-sm">Sora 2.0 (With Audio)</span>
+                        <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">Free</span>
+                      </div>
+                      <div className="flex items-center justify-between p-2 bg-gray-50 dark:bg-gray-700 rounded">
+                        <span className="text-sm">Seedance 1.0 pro fast</span>
+                        <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">Free</span>
+                      </div>
+                      <div className="flex items-center justify-between p-2 bg-gray-50 dark:bg-gray-700 rounded">
+                        <span className="text-sm">Seedance 1.0 pro</span>
+                        <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">Free</span>
+                      </div>
+                      <div className="flex items-center justify-between p-2 bg-gray-50 dark:bg-gray-700 rounded">
+                        <span className="text-sm">Veo 3.0</span>
+                        <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">Free</span>
+                      </div>
+                      <div className="flex items-center justify-between p-2 bg-gray-50 dark:bg-gray-700 rounded">
+                        <span className="text-sm">Veo 3.1</span>
+                        <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">Free</span>
+                      </div>
+                      <div className="flex items-center justify-between p-2 bg-gray-50 dark:bg-gray-700 rounded">
+                        <span className="text-sm">Vidu Q2</span>
+                        <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">Free</span>
+                      </div>
+                      <div className="flex items-center justify-between p-2 bg-gray-50 dark:bg-gray-700 rounded">
+                        <span className="text-sm">Seedance 2.0</span>
+                        <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">Free</span>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="mt-4 p-3 bg-blue-50 dark:bg-blue-900 rounded-lg">
+                    <p className="text-sm text-blue-800 dark:text-blue-200">
+                      💡 <strong>All models are available for free!</strong> Choose any model based on your specific needs.
+                    </p>
+                  </div>
+                </div>
               </div>
 
               {/* Quick Tips */}
@@ -1094,9 +1178,10 @@ export default function ToolPageClient({ slug }: ToolPageClientProps) {
               </div>
             </div>
           </div>
-        )}
+        </div>
       </main>
       
+      {/* Footer */}
       <Footer />
     </div>
   );
