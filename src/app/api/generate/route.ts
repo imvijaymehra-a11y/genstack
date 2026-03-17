@@ -85,17 +85,25 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // For image tools, file is required
-    const imageTools = ['background-remover', 'image-enhancer'];
-    if (imageTools.includes(toolSlug) && !imageFile) {
+    // For image tools that process existing images, file is required
+    const imageProcessingTools = ['background-remover', 'image-enhancer'];
+    if (imageProcessingTools.includes(toolSlug) && !imageFile) {
       return NextResponse.json(
         { error: 'Image file is required for this tool' },
         { status: 400 }
       );
     }
 
+    // For AI image generator, prompt is required (not file)
+    if (toolSlug === 'ai-image-generator' && !input) {
+      return NextResponse.json(
+        { error: 'Prompt is required for AI image generation' },
+        { status: 400 }
+      );
+    }
+
     // For non-image tools, input is required
-    if (!imageTools.includes(toolSlug) && !input) {
+    if (!imageProcessingTools.includes(toolSlug) && !input) {
       return NextResponse.json(
         { error: 'Input is required' },
         { status: 400 }
