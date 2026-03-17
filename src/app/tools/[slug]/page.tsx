@@ -42,7 +42,7 @@ export default function ToolPage() {
     setOutput('');
 
     try {
-      const response = await fetch('/api/generate', {
+      const response = await fetch('/api/generate-simple', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getToolBySlug } from '@/lib/tools';
+// import { getToolBySlug } from '@/lib/tools';
 import OpenAI from 'openai';
 
 // Initialize multiple API providers
@@ -30,8 +30,10 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const tool = getToolBySlug(toolSlug);
-    if (!tool) {
+    // Define tools directly instead of importing
+    const validTools = ['blog-generator', 'seo-title-generator', 'product-description-generator', 'youtube-script-generator', 'ad-copy-generator'];
+    
+    if (!validTools.includes(toolSlug)) {
       return NextResponse.json(
         { success: false, error: 'Invalid tool' },
         { status: 400 }
