@@ -2,6 +2,8 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { Upload, X, Sparkles, Zap, Camera, Sun, Palette, Wand2, Download, ArrowRight, ChevronLeft, ChevronRight, Scissors } from 'lucide-react';
+import Navbar from '@/components/Navbar';
+import Footer from '@/components/Footer';
 
 interface CapCutImageEnhancerProps {
   toolName: string;
@@ -22,9 +24,126 @@ export default function CapCutImageEnhancer({
   const [previewUrl, setPreviewUrl] = useState<string>('');
   const [dragActive, setDragActive] = useState(false);
   const [enhancementType, setEnhancementType] = useState<string>('auto');
-  const [showResult, setShowResult] = useState(false);
+  const [showComparison, setShowComparison] = useState(false);
+  const [sliderPosition, setSliderPosition] = useState(50);
+  const [isDragging, setIsDragging] = useState(false);
   
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const comparisonRef = useRef<HTMLDivElement>(null);
+
+  // Handle mouse move for slider
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      if (!isDragging || !comparisonRef.current) return;
+      
+      const rect = comparisonRef.current.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const percentage = (x / rect.width) * 100;
+      setSliderPosition(Math.min(100, Math.max(0, percentage)));
+    };
+
+    const handleMouseUp = () => {
+      setIsDragging(false);
+    };
+
+    if (isDragging) {
+      document.addEventListener('mousemove', handleMouseMove);
+      document.addEventListener('mouseup', handleMouseUp);
+    }
+
+    return () => {
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUp);
+    };
+  }, [isDragging]);
+
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file && file.type.startsWith('image/')) {
+      setSelectedFile(file);
+      const url = URL.createObjectURL(file);
+      setPreviewUrl(url);
+      setShowComparison(false);
+    }
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragActive(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragActive(false);
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragActive(false);
+    
+    const file = e.dataTransfer.files[0];
+    if (file && file.type.startsWith('image/')) {
+      setSelectedFile(file);
+      const url = URL.createObjectURL(file);
+      setPreviewUrl(url);
+      setShowComparison(false);
+    }
+  };
+
+  const handleGenerate = async () => {
+    if (!selectedFile) return;
+    
+    try {
+      await onGenerate(enhancementType, selectedFile);
+      setShowComparison(true);
+    } catch (error) {
+      console.error('Enhancement failed:', error);
+    }
+  };
+
+  const downloadEnhanced = async () => {
+    if (!generatedImage) return;
+    
+    try {
+      // Create a temporary image to check dimensions
+      const img = new Image();
+      img.src = generatedImage;
+      
+      img.onload = async () => {
+        const width = img.naturalWidth;
+        const height = img.naturalHeight;
+        const maxDimension = Math.max(width, height);
+        
+        if (maxDimension > 750) {
+          // Show paid upgrade modal or redirect to pricing
+          alert('Images larger than 750px require a premium subscription. Please upgrade to download high-resolution images.');
+          return;
+        }
+        
+        // Proceed with download for images <= 750px
+        const response = await fetch(generatedImage);
+        const blob = await response.blob();
+        
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `enhanced-${selectedFile?.name || 'photo.jpg'}`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+      };
+      
+      img.onerror = () => {
+        console.error('Failed to load image for dimension check');
+      };
+    } catch (error) {
+      console.error('Download failed:', error);
+    }
+  };
 
   const enhancementTypes = [
     {
@@ -71,95 +190,18 @@ export default function CapCutImageEnhancer({
     }
   ];
 
-  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file && file.type.startsWith('image/')) {
-      setSelectedFile(file);
-      const url = URL.createObjectURL(file);
-      setPreviewUrl(url);
-      setShowResult(false);
-    }
-  };
-
-  const handleDragOver = (e: React.DragEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setDragActive(true);
-  };
-
-  const handleDragLeave = (e: React.DragEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setDragActive(false);
-  };
-
-  const handleDrop = (e: React.DragEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setDragActive(false);
-    
-    const file = e.dataTransfer.files[0];
-    if (file && file.type.startsWith('image/')) {
-      setSelectedFile(file);
-      const url = URL.createObjectURL(file);
-      setPreviewUrl(url);
-      setShowResult(false);
-    }
-  };
-
-  const handleGenerate = async () => {
-    if (!selectedFile) return;
-    
-    try {
-      await onGenerate(enhancementType, selectedFile);
-      setShowResult(true);
-    } catch (error) {
-      console.error('Enhancement failed:', error);
-    }
-  };
-
-  const downloadEnhanced = async () => {
-    if (!generatedImage) return;
-    
-    try {
-      const response = await fetch(generatedImage);
-      const blob = await response.blob();
-      
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = `enhanced-${selectedFile?.name || 'photo.jpg'}`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      URL.revokeObjectURL(url);
-    } catch (error) {
-      console.error('Download failed:', error);
-    }
-  };
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50">
-      {/* Header */}
-      <div className="bg-white/80 backdrop-blur-md border-b border-purple-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            <div className="flex items-center space-x-3">
-              <div className="p-2 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg">
-                <Sparkles className="h-5 w-5 text-white" />
-              </div>
-              <div>
-                <h1 className="text-xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
-                  {toolName}
-                </h1>
-                <p className="text-xs text-gray-600">Enhance your images with AI</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
+      <Navbar />
+      
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="text-center mb-8">
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-4">
+            {toolName}
+          </h1>
+          <p className="text-gray-600 text-lg">Enhance your images with professional AI technology</p>
+        </div>
+
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Left Panel - Input */}
           <div className="space-y-6">
@@ -185,7 +227,7 @@ export default function CapCutImageEnhancer({
                         e.stopPropagation();
                         setSelectedFile(null);
                         setPreviewUrl('');
-                        setShowResult(false);
+                        setShowComparison(false);
                       }}
                       className="text-red-500 hover:text-red-700 flex items-center space-x-1 mx-auto"
                     >
@@ -236,29 +278,6 @@ export default function CapCutImageEnhancer({
               </div>
             </div>
 
-            {/* Features */}
-            <div className="bg-white/80 backdrop-blur-md rounded-2xl p-6 border border-purple-100 shadow-lg">
-              <h3 className="text-lg font-semibold text-gray-800 mb-4">Features</h3>
-              <div className="space-y-3">
-                <div className="flex items-center">
-                  <div className="w-2 h-2 bg-purple-400 rounded-full mr-3"></div>
-                  <span className="text-sm text-gray-700">Professional quality enhancement</span>
-                </div>
-                <div className="flex items-center">
-                  <div className="w-2 h-2 bg-pink-400 rounded-full mr-3"></div>
-                  <span className="text-sm text-gray-700">AI-powered processing</span>
-                </div>
-                <div className="flex items-center">
-                  <div className="w-2 h-2 bg-blue-400 rounded-full mr-3"></div>
-                  <span className="text-sm text-gray-700">Multiple enhancement options</span>
-                </div>
-                <div className="flex items-center">
-                  <div className="w-2 h-2 bg-green-400 rounded-full mr-3"></div>
-                  <span className="text-sm text-gray-700">Fast processing</span>
-                </div>
-              </div>
-            </div>
-
             {/* Enhance Button */}
             <button
               onClick={handleGenerate}
@@ -282,23 +301,71 @@ export default function CapCutImageEnhancer({
 
           {/* Right Panel - Result */}
           <div className="space-y-6">
-            {showResult && generatedImage ? (
+            {showComparison && generatedImage && previewUrl ? (
               <div className="bg-white/80 backdrop-blur-md rounded-2xl p-6 border border-purple-100 shadow-lg">
-                <h3 className="text-lg font-semibold text-gray-800 mb-4">Enhanced Image</h3>
-                <div className="space-y-4">
+                <h3 className="text-lg font-semibold text-gray-800 mb-4">Enhanced Result</h3>
+                
+                {/* Comparison Slider */}
+                <div 
+                  ref={comparisonRef}
+                  className="relative w-full h-96 rounded-lg overflow-hidden mb-4"
+                  onMouseDown={(e) => {
+                    setIsDragging(true);
+                    const rect = comparisonRef.current?.getBoundingClientRect();
+                    if (rect) {
+                      const x = e.clientX - rect.left;
+                      const percentage = (x / rect.width) * 100;
+                      setSliderPosition(Math.min(100, Math.max(0, percentage)));
+                    }
+                  }}
+                >
+                  {/* Original Image */}
                   <img 
-                    src={generatedImage} 
-                    alt="Enhanced" 
-                    className="w-full rounded-lg shadow-md"
+                    src={previewUrl} 
+                    alt="Original" 
+                    className="absolute inset-0 w-full h-full object-cover"
                   />
-                  <button 
-                    onClick={downloadEnhanced}
-                    className="w-full py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-medium rounded-lg hover:from-purple-700 hover:to-pink-700 transition-colors flex items-center justify-center space-x-2"
+                  
+                  {/* Enhanced Image */}
+                  <div 
+                    className="absolute inset-0 overflow-hidden"
+                    style={{ width: `${sliderPosition}%` }}
                   >
-                    <Download className="h-4 w-4" />
-                    <span>Download Enhanced</span>
-                  </button>
+                    <img 
+                      src={generatedImage} 
+                      alt="Enhanced" 
+                      className="absolute inset-0 w-full h-full object-cover"
+                    />
+                  </div>
+                  
+                  {/* Slider Line */}
+                  <div 
+                    className="absolute top-0 bottom-0 w-1 bg-white shadow-lg"
+                    style={{ left: `${sliderPosition}%` }}
+                  >
+                    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-8 h-8 bg-white rounded-full shadow-lg flex items-center justify-center">
+                      <ChevronLeft className="h-4 w-4 text-gray-600" />
+                      <ChevronRight className="h-4 w-4 text-gray-600" />
+                    </div>
+                  </div>
+                  
+                  {/* Labels */}
+                  <div className="absolute top-4 left-4 bg-black/50 text-white px-2 py-1 rounded text-sm">
+                    Enhanced
+                  </div>
+                  <div className="absolute top-4 right-4 bg-black/50 text-white px-2 py-1 rounded text-sm">
+                    Original
+                  </div>
                 </div>
+
+                {/* Download Button */}
+                <button 
+                  onClick={downloadEnhanced}
+                  className="w-full py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-medium rounded-lg hover:from-purple-700 hover:to-pink-700 transition-colors flex items-center justify-center space-x-2"
+                >
+                  <Download className="h-4 w-4" />
+                  <span>Download Enhanced (Free up to 750px)</span>
+                </button>
               </div>
             ) : (
               <div className="bg-white/80 backdrop-blur-md rounded-2xl p-12 border border-purple-100 shadow-lg text-center">
@@ -316,6 +383,8 @@ export default function CapCutImageEnhancer({
           </div>
         </div>
       </div>
+      
+      <Footer />
     </div>
   );
 }
