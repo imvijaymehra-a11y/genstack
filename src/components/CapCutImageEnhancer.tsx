@@ -128,6 +128,8 @@ export default function CapCutImageEnhancer({
   };
 
   const proceedWithDownload = async () => {
+    if (!generatedImage) return;
+    
     try {
       const response = await fetch(generatedImage);
       const blob = await response.blob();

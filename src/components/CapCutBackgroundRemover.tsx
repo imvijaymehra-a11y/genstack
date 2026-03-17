@@ -116,6 +116,8 @@ export default function CapCutBackgroundRemover({ toolName, toolSlug, onGenerate
   };
 
   const proceedWithDownload = async () => {
+    if (!generatedImage) return;
+    
     try {
       const response = await fetch(generatedImage);
       const blob = await response.blob();
