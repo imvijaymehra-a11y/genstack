@@ -333,10 +333,8 @@ function applySimpleEnhancement(data: Buffer, type: string): Buffer {
     
     return enhanced;
   } catch (error) {
-    return {
-      success: false,
-      error: error instanceof Error ? error.message : 'Image enhancement failed'
-    };
+    // Return original buffer if enhancement fails
+    return data;
   }
 }
 
