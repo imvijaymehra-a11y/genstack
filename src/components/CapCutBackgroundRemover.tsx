@@ -79,28 +79,33 @@ export default function CapCutBackgroundRemover({ toolName, toolSlug, onGenerate
       // 'original' means no limit
       
       if (maxAllowedSize !== Infinity) {
-        // Create a temporary image to check dimensions
-        const img = new Image() as HTMLImageElement;
-        img.src = generatedImage;
-        
-        img.onload = async () => {
-          const width = img.naturalWidth;
-          const height = img.naturalHeight;
-          const maxDimension = Math.max(width, height);
+        // Check image dimensions using a different approach
+        if (typeof window !== 'undefined') {
+          const img = document.createElement('img');
+          img.src = generatedImage;
           
-          if (maxDimension > maxAllowedSize) {
-            alert(`Images larger than ${maxAllowedSize}px require a premium subscription. Please upgrade to download high-resolution images.`);
-            return;
-          }
+          img.onload = async () => {
+            const width = img.naturalWidth;
+            const height = img.naturalHeight;
+            const maxDimension = Math.max(width, height);
+            
+            if (maxDimension > maxAllowedSize) {
+              alert(`Images larger than ${maxAllowedSize}px require a premium subscription. Please upgrade to download high-resolution images.`);
+              return;
+            }
+            
+            // Proceed with download
+            proceedWithDownload();
+          };
           
-          // Proceed with download
+          img.onerror = () => {
+            console.error('Failed to load image for dimension check');
+            proceedWithDownload();
+          };
+        } else {
+          // Fallback for SSR - proceed with download
           proceedWithDownload();
-        };
-        
-        img.onerror = () => {
-          console.error('Failed to load image for dimension check');
-          proceedWithDownload();
-        };
+        }
       } else {
         // Original resolution - always allow download
         proceedWithDownload();
