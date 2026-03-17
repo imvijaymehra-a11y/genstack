@@ -27,35 +27,10 @@ export default function CapCutImageEnhancer({
   const [showComparison, setShowComparison] = useState(false);
   const [sliderPosition, setSliderPosition] = useState(50);
   const [isDragging, setIsDragging] = useState(false);
+  const [selectedResolution, setSelectedResolution] = useState('original');
   
   const fileInputRef = useRef<HTMLInputElement>(null);
   const comparisonRef = useRef<HTMLDivElement>(null);
-
-  // Handle mouse move for slider
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      if (!isDragging || !comparisonRef.current) return;
-      
-      const rect = comparisonRef.current.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const percentage = (x / rect.width) * 100;
-      setSliderPosition(Math.min(100, Math.max(0, percentage)));
-    };
-
-    const handleMouseUp = () => {
-      setIsDragging(false);
-    };
-
-    if (isDragging) {
-      document.addEventListener('mousemove', handleMouseMove);
-      document.addEventListener('mouseup', handleMouseUp);
-    }
-
-    return () => {
-      document.removeEventListener('mousemove', handleMouseMove);
-      document.removeEventListener('mouseup', handleMouseUp);
-    };
-  }, [isDragging]);
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -108,38 +83,58 @@ export default function CapCutImageEnhancer({
     if (!generatedImage) return;
     
     try {
-      // Create a temporary image to check dimensions
-      const img = new Image();
-      img.src = generatedImage;
+      // Check selected resolution
+      let maxAllowedSize = Infinity;
+      if (selectedResolution === '750px') maxAllowedSize = 750;
+      else if (selectedResolution === '500px') maxAllowedSize = 500;
+      else if (selectedResolution === '300px') maxAllowedSize = 300;
+      // 'original' means no limit
       
-      img.onload = async () => {
-        const width = img.naturalWidth;
-        const height = img.naturalHeight;
-        const maxDimension = Math.max(width, height);
+      if (maxAllowedSize !== Infinity) {
+        // Create a temporary image to check dimensions
+        const img = new Image();
+        img.src = generatedImage;
         
-        if (maxDimension > 750) {
-          // Show paid upgrade modal or redirect to pricing
-          alert('Images larger than 750px require a premium subscription. Please upgrade to download high-resolution images.');
-          return;
-        }
+        img.onload = async () => {
+          const width = img.naturalWidth;
+          const height = img.naturalHeight;
+          const maxDimension = Math.max(width, height);
+          
+          if (maxDimension > maxAllowedSize) {
+            alert(`Images larger than ${maxAllowedSize}px require a premium subscription. Please upgrade to download high-resolution images.`);
+            return;
+          }
+          
+          // Proceed with download
+          proceedWithDownload();
+        };
         
-        // Proceed with download for images <= 750px
-        const response = await fetch(generatedImage);
-        const blob = await response.blob();
-        
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = `enhanced-${selectedFile?.name || 'photo.jpg'}`;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        URL.revokeObjectURL(url);
-      };
+        img.onerror = () => {
+          console.error('Failed to load image for dimension check');
+          proceedWithDownload();
+        };
+      } else {
+        // Original resolution - always allow download
+        proceedWithDownload();
+      }
+    } catch (error) {
+      console.error('Download failed:', error);
+    }
+  };
+
+  const proceedWithDownload = async () => {
+    try {
+      const response = await fetch(generatedImage);
+      const blob = await response.blob();
       
-      img.onerror = () => {
-        console.error('Failed to load image for dimension check');
-      };
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `enhanced-${selectedFile?.name || 'photo.jpg'}`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
     } catch (error) {
       console.error('Download failed:', error);
     }
@@ -278,6 +273,27 @@ export default function CapCutImageEnhancer({
               </div>
             </div>
 
+            {/* Resolution Selection */}
+            <div className="bg-white/80 backdrop-blur-md rounded-2xl p-6 border border-purple-100 shadow-lg">
+              <h3 className="text-lg font-semibold text-gray-800 mb-4">Download Resolution</h3>
+              <select
+                value={selectedResolution}
+                onChange={(e) => setSelectedResolution(e.target.value)}
+                className="w-full px-4 py-3 border border-purple-200 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent bg-white"
+              >
+                <option value="original">Original Resolution (Premium)</option>
+                <option value="750px">Up to 750px (Free)</option>
+                <option value="500px">Up to 500px (Free)</option>
+                <option value="300px">Up to 300px (Free)</option>
+              </select>
+              <div className="mt-2 text-sm text-gray-600">
+                {selectedResolution === 'original' 
+                  ? 'Download in original resolution (Premium required for large images)'
+                  : `Free download for images up to ${selectedResolution.replace('px', '')}px`
+                }
+              </div>
+            </div>
+
             {/* Enhance Button */}
             <button
               onClick={handleGenerate}
@@ -308,8 +324,9 @@ export default function CapCutImageEnhancer({
                 {/* Comparison Slider */}
                 <div 
                   ref={comparisonRef}
-                  className="relative w-full h-96 rounded-lg overflow-hidden mb-4"
+                  className="relative w-full h-96 rounded-lg overflow-hidden mb-4 cursor-ew-resize select-none"
                   onMouseDown={(e) => {
+                    e.preventDefault();
                     setIsDragging(true);
                     const rect = comparisonRef.current?.getBoundingClientRect();
                     if (rect) {
@@ -318,15 +335,24 @@ export default function CapCutImageEnhancer({
                       setSliderPosition(Math.min(100, Math.max(0, percentage)));
                     }
                   }}
+                  onMouseMove={(e) => {
+                    if (!isDragging) return;
+                    e.preventDefault();
+                    const rect = comparisonRef.current?.getBoundingClientRect();
+                    if (rect) {
+                      const x = e.clientX - rect.left;
+                      const percentage = (x / rect.width) * 100;
+                      setSliderPosition(Math.min(100, Math.max(0, percentage)));
+                    }
+                  }}
+                  onMouseUp={() => {
+                    setIsDragging(false);
+                  }}
+                  onMouseLeave={() => {
+                    setIsDragging(false);
+                  }}
                 >
-                  {/* Original Image */}
-                  <img 
-                    src={previewUrl} 
-                    alt="Original" 
-                    className="absolute inset-0 w-full h-full object-cover"
-                  />
-                  
-                  {/* Enhanced Image */}
+                  {/* Enhanced Image (Left Side) */}
                   <div 
                     className="absolute inset-0 overflow-hidden"
                     style={{ width: `${sliderPosition}%` }}
@@ -338,12 +364,19 @@ export default function CapCutImageEnhancer({
                     />
                   </div>
                   
+                  {/* Original Image (Right Side) */}
+                  <img 
+                    src={previewUrl} 
+                    alt="Original" 
+                    className="absolute inset-0 w-full h-full object-cover"
+                  />
+                  
                   {/* Slider Line */}
                   <div 
-                    className="absolute top-0 bottom-0 w-1 bg-white shadow-lg"
+                    className="absolute top-0 bottom-0 w-1 bg-white shadow-lg cursor-ew-resize"
                     style={{ left: `${sliderPosition}%` }}
                   >
-                    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-8 h-8 bg-white rounded-full shadow-lg flex items-center justify-center">
+                    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-8 h-8 bg-white rounded-full shadow-lg flex items-center justify-center cursor-ew-resize">
                       <ChevronLeft className="h-4 w-4 text-gray-600" />
                       <ChevronRight className="h-4 w-4 text-gray-600" />
                     </div>
@@ -364,7 +397,13 @@ export default function CapCutImageEnhancer({
                   className="w-full py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-medium rounded-lg hover:from-purple-700 hover:to-pink-700 transition-colors flex items-center justify-center space-x-2"
                 >
                   <Download className="h-4 w-4" />
-                  <span>Download Enhanced (Free up to 750px)</span>
+                  <span>
+                    Download Enhanced (
+                    {selectedResolution === 'original' 
+                      ? 'Original Resolution' 
+                      : `Free up to ${selectedResolution}`
+                    })
+                  </span>
                 </button>
               </div>
             ) : (

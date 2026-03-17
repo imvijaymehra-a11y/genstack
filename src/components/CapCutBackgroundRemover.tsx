@@ -16,6 +16,7 @@ export default function CapCutBackgroundRemover({ toolName, toolSlug, onGenerate
   const [previewUrl, setPreviewUrl] = useState<string>('');
   const [showResult, setShowResult] = useState(false);
   const [backgroundColor, setBackgroundColor] = useState('transparent');
+  const [selectedResolution, setSelectedResolution] = useState('750px');
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const backgroundColors = [
@@ -69,6 +70,47 @@ export default function CapCutBackgroundRemover({ toolName, toolSlug, onGenerate
   const downloadResult = async () => {
     if (!generatedImage) return;
     
+    try {
+      // Check selected resolution
+      let maxAllowedSize = Infinity;
+      if (selectedResolution === '750px') maxAllowedSize = 750;
+      else if (selectedResolution === '500px') maxAllowedSize = 500;
+      else if (selectedResolution === '300px') maxAllowedSize = 300;
+      // 'original' means no limit
+      
+      if (maxAllowedSize !== Infinity) {
+        // Create a temporary image to check dimensions
+        const img = new Image();
+        img.src = generatedImage;
+        
+        img.onload = async () => {
+          const width = img.naturalWidth;
+          const height = img.naturalHeight;
+          const maxDimension = Math.max(width, height);
+          
+          if (maxDimension > maxAllowedSize) {
+            alert(`Images larger than ${maxAllowedSize}px require a premium subscription. Please upgrade to download high-resolution images.`);
+            return;
+          }
+          
+          // Proceed with download
+          proceedWithDownload();
+        };
+        
+        img.onerror = () => {
+          console.error('Failed to load image for dimension check');
+          proceedWithDownload();
+        };
+      } else {
+        // Original resolution - always allow download
+        proceedWithDownload();
+      }
+    } catch (error) {
+      console.error('Download failed:', error);
+    }
+  };
+
+  const proceedWithDownload = async () => {
     try {
       const response = await fetch(generatedImage);
       const blob = await response.blob();
@@ -176,6 +218,27 @@ export default function CapCutBackgroundRemover({ toolName, toolSlug, onGenerate
               </div>
             </div>
 
+            {/* Resolution Selection */}
+            <div className="bg-white/80 backdrop-blur-md rounded-2xl p-6 border border-red-100 shadow-lg">
+              <h3 className="text-lg font-semibold text-gray-800 mb-4">Download Resolution</h3>
+              <select
+                value={selectedResolution}
+                onChange={(e) => setSelectedResolution(e.target.value)}
+                className="w-full px-4 py-3 border border-red-200 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent bg-white"
+              >
+                <option value="original">Original Resolution (Premium)</option>
+                <option value="750px">Up to 750px (Free)</option>
+                <option value="500px">Up to 500px (Free)</option>
+                <option value="300px">Up to 300px (Free)</option>
+              </select>
+              <div className="mt-2 text-sm text-gray-600">
+                {selectedResolution === 'original' 
+                  ? 'Download in original resolution (Premium required for large images)'
+                  : `Free download for images up to ${selectedResolution.replace('px', '')}px`
+                }
+              </div>
+            </div>
+
             {/* Features */}
             <div className="bg-white/80 backdrop-blur-md rounded-2xl p-6 border border-red-100 shadow-lg">
               <h3 className="text-lg font-semibold text-gray-800 mb-4">Features</h3>
@@ -236,7 +299,13 @@ export default function CapCutBackgroundRemover({ toolName, toolSlug, onGenerate
                     className="w-full py-3 bg-gradient-to-r from-red-600 to-pink-600 text-white font-medium rounded-lg hover:from-red-700 hover:to-pink-700 transition-colors flex items-center justify-center space-x-2"
                   >
                     <Download className="h-4 w-4" />
-                    <span>Download Image</span>
+                    <span>
+                    Download Image (
+                    {selectedResolution === 'original' 
+                      ? 'Original Resolution' 
+                      : `Free up to ${selectedResolution}`
+                    })
+                  </span>
                   </button>
                 </div>
               </div>
