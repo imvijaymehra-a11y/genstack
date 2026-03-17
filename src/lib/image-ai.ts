@@ -276,9 +276,9 @@ export async function removeBackground(imageFile: File, instructions?: string): 
 }
 
 // Simple image enhancement function
-function applySimpleEnhancement(data: Buffer, type: string): Buffer {
+function applySimpleEnhancement(data: Uint8Array, type: string): Uint8Array {
   try {
-    const enhanced = Buffer.from(data);
+    const enhanced = new Uint8Array(data);
     
     for (let i = 0; i < data.length; i += 4) {
       const r = data[i];
