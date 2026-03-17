@@ -19,6 +19,7 @@ export default function CapCutImageGenerator({ toolName, toolSlug, onGenerate, i
   const [imageStyle, setImageStyle] = useState('realistic');
   const [aspectRatio, setAspectRatio] = useState('1:1');
   const [quality, setQuality] = useState('standard');
+  const [selectedResolution, setSelectedResolution] = useState('750px'); // Add resolution state
   const [showAdvanced, setShowAdvanced] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -87,6 +88,13 @@ export default function CapCutImageGenerator({ toolName, toolSlug, onGenerate, i
     { id: 'ultra', name: 'Ultra', description: 'Best quality, slowest generation' }
   ];
 
+  const resolutionOptions = [
+    { id: '750px', name: '750px', description: 'Free - Good quality' },
+    { id: '1024px', name: '1024px', description: 'Standard - Better quality' },
+    { id: '2048px', name: '2048px', description: 'High - Professional quality' },
+    { id: '4096px', name: '4096px', description: 'Ultra - Maximum quality' }
+  ];
+
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file && file.type.startsWith('image/')) {
@@ -119,8 +127,12 @@ export default function CapCutImageGenerator({ toolName, toolSlug, onGenerate, i
                         quality === 'high' ? 'high quality, detailed' : '';
     const aspectPrompt = aspectRatio === '16:9' ? 'wide angle' : 
                        aspectRatio === '9:16' ? 'portrait' : '';
+    const resolutionPrompt = selectedResolution === '4096px' ? '4K resolution, extremely detailed' :
+                          selectedResolution === '2048px' ? '2K resolution, highly detailed' :
+                          selectedResolution === '1024px' ? 'HD resolution, detailed' : 
+                          selectedResolution === '750px' ? 'standard resolution' : '';
     
-    const prompts = [prompt, stylePrompt, qualityPrompt, aspectPrompt].filter(p => p.trim());
+    const prompts = [prompt, stylePrompt, qualityPrompt, aspectPrompt, resolutionPrompt].filter(p => p.trim());
     return prompts.join(', ');
   };
 
@@ -146,14 +158,45 @@ export default function CapCutImageGenerator({ toolName, toolSlug, onGenerate, i
       const response = await fetch(generatedImage);
       const blob = await response.blob();
       
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = `ai-generated-${toolSlug}-${Date.now()}.png`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      URL.revokeObjectURL(url);
+      // Create image element to check dimensions
+      const img = document.createElement('img');
+      img.src = URL.createObjectURL(blob);
+      
+      await new Promise<void>((resolve) => {
+        img.onload = () => {
+          const width = img.naturalWidth;
+          const height = img.naturalHeight;
+          
+          // Check if selected resolution is allowed
+          const isFreeResolution = selectedResolution === '750px';
+          const isStandardResolution = selectedResolution === '1024px';
+          const isHighResolution = selectedResolution === '2048px';
+          const isUltraResolution = selectedResolution === '4096px';
+          
+          // Allow download if:
+          // 1. Any resolution up to 750px (free)
+          // 2. User is authenticated (assuming premium users can access higher resolutions)
+          // For now, we'll allow all resolutions but add proper checks later
+          const canDownload = isFreeResolution || isStandardResolution || isHighResolution || isUltraResolution;
+          
+          if (!canDownload) {
+            alert(`${selectedResolution} resolution requires a premium subscription. Please upgrade to download higher resolution images.`);
+            URL.revokeObjectURL(img.src);
+            return;
+          }
+          
+          const url = URL.createObjectURL(blob);
+          const link = document.createElement('a');
+          link.href = url;
+          link.download = `ai-generated-${toolSlug}-${selectedResolution}-${Date.now()}.png`;
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+          URL.revokeObjectURL(url);
+          URL.revokeObjectURL(img.src);
+          resolve();
+        };
+      });
     } catch (error) {
       console.error('Download failed:', error);
     }
@@ -374,6 +417,36 @@ export default function CapCutImageGenerator({ toolName, toolSlug, onGenerate, i
                   ))}
                 </div>
               </div>
+
+              {/* Resolution */}
+              <div className="bg-white/90 backdrop-blur-md rounded-2xl p-6 border border-purple-100 shadow-lg">
+                <h3 className="text-lg font-semibold text-gray-800 mb-4">Resolution</h3>
+                <div className="space-y-2">
+                  {resolutionOptions.map((option) => (
+                    <button
+                      key={option.id}
+                      onClick={() => setSelectedResolution(option.id)}
+                      className={`w-full p-3 rounded-lg border-2 transition-all text-left ${
+                        selectedResolution === option.id
+                          ? 'border-purple-500 bg-purple-50'
+                          : 'border-gray-200 hover:border-purple-300'
+                      }`}
+                    >
+                      <div className="flex justify-between items-center">
+                        <div>
+                          <div className="text-sm font-medium text-gray-800">{option.name}</div>
+                          <div className="text-xs text-gray-500">{option.description}</div>
+                        </div>
+                        {selectedResolution === option.id && (
+                          <div className="w-4 h-4 bg-purple-500 rounded-full flex items-center justify-center">
+                            <div className="w-2 h-2 bg-white rounded-full"></div>
+                          </div>
+                        )}
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </div>
             </div>
 
             {/* Generate Button */}
@@ -428,7 +501,7 @@ export default function CapCutImageGenerator({ toolName, toolSlug, onGenerate, i
                       className="py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-medium rounded-lg hover:from-indigo-700 hover:to-purple-700 transition-colors flex items-center justify-center space-x-2 shadow-md"
                     >
                       <Download className="h-4 w-4" />
-                      <span>Download</span>
+                      <span>Download {selectedResolution}</span>
                     </button>
                     <button
                       onClick={regenerateImage}
