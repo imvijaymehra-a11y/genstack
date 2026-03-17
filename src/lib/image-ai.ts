@@ -580,6 +580,12 @@ export async function enhanceImage(imageFile: File, enhancementType: string = 'a
         }
       };
     }
+  } catch (error) {
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Image enhancement failed'
+    };
+  }
 }
 
 // Professional AI Image Generation
