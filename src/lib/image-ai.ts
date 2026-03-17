@@ -276,9 +276,10 @@ export async function removeBackground(imageFile: File, instructions?: string): 
 }
 
 // Simple image enhancement function
-function applySimpleEnhancement(data: Uint8Array, type: string): Uint8Array {
+function applySimpleEnhancement(data: Buffer, type: string): Buffer {
   try {
-    const enhanced = new Uint8Array(data);
+    const enhanced = Buffer.allocUnsafe(data.length);
+    data.copy(enhanced);
     
     for (let i = 0; i < data.length; i += 4) {
       const r = data[i];
@@ -331,10 +332,10 @@ function applySimpleEnhancement(data: Uint8Array, type: string): Uint8Array {
       enhanced[i + 3] = newA;
     }
     
-    return Buffer.from(enhanced);
+    return enhanced;
   } catch (error) {
     // Return original buffer if enhancement fails
-    return Buffer.from(data);
+    return data;
   }
 }
 
