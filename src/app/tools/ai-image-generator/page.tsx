@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { CapCutImageGenerator } from '@/components/CapCutImageGenerator';
+import React, { useState, useEffect } from 'react';
+import CapCutImageGenerator from '@/components/CapCutImageGenerator';
 import { supabase } from '@/lib/supabase';
 
 export default function AIImageGeneratorPage() {
