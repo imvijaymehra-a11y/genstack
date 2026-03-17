@@ -524,27 +524,27 @@ export async function enhanceImage(imageFile: File, enhancementType: string = 'a
         case 'auto':
         case 'resolution':
           // Apply sharpening and contrast enhancement
-          enhancedData = applySimpleEnhancement(binaryData, 'sharpen');
+          enhancedData = applySimpleEnhancement(binaryData as any, 'sharpen') as any;
           break;
           
         case 'color':
           // Apply color enhancement
-          enhancedData = applySimpleEnhancement(binaryData, 'color');
+          enhancedData = applySimpleEnhancement(binaryData as any, 'color') as any;
           break;
           
         case 'portrait':
           // Apply portrait enhancement
-          enhancedData = applySimpleEnhancement(binaryData, 'portrait');
+          enhancedData = applySimpleEnhancement(binaryData as any, 'portrait') as any;
           break;
           
         case 'landscape':
           // Apply landscape enhancement
-          enhancedData = applySimpleEnhancement(binaryData, 'landscape');
+          enhancedData = applySimpleEnhancement(binaryData as any, 'landscape') as any;
           break;
           
         default:
           // General enhancement
-          enhancedData = applySimpleEnhancement(binaryData, 'general');
+          enhancedData = applySimpleEnhancement(binaryData as any, 'general') as any;
           break;
       }
       
