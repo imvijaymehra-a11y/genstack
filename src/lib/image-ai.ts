@@ -331,10 +331,10 @@ function applySimpleEnhancement(data: Uint8Array, type: string): Uint8Array {
       enhanced[i + 3] = newA;
     }
     
-    return enhanced;
+    return Buffer.from(enhanced);
   } catch (error) {
     // Return original buffer if enhancement fails
-    return data;
+    return Buffer.from(data);
   }
 }
 
