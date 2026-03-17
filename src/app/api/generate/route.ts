@@ -8,32 +8,52 @@ const openai = new OpenAI({
 
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
-    const { toolSlug, input } = body;
+    const { toolSlug, input } = await request.json();
 
     if (!toolSlug || !input) {
       return NextResponse.json(
-        { error: 'Tool slug and input are required' },
+        { success: false, error: 'Missing required fields' },
         { status: 400 }
       );
     }
 
-    // Get the tool configuration
     const tool = getToolBySlug(toolSlug);
     if (!tool) {
       return NextResponse.json(
-        { error: 'Tool not found' },
-        { status: 404 }
+        { success: false, error: 'Invalid tool' },
+        { status: 400 }
       );
     }
 
-    // Replace {input} placeholder in prompt
-    const prompt = tool.prompt.replace('{input}', input);
+    // Create prompt based on tool type
+    let prompt = '';
+    switch (toolSlug) {
+      case 'blog-generator':
+        prompt = `Generate a comprehensive blog post about: ${input}\n\nMake it engaging, informative, and well-structured with an introduction, body paragraphs, and conclusion. Include relevant examples and insights.`;
+        break;
+      case 'seo-title-generator':
+        prompt = `Generate 10 SEO-optimized titles for: ${input}\n\nMake them catchy, include relevant keywords, and follow best practices for click-through rates. Format as a numbered list.`;
+        break;
+      case 'product-description-generator':
+        prompt = `Generate compelling product descriptions for: ${input}\n\nFocus on benefits, features, and unique selling points. Make it persuasive and conversion-focused.`;
+        break;
+      case 'youtube-script-generator':
+        prompt = `Generate a YouTube video script about: ${input}\n\nInclude an engaging hook, main content with key points, and a call-to-action. Format with timestamps for different sections.`;
+        break;
+      case 'ad-copy-generator':
+        prompt = `Generate persuasive ad copy for: ${input}\n\nCreate multiple variations (headline, body, CTA) for different platforms. Make it compelling and action-oriented.`;
+        break;
+      default:
+        prompt = `Generate high-quality content about: ${input}`;
+    }
 
-    // Generate content using OpenAI
     const completion = await openai.chat.completions.create({
       model: 'gpt-3.5-turbo',
       messages: [
+        {
+          role: 'system',
+          content: 'You are a professional content generator. Create high-quality, engaging, and well-structured content that meets the user\'s specific needs.',
+        },
         {
           role: 'user',
           content: prompt,
@@ -43,26 +63,20 @@ export async function POST(request: NextRequest) {
       temperature: 0.7,
     });
 
-    const generatedContent = completion.choices[0]?.message?.content || '';
+    const content = completion.choices[0]?.message?.content || '';
 
     return NextResponse.json({
       success: true,
-      content: generatedContent,
-      tool: tool.name,
+      content: content.trim(),
     });
 
   } catch (error) {
-    console.error('Generation API Error:', error);
-    
-    if (error instanceof Error) {
-      return NextResponse.json(
-        { error: error.message },
-        { status: 500 }
-      );
-    }
-
+    console.error('Generation error:', error);
     return NextResponse.json(
-      { error: 'An unexpected error occurred' },
+      { 
+        success: false, 
+        error: 'Failed to generate content. Please try again.' 
+      },
       { status: 500 }
     );
   }
