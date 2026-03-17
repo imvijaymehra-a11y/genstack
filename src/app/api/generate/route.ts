@@ -2,9 +2,22 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getToolBySlug } from '@/lib/tools';
 import OpenAI from 'openai';
 
+// Initialize multiple API providers
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
+
+const anthropic = {
+  apiKey: process.env.ANTHROPIC_API_KEY,
+};
+
+const gemini = {
+  apiKey: process.env.GOOGLE_GEMINI_API_KEY,
+};
+
+const groq = {
+  apiKey: process.env.GROQ_API_KEY,
+};
 
 export async function POST(request: NextRequest) {
   try {
@@ -47,23 +60,70 @@ export async function POST(request: NextRequest) {
         prompt = `Generate high-quality content about: ${input}`;
     }
 
-    const completion = await openai.chat.completions.create({
-      model: 'gpt-3.5-turbo',
-      messages: [
-        {
-          role: 'system',
-          content: 'You are a professional content generator. Create high-quality, engaging, and well-structured content that meets the user\'s specific needs.',
-        },
-        {
-          role: 'user',
-          content: prompt,
-        },
-      ],
-      max_tokens: 2000,
-      temperature: 0.7,
-    });
+    // Try different API providers with fallback
+    let content = '';
+    let lastError = null;
 
-    const content = completion.choices[0]?.message?.content || '';
+    // Try OpenAI first
+    try {
+      const completion = await openai.chat.completions.create({
+        model: 'gpt-3.5-turbo',
+        messages: [
+          {
+            role: 'system',
+            content: 'You are a professional content generator. Create high-quality, engaging, and well-structured content that meets the user\'s specific needs.',
+          },
+          {
+            role: 'user',
+            content: prompt,
+          },
+        ],
+        max_tokens: 2000,
+        temperature: 0.7,
+      });
+      content = completion.choices[0]?.message?.content || '';
+    } catch (openaiError) {
+      console.error('OpenAI failed:', openaiError);
+      lastError = openaiError;
+      
+      // Try Groq as fallback (faster and often has credits)
+      if (groq.apiKey) {
+        try {
+          const groqResponse = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+            method: 'POST',
+            headers: {
+              'Authorization': `Bearer ${groq.apiKey}`,
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              model: 'llama2-70b-4096',
+              messages: [
+                {
+                  role: 'system',
+                  content: 'You are a professional content generator. Create high-quality, engaging, and well-structured content that meets the user\'s specific needs.',
+                },
+                {
+                  role: 'user',
+                  content: prompt,
+                },
+              ],
+              max_tokens: 2000,
+              temperature: 0.7,
+            }),
+          });
+          
+          const groqData = await groqResponse.json();
+          content = groqData.choices?.[0]?.message?.content || '';
+        } catch (groqError) {
+          console.error('Groq failed:', groqError);
+          lastError = groqError;
+        }
+      }
+    }
+
+    if (!content) {
+      throw lastError || new Error('All API providers failed');
+    }
 
     return NextResponse.json({
       success: true,
