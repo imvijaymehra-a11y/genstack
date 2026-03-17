@@ -80,7 +80,7 @@ export default function CapCutBackgroundRemover({ toolName, toolSlug, onGenerate
       
       if (maxAllowedSize !== Infinity) {
         // Create a temporary image to check dimensions
-        const img = new Image();
+        const img = new Image() as HTMLImageElement;
         img.src = generatedImage;
         
         img.onload = async () => {
