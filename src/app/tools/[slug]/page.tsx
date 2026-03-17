@@ -61,7 +61,8 @@ export default function ToolPage() {
         setOutput('Error: ' + result.error);
       }
     } catch (error) {
-      setOutput('Error: Failed to generate content. Please try again.');
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+      setOutput('Error: Failed to generate content. Please try again. ' + errorMessage);
     } finally {
       setIsLoading(false);
     }
@@ -75,7 +76,8 @@ export default function ToolPage() {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch (error) {
-      console.error('Failed to copy text:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+      console.error('Failed to copy text:', errorMessage);
     }
   };
 

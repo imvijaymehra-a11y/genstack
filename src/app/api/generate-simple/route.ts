@@ -77,10 +77,11 @@ export async function POST(request: NextRequest) {
 
   } catch (error) {
     console.error('Generation error:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
     return NextResponse.json(
       { 
         success: false, 
-        error: `Failed to generate content: ${error.message}` 
+        error: `Failed to generate content: ${errorMessage}` 
       },
       { status: 500 }
     );

@@ -134,10 +134,11 @@ export async function POST(request: NextRequest) {
 
   } catch (error) {
     console.error('Generation error:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
     return NextResponse.json(
       { 
         success: false, 
-        error: 'Failed to generate content. Please try again.' 
+        error: `Failed to generate content. Please try again. ${errorMessage}` 
       },
       { status: 500 }
     );
