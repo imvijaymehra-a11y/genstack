@@ -142,8 +142,15 @@ export default function CapCutImageGenerator({ toolName, toolSlug, onGenerate, i
       return;
     }
     
+    console.log('Starting image generation with prompt:', prompt);
+    console.log('Selected style:', imageStyle);
+    console.log('Selected resolution:', selectedResolution);
+    console.log('Selected quality:', quality);
+    console.log('Selected aspect ratio:', aspectRatio);
+    
     try {
       const fullPrompt = buildFullPrompt();
+      console.log('Full prompt being sent:', fullPrompt);
       await onGenerate(fullPrompt, selectedFile || undefined);
     } catch (error) {
       console.error('Generation failed:', error);
@@ -158,45 +165,14 @@ export default function CapCutImageGenerator({ toolName, toolSlug, onGenerate, i
       const response = await fetch(generatedImage);
       const blob = await response.blob();
       
-      // Create image element to check dimensions
-      const img = document.createElement('img');
-      img.src = URL.createObjectURL(blob);
-      
-      await new Promise<void>((resolve) => {
-        img.onload = () => {
-          const width = img.naturalWidth;
-          const height = img.naturalHeight;
-          
-          // Check if selected resolution is allowed
-          const isFreeResolution = selectedResolution === '750px';
-          const isStandardResolution = selectedResolution === '1024px';
-          const isHighResolution = selectedResolution === '2048px';
-          const isUltraResolution = selectedResolution === '4096px';
-          
-          // Allow download if:
-          // 1. Any resolution up to 750px (free)
-          // 2. User is authenticated (assuming premium users can access higher resolutions)
-          // For now, we'll allow all resolutions but add proper checks later
-          const canDownload = isFreeResolution || isStandardResolution || isHighResolution || isUltraResolution;
-          
-          if (!canDownload) {
-            alert(`${selectedResolution} resolution requires a premium subscription. Please upgrade to download higher resolution images.`);
-            URL.revokeObjectURL(img.src);
-            return;
-          }
-          
-          const url = URL.createObjectURL(blob);
-          const link = document.createElement('a');
-          link.href = url;
-          link.download = `ai-generated-${toolSlug}-${selectedResolution}-${Date.now()}.png`;
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
-          URL.revokeObjectURL(url);
-          URL.revokeObjectURL(img.src);
-          resolve();
-        };
-      });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `ai-generated-${toolSlug}-${selectedResolution}-${Date.now()}.png`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
     } catch (error) {
       console.error('Download failed:', error);
     }

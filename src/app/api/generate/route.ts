@@ -257,7 +257,10 @@ export async function POST(request: NextRequest) {
     const prompt = tool.prompt.replace('{input}', input || '');
 
     // Generate content using selected AI model
+    console.log('Calling generateContentWithModel with:', { prompt, modelId, toolSlug, hasImageFile: !!imageFile });
     const generatedContent = await generateContentWithModel(prompt, modelId, toolSlug, imageFile);
+    console.log('Generated content type:', typeof generatedContent);
+    console.log('Generated content length:', generatedContent?.length || 'undefined');
 
     // Record usage
     try {
