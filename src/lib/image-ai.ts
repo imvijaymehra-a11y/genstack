@@ -602,7 +602,7 @@ export async function generateImage(prompt: string, modelId: string = 'dall-e-3'
       // Using OpenAI DALL-E 3
       const openaiApiKey = process.env.OPENAI_API_KEY;
       
-      if (openaiApiKey && (modelId === 'dall-e-3' || modelId === 'dall-e-2')) {
+      if (openaiApiKey && (modelId === 'dall-e-3' || modelId === 'dall-e-2' || modelId === 'free-generator')) {
         console.log('Using OpenAI DALL-E for generation');
         
         const response = await fetch('https://api.openai.com/v1/images/generations', {

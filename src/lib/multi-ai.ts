@@ -619,11 +619,22 @@ export async function generateContentWithModel(
     }
 
     if (toolType === 'ai-image-generator') {
-      const result = await generateImage(prompt, modelId, imageFile);
-      if (result.success && result.processedImage) {
-        return result.processedImage;
+      try {
+        const result = await generateImage(prompt, modelId, imageFile);
+        console.log('Image generation result:', result);
+        
+        if (result.success && result.processedImage) {
+          return result.processedImage;
+        }
+        
+        // If we get here, image generation failed
+        const errorMessage = result.error || 'Image generation failed';
+        console.error('Image generation failed:', errorMessage);
+        throw new Error(errorMessage);
+      } catch (error) {
+        console.error('Image generation error:', error);
+        throw new Error(`Image generation failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
       }
-      throw new Error(result.error || 'Image generation failed');
     }
 
     // Handle text-based tools
