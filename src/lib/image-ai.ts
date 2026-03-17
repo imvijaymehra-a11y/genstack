@@ -605,6 +605,8 @@ export async function generateImage(prompt: string, modelId: string = 'dall-e-3'
       if (openaiApiKey && (modelId === 'dall-e-3' || modelId === 'dall-e-2' || modelId === 'free-generator')) {
         console.log('Using OpenAI DALL-E for generation');
         
+        const openaiModel = modelId === 'free-generator' ? 'dall-e-3' : modelId;
+        
         const response = await fetch('https://api.openai.com/v1/images/generations', {
           method: 'POST',
           headers: {
@@ -612,7 +614,7 @@ export async function generateImage(prompt: string, modelId: string = 'dall-e-3'
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            model: modelId,
+            model: openaiModel,
             prompt: prompt,
             n: 1,
             size: '1024x1024',
