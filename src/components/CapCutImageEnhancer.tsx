@@ -2,8 +2,6 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { Upload, X, Sparkles, Zap, Camera, Sun, Palette, Wand2, Download, ArrowRight, ChevronLeft, ChevronRight, Scissors } from 'lucide-react';
-import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
 
 interface CapCutImageEnhancerProps {
   toolName: string;
@@ -24,103 +22,97 @@ export default function CapCutImageEnhancer({
   const [previewUrl, setPreviewUrl] = useState<string>('');
   const [dragActive, setDragActive] = useState(false);
   const [enhancementType, setEnhancementType] = useState<string>('auto');
-  const [showComparison, setShowComparison] = useState(false);
-  const [sliderPosition, setSliderPosition] = useState(50);
-  const [isDragging, setIsDragging] = useState(false);
+  const [showResult, setShowResult] = useState(false);
   
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const comparisonRef = useRef<HTMLDivElement>(null);
 
-  // Handle mouse move for slider
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      if (!isDragging || !comparisonRef.current) return;
-      
-      const rect = comparisonRef.current.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const percentage = (x / rect.width) * 100;
-      setSliderPosition(Math.min(100, Math.max(0, percentage)));
-    };
-
-    const handleMouseUp = () => {
-      setIsDragging(false);
-    };
-
-    if (isDragging) {
-      document.addEventListener('mousemove', handleMouseMove);
-      document.addEventListener('mouseup', handleMouseUp);
+  const enhancementTypes = [
+    {
+      id: 'auto',
+      name: 'Auto Enhance',
+      icon: <Sparkles className="h-5 w-5" />,
+      description: 'AI-powered enhancement',
+      gradient: 'from-purple-500 to-pink-500'
+    },
+    {
+      id: 'resolution',
+      name: 'Resolution',
+      icon: <Zap className="h-5 w-5" />,
+      description: 'Increase image quality',
+      gradient: 'from-blue-500 to-purple-500'
+    },
+    {
+      id: 'color',
+      name: 'Color',
+      icon: <Palette className="h-5 w-5" />,
+      description: 'Enhance colors',
+      gradient: 'from-pink-500 to-red-500'
+    },
+    {
+      id: 'portrait',
+      name: 'Portrait',
+      icon: <Camera className="h-5 w-5" />,
+      description: 'Face enhancement',
+      gradient: 'from-green-500 to-blue-500'
+    },
+    {
+      id: 'landscape',
+      name: 'Landscape',
+      icon: <Sun className="h-5 w-5" />,
+      description: 'Scene enhancement',
+      gradient: 'from-yellow-500 to-orange-500'
+    },
+    {
+      id: 'background-removal',
+      name: 'Background',
+      icon: <Scissors className="h-5 w-5" />,
+      description: 'Remove background',
+      gradient: 'from-red-500 to-pink-500'
     }
+  ];
 
-    return () => {
-      document.removeEventListener('mousemove', handleMouseMove);
-      document.removeEventListener('mouseup', handleMouseUp);
-    };
-  }, [isDragging]);
-
-  // Handle mouse down on slider
-  const handleSliderMouseDown = (e: React.MouseEvent) => {
-    e.preventDefault();
-    setIsDragging(true);
-  };
-
-  const handleFileSelect = (file: File) => {
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
     if (file && file.type.startsWith('image/')) {
       setSelectedFile(file);
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        setPreviewUrl(e.target?.result as string);
-        setShowComparison(false);
-      };
-      reader.readAsDataURL(file);
+      const url = URL.createObjectURL(file);
+      setPreviewUrl(url);
+      setShowResult(false);
     }
   };
 
-  const handleDrag = (e: React.DragEvent) => {
+  const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    if (e.type === 'dragenter' || e.type === 'dragover') {
-      setDragActive(true);
-    } else if (e.type === 'dragleave') {
-      setDragActive(false);
-    }
+    setDragActive(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragActive(false);
   };
 
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
     e.stopPropagation();
     setDragActive(false);
-
-    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-      handleFileSelect(e.dataTransfer.files[0]);
-    }
-  };
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      handleFileSelect(e.target.files[0]);
-    }
-  };
-
-  const removeFile = () => {
-    setSelectedFile(null);
-    setPreviewUrl('');
-    setShowComparison(false);
-    if (fileInputRef.current) {
-      fileInputRef.current.value = '';
-    }
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
     
-    if (!selectedFile) return;
-    if (isGenerating) return;
+    const file = e.dataTransfer.files[0];
+    if (file && file.type.startsWith('image/')) {
+      setSelectedFile(file);
+      const url = URL.createObjectURL(file);
+      setPreviewUrl(url);
+      setShowResult(false);
+    }
+  };
 
+  const handleGenerate = async () => {
+    if (!selectedFile) return;
+    
     try {
-      const enhancedInput = `${enhancementType}: enhance photo`;
-      const result = await onGenerate(enhancedInput, selectedFile);
-      console.log('Enhancement result:', result);
-      setShowComparison(true);
+      await onGenerate(enhancementType, selectedFile);
+      setShowResult(true);
     } catch (error) {
       console.error('Enhancement failed:', error);
     }
@@ -130,11 +122,9 @@ export default function CapCutImageEnhancer({
     if (!generatedImage) return;
     
     try {
-      // Convert base64 to blob
       const response = await fetch(generatedImage);
       const blob = await response.blob();
       
-      // Create download link
       const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
@@ -148,173 +138,132 @@ export default function CapCutImageEnhancer({
     }
   };
 
-  const enhancementOptions = [
-    {
-      id: 'auto',
-      name: 'Auto Enhance',
-      icon: <Zap className="h-5 w-5" />,
-      description: 'One-tap AI enhancement',
-      gradient: 'from-purple-500 to-pink-500'
-    },
-    {
-      id: 'portrait',
-      name: 'Portrait',
-      icon: <Camera className="h-5 w-5" />,
-      description: 'Perfect for faces',
-      gradient: 'from-blue-500 to-cyan-500'
-    },
-    {
-      id: 'landscape',
-      name: 'Landscape',
-      icon: <Sun className="h-5 w-5" />,
-      description: 'Nature & scenery',
-      gradient: 'from-green-500 to-emerald-500'
-    },
-    {
-      id: 'color',
-      name: 'Color Boost',
-      icon: <Palette className="h-5 w-5" />,
-      description: 'Vibrant colors',
-      gradient: 'from-orange-500 to-red-500'
-    },
-    {
-      id: 'background-removal',
-      name: 'Remove Background',
-      icon: <Scissors className="h-5 w-5" />,
-      description: 'AI background removal',
-      gradient: 'from-red-500 to-pink-500'
-    }
-  ];
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-violet-900">
-      <Navbar />
-      
-      {/* Hero Section */}
-      <div className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-purple-600/20 to-pink-600/20 backdrop-blur-3xl"></div>
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="text-center">
-            <div className="flex justify-center mb-6">
-              <div className="p-3 bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl">
-                <Sparkles className="h-8 w-8 text-white" />
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50">
+      {/* Header */}
+      <div className="bg-white/80 backdrop-blur-md border-b border-purple-100">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16">
+            <div className="flex items-center space-x-3">
+              <div className="p-2 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg">
+                <Sparkles className="h-5 w-5 text-white" />
+              </div>
+              <div>
+                <h1 className="text-xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+                  {toolName}
+                </h1>
+                <p className="text-xs text-gray-600">Enhance your images with AI</p>
               </div>
             </div>
-            <h1 className="text-4xl md:text-6xl font-bold text-white mb-6 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-              AI Photo Enhancer
-            </h1>
-            <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
-              Transform your photos with one-tap AI enhancement using Nano Banana model
-            </p>
           </div>
         </div>
       </div>
 
-      {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          
-          {/* Left Column - Upload & Enhancement */}
+          {/* Left Panel - Input */}
           <div className="space-y-6">
-            
-            {/* Upload Area */}
-            <div
-              className={`relative border-2 border-dashed rounded-2xl p-8 text-center transition-all duration-300 ${
-                dragActive
-                  ? 'border-purple-500 bg-purple-500/10 scale-[1.02]'
-                  : 'border-gray-600 bg-gray-800/50 hover:border-purple-400 hover:bg-gray-800/70'
-              }`}
-              onDragEnter={handleDrag}
-              onDragLeave={handleDrag}
-              onDragOver={handleDrag}
-              onDrop={handleDrop}
-            >
-              <input
-                ref={fileInputRef}
-                type="file"
-                accept="image/*"
-                onChange={handleFileChange}
-                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                disabled={isGenerating}
-              />
-              
-              <div className="space-y-4">
-                <div className="flex justify-center">
-                  {previewUrl ? (
-                    <div className="relative">
-                      <img
-                        src={previewUrl}
-                        alt="Preview"
-                        className="max-h-64 max-w-full rounded-xl shadow-2xl"
-                      />
-                      <button
-                        type="button"
-                        onClick={removeFile}
-                        className="absolute -top-2 -right-2 p-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors"
-                        disabled={isGenerating}
-                      >
-                        <X className="h-4 w-4" />
-                      </button>
+            {/* Image Upload */}
+            <div className="bg-white/80 backdrop-blur-md rounded-2xl p-6 border border-purple-100 shadow-lg">
+              <h3 className="text-lg font-semibold text-gray-800 mb-4">Upload Image</h3>
+              <div
+                onDragOver={handleDragOver}
+                onDragLeave={handleDragLeave}
+                onDrop={handleDrop}
+                onClick={() => fileInputRef.current?.click()}
+                className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors ${
+                  dragActive 
+                    ? 'border-purple-500 bg-purple-50' 
+                    : 'border-purple-300 hover:border-purple-500 bg-purple-50/50'
+                }`}
+              >
+                {previewUrl ? (
+                  <div className="space-y-4">
+                    <img src={previewUrl} alt="Preview" className="max-h-40 mx-auto rounded-lg" />
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setSelectedFile(null);
+                        setPreviewUrl('');
+                        setShowResult(false);
+                      }}
+                      className="text-red-500 hover:text-red-700 flex items-center space-x-1 mx-auto"
+                    >
+                      <X className="h-4 w-4" />
+                      <span>Remove</span>
+                    </button>
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    <Upload className="h-12 w-12 text-purple-400 mx-auto" />
+                    <div>
+                      <p className="text-gray-700 font-medium">Drop image here</p>
+                      <p className="text-sm text-gray-500">or click to browse</p>
                     </div>
-                  ) : (
-                    <div className="space-y-4">
-                      <div className="flex justify-center">
-                        <Upload className="h-16 w-16 text-gray-400" />
-                      </div>
-                      <div>
-                        <p className="text-xl font-medium text-white mb-2">
-                          Drop your photo here
-                        </p>
-                        <p className="text-gray-400">
-                          or click to browse
-                        </p>
-                      </div>
-                    </div>
-                  )}
-                </div>
-                
-                <div className="text-xs text-gray-500">
-                  Supported: JPG, PNG, WebP (Max 10MB)
-                </div>
+                  </div>
+                )}
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  onChange={handleFileSelect}
+                  className="hidden"
+                />
               </div>
             </div>
 
-            {/* Enhancement Options */}
-            <div className="space-y-4">
-              <h3 className="text-lg font-semibold text-white mb-4">Choose Enhancement</h3>
+            {/* Enhancement Type Selection */}
+            <div className="bg-white/80 backdrop-blur-md rounded-2xl p-6 border border-purple-100 shadow-lg">
+              <h3 className="text-lg font-semibold text-gray-800 mb-4">Enhancement Type</h3>
               <div className="grid grid-cols-2 gap-3">
-                {enhancementOptions.map((option) => (
+                {enhancementTypes.map((type) => (
                   <button
-                    key={option.id}
-                    type="button"
-                    onClick={() => setEnhancementType(option.id)}
-                    className={`relative p-4 rounded-xl transition-all duration-300 ${
-                      enhancementType === option.id
-                        ? 'bg-gradient-to-r ' + option.gradient + ' text-white shadow-lg scale-[1.05]'
-                        : 'bg-gray-800 text-gray-300 hover:bg-gray-700 border border-gray-700'
+                    key={type.id}
+                    onClick={() => setEnhancementType(type.id)}
+                    className={`p-3 rounded-lg border-2 transition-all ${
+                      enhancementType === type.id
+                        ? 'border-purple-500 bg-purple-50'
+                        : 'border-gray-200 hover:border-purple-300'
                     }`}
-                    disabled={isGenerating}
                   >
-                    <div className="flex items-center space-x-3">
-                      <div className="flex-shrink-0">
-                        {option.icon}
-                      </div>
-                      <div className="text-left">
-                        <div className="font-medium text-sm">{option.name}</div>
-                        <div className="text-xs opacity-80">{option.description}</div>
-                      </div>
+                    <div className={`w-8 h-8 rounded-lg bg-gradient-to-r ${type.gradient} flex items-center justify-center text-white mb-2 mx-auto`}>
+                      {type.icon}
                     </div>
+                    <div className="text-sm font-medium text-gray-800">{type.name}</div>
+                    <div className="text-xs text-gray-500">{type.description}</div>
                   </button>
                 ))}
               </div>
             </div>
 
+            {/* Features */}
+            <div className="bg-white/80 backdrop-blur-md rounded-2xl p-6 border border-purple-100 shadow-lg">
+              <h3 className="text-lg font-semibold text-gray-800 mb-4">Features</h3>
+              <div className="space-y-3">
+                <div className="flex items-center">
+                  <div className="w-2 h-2 bg-purple-400 rounded-full mr-3"></div>
+                  <span className="text-sm text-gray-700">Professional quality enhancement</span>
+                </div>
+                <div className="flex items-center">
+                  <div className="w-2 h-2 bg-pink-400 rounded-full mr-3"></div>
+                  <span className="text-sm text-gray-700">AI-powered processing</span>
+                </div>
+                <div className="flex items-center">
+                  <div className="w-2 h-2 bg-blue-400 rounded-full mr-3"></div>
+                  <span className="text-sm text-gray-700">Multiple enhancement options</span>
+                </div>
+                <div className="flex items-center">
+                  <div className="w-2 h-2 bg-green-400 rounded-full mr-3"></div>
+                  <span className="text-sm text-gray-700">Fast processing</span>
+                </div>
+              </div>
+            </div>
+
             {/* Enhance Button */}
             <button
-              type="submit"
-              onClick={handleSubmit}
-              disabled={!selectedFile || isGenerating}
-              className="w-full py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold rounded-xl hover:from-purple-700 hover:to-pink-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center space-x-2"
+              onClick={handleGenerate}
+              disabled={isGenerating || !selectedFile}
+              className="w-full py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold rounded-lg hover:from-purple-700 hover:to-pink-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2 shadow-lg"
             >
               {isGenerating ? (
                 <>
@@ -323,125 +272,50 @@ export default function CapCutImageEnhancer({
                 </>
               ) : (
                 <>
-                  <Wand2 className="h-5 w-5" />
-                  <span>Enhance Photo</span>
+                  <Sparkles className="h-5 w-5" />
+                  <span>Enhance Image</span>
                   <ArrowRight className="h-5 w-5" />
                 </>
               )}
             </button>
           </div>
 
-          {/* Right Column - Result */}
+          {/* Right Panel - Result */}
           <div className="space-y-6">
-            
-            {/* Before/After Comparison */}
-            {generatedImage && (
-              <div className="bg-gray-800/50 rounded-2xl p-6 backdrop-blur-sm">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-lg font-semibold text-white">Result</h3>
-                  <button
-                    onClick={() => setShowComparison(!showComparison)}
-                    className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors text-sm"
+            {showResult && generatedImage ? (
+              <div className="bg-white/80 backdrop-blur-md rounded-2xl p-6 border border-purple-100 shadow-lg">
+                <h3 className="text-lg font-semibold text-gray-800 mb-4">Enhanced Image</h3>
+                <div className="space-y-4">
+                  <img 
+                    src={generatedImage} 
+                    alt="Enhanced" 
+                    className="w-full rounded-lg shadow-md"
+                  />
+                  <button 
+                    onClick={downloadEnhanced}
+                    className="w-full py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-medium rounded-lg hover:from-purple-700 hover:to-pink-700 transition-colors flex items-center justify-center space-x-2"
                   >
-                    {showComparison ? 'Hide' : 'Show'} Comparison
+                    <Download className="h-4 w-4" />
+                    <span>Download Enhanced</span>
                   </button>
                 </div>
-
-                {showComparison ? (
-                  <div className="relative rounded-xl overflow-hidden border border-gray-700">
-                    <div
-                      ref={comparisonRef}
-                      className="relative w-full h-96 cursor-ew-resize select-none"
-                    >
-                      {/* Before Image */}
-                      <img
-                        src={previewUrl}
-                        alt="Before"
-                        className="absolute inset-0 w-full h-full object-contain bg-gray-900"
-                      />
-                      
-                      {/* After Image */}
-                      <div
-                        className="absolute inset-0 overflow-hidden"
-                        style={{ clipPath: `inset(0 ${100 - sliderPosition}% 0 0)` }}
-                      >
-                        <img
-                          src={generatedImage}
-                          alt="After"
-                          className="absolute inset-0 w-full h-full object-contain bg-gray-900"
-                        />
-                      </div>
-
-                      {/* Slider Line */}
-                      <div
-                        className="absolute top-0 bottom-0 w-0.5 bg-white shadow-lg cursor-ew-resize"
-                        style={{ left: `${sliderPosition}%` }}
-                        onMouseDown={handleSliderMouseDown}
-                      >
-                        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-8 h-8 bg-white rounded-full shadow-lg flex items-center justify-center">
-                          <ChevronLeft className="h-3 w-3 text-gray-600 -mr-1" />
-                          <ChevronRight className="h-3 w-3 text-gray-600 -ml-1" />
-                        </div>
-                      </div>
-
-                      {/* Labels */}
-                      <div className="absolute top-4 left-4 px-3 py-1 bg-black/70 text-white text-sm rounded">
-                        Before
-                      </div>
-                      <div className="absolute top-4 right-4 px-3 py-1 bg-purple-600/70 text-white text-sm rounded">
-                        Enhanced
-                      </div>
-                    </div>
+              </div>
+            ) : (
+              <div className="bg-white/80 backdrop-blur-md rounded-2xl p-12 border border-purple-100 shadow-lg text-center">
+                <div className="space-y-4">
+                  <div className="w-16 h-16 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full flex items-center justify-center mx-auto">
+                    <Sparkles className="h-8 w-8 text-white" />
                   </div>
-                ) : (
-                  <div className="space-y-4">
-                    <div>
-                      <h4 className="text-sm font-medium text-gray-400 mb-2">Enhanced Photo</h4>
-                      <img
-                        src={generatedImage}
-                        alt="Enhanced"
-                        className="w-full rounded-xl"
-                      />
-                    </div>
-                    <button 
-                      onClick={downloadEnhanced}
-                      className="w-full py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-medium rounded-lg hover:from-purple-700 hover:to-pink-700 transition-colors flex items-center justify-center space-x-2"
-                    >
-                      <Download className="h-4 w-4" />
-                      <span>Download Enhanced</span>
-                    </button>
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-800 mb-2">Ready to Enhance</h3>
+                    <p className="text-gray-600">Upload an image and choose enhancement type to transform your photos</p>
                   </div>
-                )}
+                </div>
               </div>
             )}
-
-            {/* AI Model Info */}
-            <div className="bg-gradient-to-r from-purple-600/20 to-pink-600/20 rounded-2xl p-6 border border-purple-500/30">
-              <div className="flex items-center space-x-3 mb-4">
-                <div className="p-2 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg">
-                  <Sparkles className="h-5 w-5 text-white" />
-                </div>
-                <h3 className="text-lg font-semibold text-white">Nano Banana AI</h3>
-              </div>
-              <p className="text-gray-300 text-sm mb-4">
-                Advanced AI model trained on millions of photos for professional enhancement results
-              </p>
-              <div className="grid grid-cols-2 gap-4 text-sm">
-                <div className="bg-gray-800/50 rounded-lg p-3">
-                  <div className="text-purple-400 font-medium">Processing Time</div>
-                  <div className="text-white">2-3 seconds</div>
-                </div>
-                <div className="bg-gray-800/50 rounded-lg p-3">
-                  <div className="text-purple-400 font-medium">Quality</div>
-                  <div className="text-white">Professional</div>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
       </div>
-      
-      <Footer />
     </div>
   );
 }

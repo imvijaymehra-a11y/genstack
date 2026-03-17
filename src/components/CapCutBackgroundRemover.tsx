@@ -2,8 +2,6 @@
 
 import { useState, useRef } from 'react';
 import { Upload, X, Sparkles, Scissors, Download, Image, CheckCircle, ArrowRight } from 'lucide-react';
-import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
 
 interface CapCutBackgroundRemoverProps {
   toolName: string;
@@ -57,22 +55,18 @@ export default function CapCutBackgroundRemover({ toolName, toolSlug, onGenerate
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
+  const handleGenerate = async () => {
     if (!selectedFile) return;
-    if (isGenerating) return;
-
+    
     try {
-      const enhancedInput = `Remove background with ${backgroundColor} background`;
-      const result = await onGenerate(enhancedInput, selectedFile);
+      await onGenerate('', selectedFile);
       setShowResult(true);
     } catch (error) {
       console.error('Background removal failed:', error);
     }
   };
 
-  const downloadImage = async () => {
+  const downloadResult = async () => {
     if (!generatedImage) return;
     
     try {
@@ -82,7 +76,7 @@ export default function CapCutBackgroundRemover({ toolName, toolSlug, onGenerate
       const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
-      link.download = `background-removed-${Date.now()}.png`;
+      link.download = `background-removed-${toolSlug}-${Date.now()}.png`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -92,252 +86,176 @@ export default function CapCutBackgroundRemover({ toolName, toolSlug, onGenerate
     }
   };
 
-  const clearImage = () => {
-    setSelectedFile(null);
-    setPreviewUrl('');
-    setShowResult(false);
-    if (fileInputRef.current) {
-      fileInputRef.current.value = '';
-    }
-  };
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-violet-900">
-      <Navbar />
-      
-      {/* Hero Section */}
-      <div className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-red-600/20 to-pink-600/20 backdrop-blur-3xl"></div>
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-          <div className="text-center">
-            <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
-              AI Background Remover
-            </h1>
-            <p className="text-xl text-gray-300 mb-8 max-w-3xl mx-auto">
-              Remove backgrounds from images instantly with professional AI-powered precision
-            </p>
+    <div className="min-h-screen bg-gradient-to-br from-red-50 via-pink-50 to-purple-50">
+      {/* Header */}
+      <div className="bg-white/80 backdrop-blur-md border-b border-red-100">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16">
+            <div className="flex items-center space-x-3">
+              <div className="p-2 bg-gradient-to-r from-red-600 to-pink-600 rounded-lg">
+                <Scissors className="h-5 w-5 text-white" />
+              </div>
+              <div>
+                <h1 className="text-xl font-bold bg-gradient-to-r from-red-600 to-pink-600 bg-clip-text text-transparent">
+                  {toolName}
+                </h1>
+                <p className="text-xs text-gray-600">Remove backgrounds instantly</p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid lg:grid-cols-3 gap-8">
-          {/* Left Column - Main Tool */}
-          <div className="lg:col-span-2 space-y-8">
-            {/* Upload Section */}
-            <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-8 border border-white/20">
-              <h2 className="text-2xl font-bold text-white mb-6 flex items-center">
-                <Scissors className="h-6 w-6 mr-2" />
-                Remove Background
-              </h2>
-              
-              {!previewUrl ? (
-                /* Upload Area */
-                <div
-                  onDragOver={handleDragOver}
-                  onDrop={handleDrop}
-                  onClick={() => fileInputRef.current?.click()}
-                  className="border-2 border-dashed border-white/30 rounded-xl p-12 text-center cursor-pointer hover:border-purple-400 transition-colors bg-white/5"
-                >
-                  <Upload className="h-16 w-16 text-white mx-auto mb-4" />
-                  <h3 className="text-xl font-semibold text-white mb-2">
-                    Upload Image
-                  </h3>
-                  <p className="text-gray-400 mb-4">
-                    Drag & drop your image here or click to browse
-                  </p>
-                  <p className="text-sm text-gray-500">
-                    Supports: JPG, PNG, WebP (Max 10MB)
-                  </p>
-                  <input
-                    ref={fileInputRef}
-                    type="file"
-                    accept="image/*"
-                    onChange={handleFileSelect}
-                    className="hidden"
-                  />
-                </div>
-              ) : (
-                /* Preview Area */
-                <div className="space-y-4">
-                  <div className="relative">
-                    <img
-                      src={previewUrl}
-                      alt="Preview"
-                      className="w-full rounded-xl"
-                    />
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {/* Left Panel - Input */}
+          <div className="space-y-6">
+            {/* Image Upload */}
+            <div className="bg-white/80 backdrop-blur-md rounded-2xl p-6 border border-red-100 shadow-lg">
+              <h3 className="text-lg font-semibold text-gray-800 mb-4">Upload Image</h3>
+              <div
+                onDragOver={handleDragOver}
+                onDrop={handleDrop}
+                onClick={() => fileInputRef.current?.click()}
+                className="border-2 border-dashed border-red-300 rounded-lg p-8 text-center cursor-pointer hover:border-red-500 transition-colors bg-red-50/50"
+              >
+                {previewUrl ? (
+                  <div className="space-y-4">
+                    <img src={previewUrl} alt="Preview" className="max-h-40 mx-auto rounded-lg" />
                     <button
-                      onClick={clearImage}
-                      className="absolute top-2 right-2 p-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setSelectedFile(null);
+                        setPreviewUrl('');
+                        setShowResult(false);
+                      }}
+                      className="text-red-500 hover:text-red-700 flex items-center space-x-1 mx-auto"
                     >
                       <X className="h-4 w-4" />
+                      <span>Remove</span>
                     </button>
                   </div>
-
-                  {/* Background Color Selection */}
-                  <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-3">
-                      New Background
-                    </label>
-                    <div className="grid grid-cols-3 md:grid-cols-6 gap-3">
-                      {backgroundColors.map((bg) => (
-                        <button
-                          key={bg.id}
-                          onClick={() => setBackgroundColor(bg.id)}
-                          className={`p-3 rounded-lg border-2 transition-all duration-200 ${
-                            backgroundColor === bg.id
-                              ? 'border-purple-500 scale-105'
-                              : 'border-white/20 hover:border-purple-400'
-                          }`}
-                        >
-                          <div className={`w-8 h-8 rounded ${bg.color} mb-1 mx-auto`}></div>
-                          <div className="text-white text-xs font-medium">{bg.name}</div>
-                        </button>
-                      ))}
+                ) : (
+                  <div className="space-y-4">
+                    <Upload className="h-12 w-12 text-red-400 mx-auto" />
+                    <div>
+                      <p className="text-gray-700 font-medium">Drop image here</p>
+                      <p className="text-sm text-gray-500">or click to browse</p>
                     </div>
                   </div>
-
-                  {/* Remove Button */}
-                  <button
-                    onClick={handleSubmit}
-                    disabled={isGenerating}
-                    className="w-full py-4 bg-gradient-to-r from-red-600 to-pink-600 text-white font-bold rounded-xl hover:from-red-700 hover:to-pink-700 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
-                  >
-                    {isGenerating ? (
-                      <>
-                        <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
-                        <span>Removing Background...</span>
-                      </>
-                    ) : (
-                      <>
-                        <Scissors className="h-5 w-5" />
-                        <span>Remove Background</span>
-                      </>
-                    )}
-                  </button>
-                </div>
-              )}
+                )}
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  onChange={handleFileSelect}
+                  className="hidden"
+                />
+              </div>
             </div>
 
-            {/* Result Section */}
-            {showResult && generatedImage && (
-              <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-8 border border-white/20">
-                <h3 className="text-2xl font-bold text-white mb-6 flex items-center">
-                  <CheckCircle className="h-6 w-6 mr-2 text-green-400" />
-                  Background Removed!
-                </h3>
+            {/* Background Color Selection */}
+            <div className="bg-white/80 backdrop-blur-md rounded-2xl p-6 border border-red-100 shadow-lg">
+              <h3 className="text-lg font-semibold text-gray-800 mb-4">Background Color</h3>
+              <div className="grid grid-cols-3 gap-3">
+                {backgroundColors.map((color) => (
+                  <button
+                    key={color.id}
+                    onClick={() => setBackgroundColor(color.id)}
+                    className={`p-3 rounded-lg border-2 transition-all ${
+                      backgroundColor === color.id
+                        ? 'border-red-500 bg-red-50'
+                        : 'border-gray-200 hover:border-red-300'
+                    }`}
+                  >
+                    <div className={`w-8 h-8 rounded-lg ${color.color} mb-2 mx-auto border border-gray-300`}></div>
+                    <div className="text-sm font-medium text-gray-800">{color.name}</div>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Features */}
+            <div className="bg-white/80 backdrop-blur-md rounded-2xl p-6 border border-red-100 shadow-lg">
+              <h3 className="text-lg font-semibold text-gray-800 mb-4">Features</h3>
+              <div className="space-y-3">
+                <div className="flex items-center">
+                  <CheckCircle className="h-4 w-4 text-red-500 mr-3" />
+                  <span className="text-sm text-gray-700">AI-powered background removal</span>
+                </div>
+                <div className="flex items-center">
+                  <CheckCircle className="h-4 w-4 text-red-500 mr-3" />
+                  <span className="text-sm text-gray-700">Preserve fine details</span>
+                </div>
+                <div className="flex items-center">
+                  <CheckCircle className="h-4 w-4 text-red-500 mr-3" />
+                  <span className="text-sm text-gray-700">Multiple background options</span>
+                </div>
+                <div className="flex items-center">
+                  <CheckCircle className="h-4 w-4 text-red-500 mr-3" />
+                  <span className="text-sm text-gray-700">High-quality output</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Remove Button */}
+            <button
+              onClick={handleGenerate}
+              disabled={isGenerating || !selectedFile}
+              className="w-full py-4 bg-gradient-to-r from-red-600 to-pink-600 text-white font-semibold rounded-lg hover:from-red-700 hover:to-pink-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2 shadow-lg"
+            >
+              {isGenerating ? (
+                <>
+                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                  <span>Removing Background...</span>
+                </>
+              ) : (
+                <>
+                  <Scissors className="h-5 w-5" />
+                  <span>Remove Background</span>
+                  <ArrowRight className="h-5 w-5" />
+                </>
+              )}
+            </button>
+          </div>
+
+          {/* Right Panel - Result */}
+          <div className="space-y-6">
+            {showResult && generatedImage ? (
+              <div className="bg-white/80 backdrop-blur-md rounded-2xl p-6 border border-red-100 shadow-lg">
+                <h3 className="text-lg font-semibold text-gray-800 mb-4">Result</h3>
                 <div className="space-y-4">
-                  <div className="grid md:grid-cols-2 gap-4">
-                    {/* Before */}
-                    <div>
-                      <h4 className="text-sm font-medium text-gray-400 mb-2">Original</h4>
-                      <img
-                        src={previewUrl}
-                        alt="Original"
-                        className="w-full rounded-xl opacity-75"
-                      />
-                    </div>
-                    {/* After */}
-                    <div>
-                      <h4 className="text-sm font-medium text-gray-400 mb-2">Background Removed</h4>
-                      <img
-                        src={generatedImage}
-                        alt="Background Removed"
-                        className="w-full rounded-xl"
-                      />
-                    </div>
-                  </div>
+                  <img 
+                    src={generatedImage} 
+                    alt="Background removed" 
+                    className="w-full rounded-lg shadow-md"
+                  />
                   <button 
-                    onClick={downloadImage}
-                    className="w-full py-3 bg-gradient-to-r from-green-600 to-blue-600 text-white font-medium rounded-lg hover:from-green-700 hover:to-blue-700 transition-colors flex items-center justify-center space-x-2"
+                    onClick={downloadResult}
+                    className="w-full py-3 bg-gradient-to-r from-red-600 to-pink-600 text-white font-medium rounded-lg hover:from-red-700 hover:to-pink-700 transition-colors flex items-center justify-center space-x-2"
                   >
                     <Download className="h-4 w-4" />
                     <span>Download Image</span>
                   </button>
                 </div>
               </div>
+            ) : (
+              <div className="bg-white/80 backdrop-blur-md rounded-2xl p-12 border border-red-100 shadow-lg text-center">
+                <div className="space-y-4">
+                  <div className="w-16 h-16 bg-gradient-to-r from-red-600 to-pink-600 rounded-full flex items-center justify-center mx-auto">
+                    <Scissors className="h-8 w-8 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-800 mb-2">Ready to Remove</h3>
+                    <p className="text-gray-600">Upload an image to remove its background with AI precision</p>
+                  </div>
+                </div>
+              </div>
             )}
-          </div>
-
-          {/* Right Column - Info & Tips */}
-          <div className="space-y-6">
-            {/* AI Model Info */}
-            <div className="bg-gradient-to-r from-red-600/20 to-pink-600/20 rounded-2xl p-6 border border-red-500/30">
-              <h3 className="text-xl font-bold text-white mb-4 flex items-center">
-                <Scissors className="h-5 w-5 mr-2" />
-                AI Technology
-              </h3>
-              <div className="space-y-3 text-gray-300">
-                <div className="flex items-center">
-                  <div className="w-2 h-2 bg-green-400 rounded-full mr-3"></div>
-                  <span>Remove.bg API</span>
-                </div>
-                <div className="flex items-center">
-                  <div className="w-2 h-2 bg-blue-400 rounded-full mr-3"></div>
-                  <span>Precise edge detection</span>
-                </div>
-                <div className="flex items-center">
-                  <div className="w-2 h-2 bg-purple-400 rounded-full mr-3"></div>
-                  <span>Hair & fur preservation</span>
-                </div>
-                <div className="flex items-center">
-                  <div className="w-2 h-2 bg-pink-400 rounded-full mr-3"></div>
-                  <span>Transparent PNG output</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Quick Tips */}
-            <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20">
-              <h3 className="text-xl font-bold text-white mb-4">Quick Tips</h3>
-              <div className="space-y-3 text-gray-300 text-sm">
-                <div className="flex items-start">
-                  <ArrowRight className="h-4 w-4 text-red-400 mr-2 mt-0.5 flex-shrink-0" />
-                  <span>Use high contrast images for best results</span>
-                </div>
-                <div className="flex items-start">
-                  <ArrowRight className="h-4 w-4 text-red-400 mr-2 mt-0.5 flex-shrink-0" />
-                  <span>Clear backgrounds work better</span>
-                </div>
-                <div className="flex items-start">
-                  <ArrowRight className="h-4 w-4 text-red-400 mr-2 mt-0.5 flex-shrink-0" />
-                  <span>Avoid complex backgrounds</span>
-                </div>
-                <div className="flex items-start">
-                  <ArrowRight className="h-4 w-4 text-red-400 mr-2 mt-0.5 flex-shrink-0" />
-                  <span>Good lighting improves accuracy</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Use Cases */}
-            <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20">
-              <h3 className="text-xl font-bold text-white mb-4">Perfect For</h3>
-              <div className="space-y-2 text-gray-300 text-sm">
-                <div className="flex items-center p-3 bg-white/5 rounded-lg">
-                  <Image className="h-5 w-5 text-red-400 mr-3" />
-                  <span>Product photos</span>
-                </div>
-                <div className="flex items-center p-3 bg-white/5 rounded-lg">
-                  <Image className="h-5 w-5 text-red-400 mr-3" />
-                  <span>Profile pictures</span>
-                </div>
-                <div className="flex items-center p-3 bg-white/5 rounded-lg">
-                  <Image className="h-5 w-5 text-red-400 mr-3" />
-                  <span>Social media posts</span>
-                </div>
-                <div className="flex items-center p-3 bg-white/5 rounded-lg">
-                  <Image className="h-5 w-5 text-red-400 mr-3" />
-                  <span>Graphic design</span>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
       </div>
-
-      <Footer />
     </div>
   );
 }
