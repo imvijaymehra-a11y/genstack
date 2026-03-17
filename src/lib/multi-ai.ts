@@ -292,6 +292,17 @@ Generate high-quality content that provides real value quickly and efficiently.`
   }
 }
 export async function generateWithFreeModel(prompt: string, toolType: string): Promise<string> {
+  // Handle image generation for AI Image Generator
+  if (toolType === 'ai-image-generator') {
+    // Import the generateImage function to use fallback
+    const { generateImage } = await import('./image-ai');
+    const result = await generateImage(prompt, 'fallback');
+    if (result.success && result.processedImage) {
+      return result.processedImage;
+    }
+    throw new Error(result.error || 'Image generation failed');
+  }
+
   // Enhanced template-based generation with better quality
   const enhancedPrompt = `Create high-quality, specific content about: ${prompt}\n\nRequirements:
 - Avoid generic statements like "In today's digital landscape"
